@@ -1,0 +1,17 @@
+Package: tramicp
+Type: Package
+Title: Invariant causal prediction for transformation models
+Version: 0.1.0
+Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
+    email = "lucasheinrich.kook@uzh.ch"))
+Description: Extends invariant causal prediction (Peters et al., 2016, <doi:>)
+    to transformation models (Hothorn et al., 2018, <doi:>).
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.1.2
+Depends: tram, mlt
+Imports: CondIndTests, pcalg, GeneralisedCovarianceMeasure, Rgraphviz, coin,
+    dplyr, tidyr, multcomp, sandwich, survival, dHSIC, variables, basefun, 
+    tidyverse, ggplot2, ggpubr, trtf, magrittr, methods, tibble, MASS
+Suggests: cotram, testthat (>= 3.0.0)
+Config/testthat/edition: 3
