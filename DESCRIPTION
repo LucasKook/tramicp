@@ -10,8 +10,7 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.2
 Depends: tram, mlt
-Imports: CondIndTests, pcalg, GeneralisedCovarianceMeasure, Rgraphviz, coin,
-    dplyr, tidyr, multcomp, sandwich, survival, dHSIC, variables, basefun, 
-    tidyverse, ggplot2, ggpubr, trtf, magrittr, methods, tibble, MASS
-Suggests: cotram, testthat (>= 3.0.0)
+Imports: coin, multcomp, sandwich, survival, variables, basefun, methods, MASS, 
+    cotram, dHSIC
+Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3

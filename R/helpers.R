@@ -105,14 +105,6 @@
          "kci" = "KCI")
 }
 
-#' @importFrom tibble tibble
-.binom_test <- function(x, n) {
-  tst <- try(binom.test(x = x, n = n))
-  if (inherits(tst, "try-error"))
-    tst <- list(estimate = NA, conf.int = c(NA, NA))
-  tibble(frac = tst$estimate, lwr = tst$conf.int[1], upr = tst$conf.int[2])
-}
-
 .intersect <- function(x, y) {
   ret <- try(intersect(x, y))
   if (inherits(ret, "try-error"))
@@ -149,8 +141,6 @@ intersect_intervals <- function(...) {
   apply(df, 1, c, simplify = FALSE)
 }
 
-#' @importFrom tidyr unnest nest
-#' @importFrom dplyr mutate select
 .ci <- function(alpha, ms, nenv) {
   # TODO: Extend to more than two environments
   talpha <- alpha / nenv
