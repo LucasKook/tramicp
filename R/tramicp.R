@@ -2,24 +2,21 @@
 #'
 #' @param formula Formula including response and shift terms
 #' @param data Data.frame containing response and explanatory variables
-#' @param env Character, name of environmental variable
+#' @param env Formula specifying the exogenous environment variables
 #' @param modFUN Model function from package 'tram', i.e. \code{BoxCox},
 #'     \code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
-#'     \code{Lehmann}. Standard implementation \code{lm} is also supported.
+#'     \code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
+#'     \code{\link[MASS]{polr}} are also supported.
 #' @param verbose Logical, whether output should be verbose (default \code{TRUE})
 #' @param type Character, type of invariance (\code{"residual"}, \code{"wald"},
 #'     or \code{"partial"})
 #' @param test Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
 #'     \code{"var.test"}, \code{"wald"}) or custom function for testing
 #'     invariance.
-#' @param trt Character, supply only when \code{type = "partial"}, treatment
-#'     variable. Ignored otherwise
-#' @param baseline_fixed Logical, whether baseline transformation is fixed
-#'     (\code{TRUE}) or allowed to vary across environments (\code{FALSE}).
-#'     Defaults to \code{TRUE}, i.e. a fixed baseline transformation
+#' @param controls Controls for the used tests and the overall procedure,
+#'     see \code{dicp_controls}
 #' @param alpha Level of invariance test, default
 #' @param ... Further arguments passed to \code{modFUN}
-#' @param controls Controls for the used tests, see \code{dicp_controls}
 #'
 #' @return Object of class \code{"dICP"}, containing the invariant set (if exists),
 #'     pvalues from all invariance tests and the tests themselves
@@ -31,43 +28,52 @@
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(n = 1e3, mod = "polr")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "confint")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "wald")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = "E",
-#'    modFUN = tramicp:::.mod_from_name("polr"),
-#'    type = "wald", weights = abs(rnorm(nrow(d))))
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "residual")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "residual",
-#'      test = "indep")
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald")
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
+#'     weights = abs(rnorm(nrow(d))))
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
+#'      test = "HSIC")
 #'
 dicp <- function(
-  formula, data, env, modFUN, trt = NULL, verbose = TRUE,
-  type = c("residual", "wald", "partial", "mcheck", "confint"),
-  test = "indep", controls = dicp_controls(match.arg(type), test),
-  baseline_fixed = TRUE, alpha = 0.05, ...
+  formula, data, env, modFUN, verbose = TRUE,
+  type = c("residual", "wald", "mcheck", "confint"),
+  test = "independence", controls = NULL, alpha = 0.05, ...
 ) {
 
-  # Process formula
+  call <- match.call()
+
+  ### Preliminary checks
+  if (is.character(test))
+    test <- match.arg(
+      test, c("independence", "HSIC", "t.test", "var.test", "combined", "wald")
+    )
+  if (is.null(controls))
+    controls <- dicp_controls(match.arg(type), test, alpha = alpha)
+  .check_args(formula, data, env, modFUN, type, test)
+
+  ### Process formulae
   tms <- .get_terms(formula)
   resp <- tms$response
-  me <- setdiff(tms$me, env)
+  etms <- .get_terms(env)
+  me <- setdiff(tms$all, etms$all) # no env in main effects
   ps <- lapply(0:length(me), combn, x = length(me))
 
   # Options
-  if (verbose)
+  if (verbose && interactive())
     pb <- txtProgressBar(min = 0, max = length(ps), style = 3)
 
   # Run
   tests <- list()
   for (set in seq_along(ps)) {
 
-    if (verbose)
+    if (verbose && interactive())
       setTxtProgressBar(pb, set)
 
     ret <- apply(ps[[set]], 2, controls$type_fun, me = me, resp = resp,
-                 set = set, baseline_fixed = baseline_fixed, env = env,
-                 modFUN = modFUN, data = data, trt = trt, controls = controls,
-                 ... = ...)
+                 set = set, env = etms, modFUN = modFUN, data = data,
+                 controls = controls, ... = ...)
 
     tests <- c(tests, ret)
 
@@ -75,7 +81,7 @@ dicp <- function(
 
   res <- .extract_results(tests)
   pvals <- structure(res[["pval"]], names = res[["set"]])
-  inv <- try(.inv_set(res, alpha = alpha))
+  inv <- try(.inv_set(res, alpha = controls$alpha))
   if (inherits(inv, "try-error"))
     inv <- "Cannot be computed."
   ipv <- .indiv_pvals(me, pvals)
@@ -83,20 +89,26 @@ dicp <- function(
   structure(list(inv = if (identical(inv, character(0))) "Empty" else inv,
       pvals = pvals, ipvals = ipv, tests = tests
     ), class = "dICP", type = match.arg(type), test = controls$test_name,
-    env = env, trt = trt)
+    env = env, call = call)
 
 }
 
 # Pvalues for individual predictors being a causal parent
 .indiv_pvals <- function(terms, pvals) {
-  res <- lapply(terms, \(term) max(pvals[!grepl(term, names(pvals))]))
+  res <- lapply(terms, \(term) suppressWarnings(
+    max(pvals[!grepl(term, names(pvals))], na.rm = TRUE)))
   structure(unlist(res), names = terms)
 }
 
 # GOF test
 .modelcheck <- function(
-    tx, me, resp, set, baseline_fixed, env, modFUN, data, trt, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
+
+  if (length(env$all) != 1)
+    stop("`type = \"mcheck\"` not implemented for multivariable environments")
+
+  env <- env$all
 
   # Empty set skipped
   if (set == 1)
@@ -108,14 +120,17 @@ dicp <- function(
   tset <- me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- as.formula(
-    paste0(resp, ifelse(baseline_fixed, "", paste("|", env)), "~", meff)
+    paste0(resp, ifelse(controls$baseline_fixed, "", paste("|", env)), "~", meff)
   )
 
   # Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
 
   # Test
-  r <- matrix(residuals(m), ncol = 1)
+  if ("glm" %in% class(m) && m$family$family == "binomial")
+    r <- matrix(residuals.binglm(m), ncol = 1)
+  else
+    r <- matrix(residuals(m), ncol = 1)
   x <- model.matrix(update(mfm, NULL ~ .), data = data)
   x <- if (all(x[, 1] == 1)) x[, -1]
   tst <- controls$test_fun(r, x, controls)
@@ -129,14 +144,20 @@ dicp <- function(
 # Overlapping confidence regions
 #' @importFrom mlt as.mlt
 .crmethod <- function(
-    tx, me, resp, set, baseline_fixed, env, modFUN, data, trt, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
+
+  if (length(env$all) != 1)
+    stop("`type = \"confint\"` not implemented for multivariable environments")
+
+  env <- env$all
+  stopifnot(is.factor(data[[env]]))
 
   # Prepare formula
   tset <- if (set == 1) "1" else me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- as.formula(
-    paste0(resp, ifelse(baseline_fixed, "", paste("|", env)), "~", meff)
+    paste0(resp, ifelse(controls$baseline_fixed, "", paste("|", env)), "~", meff)
   )
 
   # Fit model
@@ -166,8 +187,8 @@ dicp <- function(
 
 # Residual test
 .dicp_hsic <- function(
-    tx, me, resp, set, baseline_fixed, env, modFUN, data,
-    trt, controls, ...
+    tx, me, resp, set, env, modFUN, data,
+    controls, ...
 ) {
 
   # Skip empty set
@@ -180,16 +201,20 @@ dicp <- function(
   tset <- me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- as.formula(
-    paste0(resp, ifelse(baseline_fixed, "", paste("|", env)), "~", meff)
+    paste0(resp, ifelse(
+      controls$baseline_fixed, "", paste("|", paste0(env$all, collapse = "+"))), "~",
+      meff)
   )
 
   # Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
 
   # Test
-  r <- matrix(residuals(m), ncol = 1)
-  # e <- matrix(as.numeric(data[[env]]) - 1, ncol = 1)
-  e <- model.matrix(as.formula(paste0("~ 0 + ", env)), data = data)
+  if ("glm" %in% class(m) && m$family$family == "binomial")
+    r <- matrix(residuals.binglm(m), ncol = 1)
+  else
+    r <- matrix(residuals(m), ncol = 1)
+  e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
   tst <- controls$test_fun(r, e, controls)
 
   structure(list(set = tset, test = tst, coef = coef(m),
@@ -199,24 +224,29 @@ dicp <- function(
 
 # Full invariance
 .dicp_full <- function(
-    tx, me, resp, set, baseline_fixed, env, modFUN, data, trt, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
+
+  if (length(env$all) != 1)
+    stop("`type = \"wald\"` not implemented for multivariable environments")
+
+  env <- env$all
 
   # Empty set treated separately
   if (set == 1) {
     tset <- "1"
-    meff <- ifelse(baseline_fixed, env, "1")
+    meff <- ifelse(controls$baseline_fixed, env, "1")
     mint <- ""
   } else {
     tset <- me[tx]
-    meff <- if (baseline_fixed) paste0(c(me[tx], env), collapse = "+") else
+    meff <- if (controls$baseline_fixed) paste0(c(me[tx], env), collapse = "+") else
       paste0(me[tx], collapse = "+")
     mint <- paste0(c(paste0(me[tx], ":", env)), collapse = "+")
   }
 
   # Prepare formula
   mfm <- as.formula(
-    paste0(resp, ifelse(baseline_fixed, "", paste0("|", env)),
+    paste0(resp, ifelse(controls$baseline_fixed, "", paste0("|", env)),
            "~", meff, if (mint != "") "+", mint)
   )
 
@@ -247,7 +277,7 @@ dicp <- function(
 }
 
 # Partial invariance
-.dicp_partial <- function(tx, me, resp, set, baseline_fixed, env, modFUN,
+.dicp_partial <- function(tx, me, resp, set, env, modFUN,
                           data, trt, controls, ...) {
 
   if (set == 1) {
@@ -297,15 +327,15 @@ dicp <- function(
              B = controls$B)
 }
 
-.t.test <- function(r, e, controls) {
+.t_test <- function(r, e, controls) {
   t.test(r ~ e)
 }
 
-.var.test <- function(r, e, controls) {
+.var_test <- function(r, e, controls) {
   var.test(r ~ e)
 }
 
-.combined <- function(r, e, controls) {
+.combined_test <- function(r, e, controls) {
   shift <- t.test(r ~ e)
   scale <- var.test(r ~ e)
   list("p.value" = 2 * min(shift$p.value, scale$p.value),
@@ -313,8 +343,11 @@ dicp <- function(
 }
 
 #' @importFrom coin independence_test pvalue
-.rand.test <- function(r, e, controls) {
-  tst <- independence_test(r ~ e)
+.indep_test <- function(r, e, controls) {
+  tst <- independence_test(
+    r ~ e, teststat = controls$teststat, distribution = controls$distribution,
+    xtrafo = controls$xtrafo, ytrafo = controls$ytrafo
+  )
   list(p.value = pvalue(tst), test = tst)
 }
 
@@ -350,10 +383,10 @@ dicp <- function(
     test_fun <- switch(
       ctest,
       "HSIC" = .dhsic_test,
-      "t.test" = .t.test,
-      "var.test" = .var.test,
-      "indep" = .rand.test,
-      "combined" = .combined,
+      "t.test" = .t_test,
+      "var.test" = .var_test,
+      "independence" = .indep_test,
+      "combined" = .combined_test,
       "custom" = identity
     )
   }
@@ -379,8 +412,11 @@ dicp <- function(
 #'     vcov model.matrix dexp dlogis dnorm pexp pnorm qexp qnorm
 #' @importFrom utils capture.output combn data setTxtProgressBar stack
 #'     txtProgressBar write.csv
+#' @importFrom coin trafo
 #'
-dicp_controls <- function(type, test) {
+dicp_controls <- function(
+    type = "residual", test = "independence", baseline_fixed = TRUE, alpha = 0.05
+) {
 
   # Type of ICP
   type_fun <- .type_fun(type)
@@ -390,8 +426,10 @@ dicp_controls <- function(type, test) {
   test_info <- .test_fun(type, test, ctest)
 
   list(
-    method = "gamma", kernel = c("gaussian", "discrete"), B = 200,
+    type = type, method = "gamma", kernel = c("gaussian", "discrete"), B = 200,
     alpha = 0.05, vcov = vcov, type_fun = .type_fun(type),
-    ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]]
+    ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
+    baseline_fixed = baseline_fixed, teststat = "maximum",
+    distribution = "asymptotic", xtrafo = trafo, ytrafo = trafo
   )
 }

@@ -1,5 +1,11 @@
 # Helpers
 
+.check_args <- function(formula, data, env, modFUN, type, test) {
+  stopifnot("formula" %in% class(formula))
+  stopifnot("formula" %in% class(env))
+  stopifnot(is.function(modFUN))
+}
+
 .build_iform <- function(formula) {
   tms <- .get_terms(formula)
   as.formula(paste0("~", paste0(tms$ie, collapse = "+")))
@@ -11,7 +17,7 @@
   resp <- all.vars(formula)[1]
   ie <- grep(":", tms, value = TRUE)
   me <- grep(":", tms, value = TRUE, invert = TRUE)
-  list(all = tms, me = me, ie = ie, response = resp)
+  list(all = tms, me = me, ie = ie, response = resp, terms = atms, fml = formula)
 }
 
 .rm_int <- function(x) {

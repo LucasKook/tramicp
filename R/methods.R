@@ -50,12 +50,14 @@ summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
   mod <- object[["tests"]][[2]]$model$tram
   if (is.null(mod)) mod <- object[["tests"]][[2]]$tram
   cat(mod, "\n")
+  cat("\nCall: ")
+  print(attr(object, "call"))
   cat("\n")
   # cat(" Invariance type:", attr(object, "type"), "\n")
   cat(" Invariance test:", attr(object, "test"), "\n")
-  cat(" Environment:", attr(object, "env"), "\n")
-  if (attr(object, "type") == "partial")
-    cat("Treatment:", attr(object, "trt"), "\n")
+  # cat(" Environment:", deparse(attr(object, "env")), "\n")
+  # if (attr(object, "type") == "partial")
+    # cat("Treatment:", attr(object, "trt"), "\n")
   if (print_all) {
     cat("\n Tested sets:\n")
     print(round(object[["pvals"]], digits = digits))
