@@ -11,27 +11,24 @@ glmICP(formula, data, env, ...)
 
 \item{data}{Data.frame containing response and explanatory variables}
 
-\item{env}{Character, name of environmental variable}
+\item{env}{Formula specifying the exogenous environment variables}
 
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}
   \describe{
     \item{\code{modFUN}}{Model function from package 'tram', i.e. \code{BoxCox},
 \code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
-\code{Lehmann}. Standard implementation \code{lm} is also supported.}
+\code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
+\code{\link[MASS]{polr}} are also supported.}
     \item{\code{verbose}}{Logical, whether output should be verbose (default \code{TRUE})}
     \item{\code{type}}{Character, type of invariance (\code{"residual"}, \code{"wald"},
 or \code{"partial"})}
     \item{\code{test}}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
 \code{"var.test"}, \code{"wald"}) or custom function for testing
 invariance.}
-    \item{\code{trt}}{Character, supply only when \code{type = "partial"}, treatment
-variable. Ignored otherwise}
-    \item{\code{baseline_fixed}}{Logical, whether baseline transformation is fixed
-(\code{TRUE}) or allowed to vary across environments (\code{FALSE}).
-Defaults to \code{TRUE}, i.e. a fixed baseline transformation}
+    \item{\code{controls}}{Controls for the used tests and the overall procedure,
+see \code{dicp_controls}}
     \item{\code{alpha}}{Level of invariance test, default}
-    \item{\code{controls}}{Controls for the used tests, see \code{dicp_controls}}
   }}
 }
 \value{
@@ -43,10 +40,10 @@ ICP for generalized linear models
 \examples{
 set.seed(1334)
 d <- dgp_dicp(mod = "binary")
-glmICP(Y ~ X2, data = d, env = "E", type = "wald", test = "wald", family = "binomial")
-glmICP(Y ~ X2, data = d, env = "E", type = "residual", test = "HSIC", family = "binomial")
-glmICP(Y ~ X2, data = d, env = "E", type = "residual", test = "indep", family = "binomial")
-glmICP(Y ~ X2, data = d, env = "E", type = "confint", family = "binomial")
-dicp(Y ~ X2, data = d, env = "E", modFUN = tramicp:::.mod_from_name("binary"))
+glmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald", family = "binomial")
+glmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC", family = "binomial")
+glmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep", family = "binomial")
+glmICP(Y ~ X2, data = d, env = ~ E, type = "confint", family = "binomial")
+dicp(Y ~ X2, data = d, env = ~ E, modFUN = tramicp:::.mod_from_name("binary"))
 
 }

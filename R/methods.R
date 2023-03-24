@@ -50,19 +50,48 @@ summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
   mod <- object[["tests"]][[2]]$model$tram
   if (is.null(mod)) mod <- object[["tests"]][[2]]$tram
   cat(mod, "\n")
+  cat("\nCall: ")
+  print(attr(object, "call"))
   cat("\n")
   # cat(" Invariance type:", attr(object, "type"), "\n")
   cat(" Invariance test:", attr(object, "test"), "\n")
-  cat(" Environment:", attr(object, "env"), "\n")
-  if (attr(object, "type") == "partial")
-    cat("Treatment:", attr(object, "trt"), "\n")
+  # cat(" Environment:", deparse(attr(object, "env")), "\n")
+  # if (attr(object, "type") == "partial")
+    # cat("Treatment:", attr(object, "trt"), "\n")
   if (print_all) {
     cat("\n Tested sets:\n")
-    print(round(object[["pvals"]], digits = digits))
+    print(round(object[["set_pvals"]], digits = digits))
   }
   cat("\n Predictor p-values:\n")
-  print(round(object[["ipvals"]], digits = digits))
-  cat("\n Set of plausible causal predictors:", object[["inv"]], "\n")
+  print(round(object[["predictor_pvals"]], digits = digits))
+  cat("\n Set of plausible causal predictors:",
+      object[["candidate_causal_predictors"]], "\n")
   return(invisible(NULL))
 
+}
+
+#' Extract set and predictor p-values from tramicp outputs
+#' @param object Object of class \code{'dicp'}
+#' @param which Which p-values to return, \code{"predictor"} returns p-values
+#'     for individual predictors, \code{"set"} for each subset of the predictors,
+#'     \code{"all"} returns a list of both
+#'
+#' @return Numeric vector (or list in case \code{which = "all"}) of p-values
+#'
+#' @details Predictor p-values are computed from the set p-values as follows:
+#'     For each predictor j as the largest p-value of all sets not containing j.
+#'
+#' @examples
+#' set.seed(123)
+#' d <- dgp_dicp(n = 1e3, mod = "polr")
+#' res <- dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
+#' pvalues(res, which = "predictor")
+#' pvalues(res, which = "set")
+#' pvalues(res, which = "all")
+#'
+#' @export
+pvalues <- function(object, which = c("predictor", "set", "all")) {
+  which <- match.arg(which)
+  switch(which, "predictor" = object$predictor_pvals, "set" = object$set_pvals,
+         "all" = object[c("predictor_pvals", "set_pvals")])
 }

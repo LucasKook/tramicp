@@ -4,7 +4,12 @@
 \alias{dicp_controls}
 \title{Controls}
 \usage{
-dicp_controls(type, test)
+dicp_controls(
+  type = "residual",
+  test = "independence",
+  baseline_fixed = TRUE,
+  alpha = 0.05
+)
 }
 \arguments{
 \item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
@@ -13,6 +18,8 @@ or \code{"partial"})}
 \item{test}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
 \code{"var.test"}, \code{"wald"}) or custom function for testing
 invariance.}
+
+\item{alpha}{Level of invariance test, default}
 }
 \value{
 List of dicp controls

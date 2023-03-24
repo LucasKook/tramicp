@@ -9,12 +9,10 @@ dicp(
   data,
   env,
   modFUN,
-  trt = NULL,
   verbose = TRUE,
-  type = c("residual", "wald", "partial", "mcheck", "confint"),
-  test = "indep",
-  controls = dicp_controls(match.arg(type), test),
-  baseline_fixed = TRUE,
+  type = c("residual", "wald", "mcheck", "confint"),
+  test = "independence",
+  controls = NULL,
   alpha = 0.05,
   ...
 )
@@ -24,14 +22,12 @@ dicp(
 
 \item{data}{Data.frame containing response and explanatory variables}
 
-\item{env}{Character, name of environmental variable}
+\item{env}{Formula specifying the exogenous environment variables}
 
 \item{modFUN}{Model function from package 'tram', i.e. \code{BoxCox},
 \code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
-\code{Lehmann}. Standard implementation \code{lm} is also supported.}
-
-\item{trt}{Character, supply only when \code{type = "partial"}, treatment
-variable. Ignored otherwise}
+\code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
+\code{\link[MASS]{polr}} are also supported.}
 
 \item{verbose}{Logical, whether output should be verbose (default \code{TRUE})}
 
@@ -42,11 +38,8 @@ or \code{"partial"})}
 \code{"var.test"}, \code{"wald"}) or custom function for testing
 invariance.}
 
-\item{controls}{Controls for the used tests, see \code{dicp_controls}}
-
-\item{baseline_fixed}{Logical, whether baseline transformation is fixed
-(\code{TRUE}) or allowed to vary across environments (\code{FALSE}).
-Defaults to \code{TRUE}, i.e. a fixed baseline transformation}
+\item{controls}{Controls for the used tests and the overall procedure,
+see \code{dicp_controls}}
 
 \item{alpha}{Level of invariance test, default}
 
@@ -62,13 +55,12 @@ Invariant causal prediction for transformation models
 \examples{
 set.seed(123)
 d <- dgp_dicp(n = 1e3, mod = "polr")
-dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "confint")
-dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "wald")
-dicp(Y ~ X1 + X2 + X3, data = d, env = "E",
-   modFUN = tramicp:::.mod_from_name("polr"),
-   type = "wald", weights = abs(rnorm(nrow(d))))
-dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "residual")
-dicp(Y ~ X1 + X2 + X3, data = d, env = "E", modFUN = Polr, type = "residual",
-     test = "indep")
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald")
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
+    weights = abs(rnorm(nrow(d))))
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
+     test = "HSIC")
 
 }
