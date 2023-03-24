@@ -86,10 +86,10 @@ dicp <- function(
     inv <- "Cannot be computed."
   ipv <- .indiv_pvals(me, pvals)
 
-  structure(list(inv = if (identical(inv, character(0))) "Empty" else inv,
-      pvals = pvals, ipvals = ipv, tests = tests
-    ), class = "dICP", type = match.arg(type), test = controls$test_name,
-    env = env, call = call)
+  structure(list(candidate_causal_predictors = if (identical(inv, character(0)))
+    "Empty" else inv, set_pvals = pvals, predictor_pvals = ipv,
+    tests = tests), class = "dICP", type = match.arg(type),
+    test = controls$test_name, env = env, call = call)
 
 }
 

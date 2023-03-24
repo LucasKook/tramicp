@@ -52,9 +52,9 @@ ICP for cumulative ordinal regression using \code{MASS::polr()}
 d <- dgp_dicp(mod = "polr")
 mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
 # Almost identical to `PolrICP()`
-mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")$pvals
-PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")$pvals
-mpolrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")$pvals
+mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")$set_pvals
+PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")$set_pvals
+mpolrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")$set_pvals
 # Not implemented yet (will throw exception):
 # mpolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 
