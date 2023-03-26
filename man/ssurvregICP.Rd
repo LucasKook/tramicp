@@ -41,7 +41,6 @@ ICP for parametric survival models
 d <- dgp_dicp(mod = "weibull")
 library("survival")
 d$surv <- Surv(d$Y)
-ssurvreg(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
-    test = "indep")
+ssurvregICP(surv ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 
 }
