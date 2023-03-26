@@ -1,11 +1,12 @@
 Package: tramicp
 Type: Package
-Title: Invariant causal prediction for transformation models
+Title: Invariant causal prediction for generalized linear and transformation
+    models
 Version: 0.1.0
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
     email = "lucasheinrich.kook@uzh.ch"))
 Description: Extends invariant causal prediction (Peters et al., 2016, <doi:>)
-    to transformation models (Hothorn et al., 2018, <doi:>).
+    to generalized linear and transformation models (Hothorn et al., 2018, <doi:>).
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.2
