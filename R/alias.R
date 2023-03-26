@@ -43,6 +43,27 @@ SurvregICP <- function(formula, data, env, ...) {
   dicp(formula = formula, data = data, env = env, modFUN = Survreg, ...)
 }
 
+#' ICP for parametric survival models
+#'
+#' @inheritParams dicp
+#' @inheritDotParams dicp
+#'
+#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
+#' @export
+#'
+#' @importFrom survival survreg
+#'
+#' @examples
+#' d <- dgp_dicp(mod = "weibull")
+#' library("survival")
+#' d$surv <- Surv(d$Y)
+#' ssurvreg(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
+#'     test = "indep")
+#'
+ssurvregICP <- function(formula, data, env, ...) {
+  dicp(formula = formula, data = data, env = env, modFUN = survreg, ...)
+}
+
 #' ICP for Continuous outcome logistic regression
 #'
 #' @inheritParams dicp
