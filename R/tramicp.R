@@ -400,6 +400,9 @@ dicp <- function(
 #' Controls
 #'
 #' @inheritParams dicp
+#' @param baseline_fixed logical; whether or not the baseline transformation
+#'     is allowed to vary with the environments. Only takes effect when
+#'     \code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.
 #'
 #' @return List of dicp controls
 #'

@@ -11,6 +11,7 @@ mpolrICP(
   type = "residual",
   test = "indep",
   controls = NULL,
+  alpha = 0.05,
   ...
 )
 }
@@ -31,6 +32,8 @@ invariance.}
 \item{controls}{Controls for the used tests and the overall procedure,
 see \code{dicp_controls}}
 
+\item{alpha}{Level of invariance test, default}
+
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}
   \describe{
@@ -39,7 +42,6 @@ see \code{dicp_controls}}
 \code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
 \code{\link[MASS]{polr}} are also supported.}
     \item{\code{verbose}}{Logical, whether output should be verbose (default \code{TRUE})}
-    \item{\code{alpha}}{Level of invariance test, default}
   }}
 }
 \value{

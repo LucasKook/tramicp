@@ -19,6 +19,10 @@ or \code{"partial"})}
 \code{"var.test"}, \code{"wald"}) or custom function for testing
 invariance.}
 
+\item{baseline_fixed}{logical; whether or not the baseline transformation
+is allowed to vary with the environments. Only takes effect when
+\code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.}
+
 \item{alpha}{Level of invariance test, default}
 }
 \value{

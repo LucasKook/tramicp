@@ -34,7 +34,7 @@ BoxCoxICP <- function(formula, data, env, ...) {
 #' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-#' library(survival)
+#' library("survival")
 #' d$surv <- Surv(d$Y)
 #' dicp(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
 #'     test = "indep")
@@ -160,7 +160,7 @@ PolrICP <- function(formula, data, env, ...) {
 #' # mpolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 mpolrICP <- function(formula, data, env, type = "residual", test = "indep",
-                    controls = NULL, ...) {
+                    controls = NULL, alpha = 0.05, ...) {
   dots <- list(...)
   if (type == "confint")
     stop("`type = \"confint\"` not implemented for ICP with `MASS::polr()`.")

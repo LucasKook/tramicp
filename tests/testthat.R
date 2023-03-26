@@ -1,4 +1,4 @@
-library(testthat)
-library(tramicp)
+library("testthat")
+library("tramicp")
 
 test_check("tramicp")
