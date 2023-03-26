@@ -1,6 +1,17 @@
 combs <- c("confint" = "independence", "wald" = "wald",
            "residual" = "independence", "residual" = "HSIC")
 
+dtypes <- list(
+  "boxcox" = BoxCoxICP,
+  "weibull" = SurvregICP,
+  "colr" = ColrICP,
+  "coxph" = CoxphICP,
+  "lm" = LmICP,
+  "polr" = PolrICP,
+  "cotram" = cotramICP,
+  "binary" = \(...) glmICP(..., family = "binomial")
+)
+
 test_that("main function works", {
   set.seed(123)
   d <- dgp_dicp(n = 1e3, mod = "polr")
@@ -26,82 +37,43 @@ test_that("main function works", {
 
 test_that("All aliases work", {
 
-  ### BoxCox
-  d <- dgp_dicp(mod = "boxcox")
-  lapply(seq_along(combs), \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- BoxCoxICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                     test = ttest, verbose = FALSE)
-    expect_length(pvalues(res, "set"), 2^2)
-  })
-
-  ### Survreg
-  d <- dgp_dicp(mod = "weibull")
-  lapply(seq_along(combs), \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- SurvregICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                      test = ttest, verbose = FALSE)
-    expect_length(pvalues(res, "set"), 2^2)
-  })
-
-  ### survival::survreg
+  set.seed(123)
   library("survival")
-  d$surv <- Surv(d$Y)
-  lapply(seq_along(combs)[-1:-2], \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- dicp(surv ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                test = ttest, verbose = FALSE, modFUN = survreg)
-    expect_length(pvalues(res, "set"), 2^2)
-  })
 
-  ### Colr
-  d <- dgp_dicp(mod = "colr")
-  lapply(seq_along(combs), \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- ColrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                   test = ttest, verbose = FALSE)
-    expect_length(pvalues(res, "set"), 2^2)
-  })
-
-  ### Coxph
-  d <- dgp_dicp(mod = "coxph")
-  lapply(seq_along(combs), \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- CoxphICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                    test = ttest, verbose = FALSE)
-    expect_length(pvalues(res, "set"), 2^2)
-  })
-
-  ### Lm and lm
-  d <- dgp_dicp(mod = "lm")
-  lapply(seq_along(combs), \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- LmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+  ### All aliases
+  lapply(seq_along(dtypes), \(didx) {
+    dtype <- names(dtypes[didx])
+    FUN <- dtypes[[didx]]
+    d <- dgp_dicp(mod = dtype)
+    dotest <- seq_along(combs)
+    if (dtype == "weibull")
+      dotest <- seq_along(combs)[-1:-2]
+    lapply(dotest, \(tcomb) {
+      ttype <- names(combs)[tcomb]
+      ttest <- unname(combs[tcomb])
+      res <- FUN(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
                  test = ttest, verbose = FALSE)
-    expect_length(pvalues(res, "set"), 2^2)
-    res <- dicp(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                test = ttest, verbose = FALSE, modFUN = lm)
-    expect_length(pvalues(res, "set"), 2^2)
-  })
-
-  ### MASS::polr
-  d <- dgp_dicp(mod = "polr")
-  lapply(seq_along(combs)[-1], \(tcomb) {
-    ttype <- names(combs)[tcomb]
-    ttest <- unname(combs[tcomb])
-    res <- mpolrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                    test = ttest, verbose = FALSE)
-    expect_length(pvalues(res, "set"), 2^2)
+      expect_length(pvalues(res, "set"), 2^2)
+      if (dtype == "lm") {
+        res <- dicp(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                    test = ttest, verbose = FALSE, modFUN = lm)
+      } else if (dtype == "cotram") {
+        res <- glmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                      test = ttest, verbose = FALSE, family = "poisson")
+      } else if (dtype == "polr" && tcomb > 1) {
+        res <- mpolrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                        test = ttest, verbose = FALSE)
+      }
+      expect_length(pvalues(res, "set"), 2^2)
+    })
   })
 
   expect_error(mpolrICP(Y ~ X1 + X2, data = d, env = ~ E, type = "confint",
                         verbose = FALSE))
+
+})
+
+test_that("Output of cotramICP and glmICP", {
 
   ### cotram and poisson glm
   set.seed(13312)
