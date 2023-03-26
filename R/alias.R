@@ -57,8 +57,7 @@ SurvregICP <- function(formula, data, env, ...) {
 #' d <- dgp_dicp(mod = "weibull")
 #' library("survival")
 #' d$surv <- Surv(d$Y)
-#' ssurvreg(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
-#'     test = "indep")
+#' ssurvregICP(surv ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #'
 ssurvregICP <- function(formula, data, env, ...) {
   dicp(formula = formula, data = data, env = env, modFUN = survreg, ...)
