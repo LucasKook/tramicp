@@ -17,6 +17,8 @@
 #'     see \code{dicp_controls}
 #' @param alpha Level of invariance test, default
 #' @param ... Further arguments passed to \code{modFUN}
+#' @param baseline_fixed Fixed baseline transformation, see
+#'     \code{\link[tramicp]{dicp_controls}}.
 #'
 #' @return Object of class \code{"dICP"}, containing the invariant set (if exists),
 #'     pvalues from all invariance tests and the tests themselves
@@ -39,7 +41,8 @@
 dicp <- function(
   formula, data, env, modFUN, verbose = TRUE,
   type = c("residual", "wald", "mcheck", "confint"),
-  test = "independence", controls = NULL, alpha = 0.05, ...
+  test = "independence", controls = NULL, alpha = 0.05,
+  baseline_fixed = TRUE, ...
 ) {
 
   call <- match.call()
@@ -50,7 +53,8 @@ dicp <- function(
       test, c("independence", "HSIC", "t.test", "var.test", "combined", "wald")
     )
   if (is.null(controls))
-    controls <- dicp_controls(match.arg(type), test, alpha = alpha)
+    controls <- dicp_controls(match.arg(type), test, alpha = alpha,
+                              baseline_fixed = baseline_fixed)
   .check_args(formula, data, env, modFUN, type, test)
 
   ### Process formulae

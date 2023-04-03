@@ -62,7 +62,8 @@
     switch(
       mod,
       "polr" = \(formula, data, ...)
-      Polr(formula, data, ...),
+      polr(formula, data, ...),
+      # Polr(formula, data, ...),
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, ..., prob = prob),
       "lm" = \(formula, data, ...)

@@ -14,6 +14,7 @@ dicp(
   test = "independence",
   controls = NULL,
   alpha = 0.05,
+  baseline_fixed = TRUE,
   ...
 )
 }
@@ -42,6 +43,9 @@ invariance.}
 see \code{dicp_controls}}
 
 \item{alpha}{Level of invariance test, default}
+
+\item{baseline_fixed}{Fixed baseline transformation, see
+\code{\link[tramicp]{dicp_controls}}.}
 
 \item{...}{Further arguments passed to \code{modFUN}}
 }

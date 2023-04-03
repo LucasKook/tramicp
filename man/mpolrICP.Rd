@@ -42,6 +42,8 @@ see \code{dicp_controls}}
 \code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
 \code{\link[MASS]{polr}} are also supported.}
     \item{\code{verbose}}{Logical, whether output should be verbose (default \code{TRUE})}
+    \item{\code{baseline_fixed}}{Fixed baseline transformation, see
+\code{\link[tramicp]{dicp_controls}}.}
   }}
 }
 \value{

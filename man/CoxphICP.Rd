@@ -29,6 +29,8 @@ invariance.}
     \item{\code{controls}}{Controls for the used tests and the overall procedure,
 see \code{dicp_controls}}
     \item{\code{alpha}}{Level of invariance test, default}
+    \item{\code{baseline_fixed}}{Fixed baseline transformation, see
+\code{\link[tramicp]{dicp_controls}}.}
   }}
 }
 \value{
