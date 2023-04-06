@@ -140,6 +140,25 @@ LmICP <- function(formula, data, env, ...) {
   dicp(formula = formula, data = data, env = env, modFUN = Lm, ...)
 }
 
+#' ICP for normal linear regression (using stats::lm)
+#'
+#' @inheritParams dicp
+#' @inheritDotParams dicp
+#'
+#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
+#' @export
+#'
+#' @examples
+#' d <- dgp_dicp(mod = "lm")
+#' slmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
+#' slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
+#' slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
+#' slmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#'
+slmICP <- function(formula, data, env, ...) {
+  dicp(formula = formula, data = data, env = env, modFUN = lm, ...)
+}
+
 #' ICP for cumulative ordinal regression
 #'
 #' @inheritParams dicp

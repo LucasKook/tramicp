@@ -62,7 +62,7 @@
     switch(
       mod,
       "polr" = \(formula, data, ...)
-      polr(formula, data, ...),
+      polr(formula, data, Hess = TRUE, ...),
       # Polr(formula, data, ...),
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, ..., prob = prob),
@@ -85,7 +85,7 @@
     switch(
       mod,
       "polr" = \(formula, data, ...)
-      Polr(formula, data, method = "probit", ...),
+      polr(formula, data, method = "probit", Hess = TRUE, ...),
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, dist = "loglogistic", ..., prob = prob),
       "lm" = \(formula, data, ...)

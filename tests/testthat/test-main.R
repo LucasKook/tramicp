@@ -55,8 +55,8 @@ test_that("All aliases work", {
                  test = ttest, verbose = FALSE)
       expect_length(pvalues(res, "set"), 2^2)
       if (dtype == "lm") {
-        res <- dicp(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                    test = ttest, verbose = FALSE, modFUN = lm)
+        res <- slmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                    test = ttest, verbose = FALSE)
       } else if (dtype == "cotram") {
         res <- glmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
                       test = ttest, verbose = FALSE, family = "poisson")
