@@ -148,6 +148,8 @@ LmICP <- function(formula, data, env, ...) {
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
+#' @importFrom stats lm
+#'
 #' @examples
 #' d <- dgp_dicp(mod = "lm")
 #' slmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
