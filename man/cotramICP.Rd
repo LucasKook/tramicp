@@ -4,7 +4,19 @@
 \alias{cotramICP}
 \title{ICP for count transformation models}
 \usage{
-cotramICP(formula, data, env, ...)
+cotramICP(
+  formula,
+  data,
+  env,
+  verbose = TRUE,
+  type = "residual",
+  test = "independence",
+  controls = NULL,
+  alpha = 0.05,
+  baseline_fixed = TRUE,
+  greedy = FALSE,
+  ...
+)
 }
 \arguments{
 \item{formula}{Formula including response and shift terms}
@@ -13,6 +25,26 @@ cotramICP(formula, data, env, ...)
 
 \item{env}{Formula specifying the exogenous environment variables}
 
+\item{verbose}{Logical, whether output should be verbose (default \code{TRUE})}
+
+\item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
+or \code{"partial"})}
+
+\item{test}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
+\code{"var.test"}, \code{"wald"}) or custom function for testing
+invariance.}
+
+\item{controls}{Controls for the used tests and the overall procedure,
+see \code{dicp_controls}}
+
+\item{alpha}{Level of invariance test, default}
+
+\item{baseline_fixed}{Fixed baseline transformation, see
+\code{\link[tramicp]{dicp_controls}}.}
+
+\item{greedy}{Logical, whether to perform a greedy version of ICP (default is
+\code{FALSE})}
+
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}
   \describe{
@@ -20,17 +52,6 @@ cotramICP(formula, data, env, ...)
 \code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
 \code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
 \code{\link[MASS]{polr}} are also supported.}
-    \item{\code{verbose}}{Logical, whether output should be verbose (default \code{TRUE})}
-    \item{\code{type}}{Character, type of invariance (\code{"residual"}, \code{"wald"},
-or \code{"partial"})}
-    \item{\code{test}}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
-\code{"var.test"}, \code{"wald"}) or custom function for testing
-invariance.}
-    \item{\code{controls}}{Controls for the used tests and the overall procedure,
-see \code{dicp_controls}}
-    \item{\code{alpha}}{Level of invariance test, default}
-    \item{\code{baseline_fixed}}{Fixed baseline transformation, see
-\code{\link[tramicp]{dicp_controls}}.}
   }}
 }
 \value{

@@ -9,14 +9,25 @@
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "boxcox")
-#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
+#' BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
+#' BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald",
+#'     greedy = TRUE)
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-BoxCoxICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = BoxCox, ...)
+BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = BoxCox,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for parametric survival models
@@ -28,6 +39,7 @@ BoxCoxICP <- function(formula, data, env, ...) {
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull")
 #' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
 #' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
@@ -39,8 +51,16 @@ BoxCoxICP <- function(formula, data, env, ...) {
 #' dicp(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
 #'     test = "indep")
 #'
-SurvregICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = Survreg, ...)
+SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = Survreg,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for parametric survival models
@@ -54,13 +74,22 @@ SurvregICP <- function(formula, data, env, ...) {
 #' @importFrom survival survreg
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull")
 #' library("survival")
 #' d$surv <- Surv(d$Y)
 #' ssurvregICP(surv ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #'
-ssurvregICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = survreg, ...)
+ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = survreg,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for Continuous outcome logistic regression
@@ -78,8 +107,16 @@ ssurvregICP <- function(formula, data, env, ...) {
 #' ColrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' ColrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-ColrICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = Colr, ...)
+ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = Colr,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for Cox proportional hazards regression
@@ -97,8 +134,16 @@ ColrICP <- function(formula, data, env, ...) {
 #' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-CoxphICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = Coxph, ...)
+CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = Coxph,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for Lehmann regression models
@@ -116,8 +161,16 @@ CoxphICP <- function(formula, data, env, ...) {
 #' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-LehmannICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = Lehmann, ...)
+LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = Lehmann,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for normal linear regression
@@ -136,8 +189,16 @@ LehmannICP <- function(formula, data, env, ...) {
 #' LmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #' dicp(Y ~ X2, data = d, env = ~ E, type = "confint", modFUN = lm)
 #'
-LmICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = Lm, ...)
+LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = Lm,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for normal linear regression (using stats::lm)
@@ -157,8 +218,16 @@ LmICP <- function(formula, data, env, ...) {
 #' slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' slmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-slmICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = lm, ...)
+slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = lm,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for cumulative ordinal regression
@@ -176,8 +245,16 @@ slmICP <- function(formula, data, env, ...) {
 #' PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #' PolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-PolrICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = Polr, ...)
+PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = Polr,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for cumulative ordinal regression using \code{MASS::polr()}
@@ -200,9 +277,10 @@ PolrICP <- function(formula, data, env, ...) {
 #' # `"confint"` Not implemented yet (will throw exception):
 #' # mpolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
-mpolrICP <- function(formula, data, env, type = "residual", test = "indep",
-                    controls = NULL, alpha = 0.05, ...) {
-  dots <- list(...)
+mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
   if (type == "confint")
     stop("`type = \"confint\"` not implemented for ICP with `MASS::polr()`.")
   modF <- polr
@@ -220,8 +298,12 @@ mpolrICP <- function(formula, data, env, type = "residual", test = "indep",
     vcov <- vcov(object)
     vcov[names(cf), names(cf)]
   }
-  dicp(formula = formula, data = data, env = env, modFUN = modF, type = type,
-       test = test, controls = controls, ...)
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = modF,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' @method residuals polr
@@ -251,8 +333,16 @@ residuals.polr <- function(object, ...) {
 #' glmICP(Y ~ X2, data = d, env = ~ E, type = "confint", family = "binomial")
 #' dicp(Y ~ X2, data = d, env = ~ E, modFUN = tramicp:::.mod_from_name("binary"))
 #'
-glmICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = glm, ...)
+glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = glm,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }
 
 #' ICP for count transformation models
@@ -272,6 +362,14 @@ glmICP <- function(formula, data, env, ...) {
 #' cotramICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #' glmICP(Y ~ X2, data = d, env = ~ E, family = "poisson", test = "indep")
 #'
-cotramICP <- function(formula, data, env, ...) {
-  dicp(formula = formula, data = data, env = env, modFUN = cotram::cotram, ...)
+cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                      test = "independence", controls = NULL, alpha = 0.05,
+                      baseline_fixed = TRUE, greedy = FALSE, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = cotram::cotram,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              ... = ...)
+  attr(ret, "call") <- call
+  ret
 }

@@ -46,7 +46,11 @@ print.dICP <- function(x, ...) {
 #'
 summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
 
-  cat("\nDistributional Invariant Causal Prediction\n")
+  ttitle <- paste(
+    "\n", ifelse(attr(object, "greedy"), "Greedy", "Distributional"),
+    "Invariant Causal Prediction\n"
+  )
+  cat(ttitle)
   mod <- object[["tests"]][[2]]$model$tram
   if (is.null(mod)) mod <- object[["tests"]][[2]]$tram
   cat(mod, "\n")

@@ -8,10 +8,13 @@ mpolrICP(
   formula,
   data,
   env,
+  verbose = TRUE,
   type = "residual",
-  test = "indep",
+  test = "independence",
   controls = NULL,
   alpha = 0.05,
+  baseline_fixed = TRUE,
+  greedy = FALSE,
   ...
 )
 }
@@ -21,6 +24,8 @@ mpolrICP(
 \item{data}{Data.frame containing response and explanatory variables}
 
 \item{env}{Formula specifying the exogenous environment variables}
+
+\item{verbose}{Logical, whether output should be verbose (default \code{TRUE})}
 
 \item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
 or \code{"partial"})}
@@ -34,6 +39,12 @@ see \code{dicp_controls}}
 
 \item{alpha}{Level of invariance test, default}
 
+\item{baseline_fixed}{Fixed baseline transformation, see
+\code{\link[tramicp]{dicp_controls}}.}
+
+\item{greedy}{Logical, whether to perform a greedy version of ICP (default is
+\code{FALSE})}
+
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}
   \describe{
@@ -41,9 +52,6 @@ see \code{dicp_controls}}
 \code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
 \code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
 \code{\link[MASS]{polr}} are also supported.}
-    \item{\code{verbose}}{Logical, whether output should be verbose (default \code{TRUE})}
-    \item{\code{baseline_fixed}}{Fixed baseline transformation, see
-\code{\link[tramicp]{dicp_controls}}.}
   }}
 }
 \value{

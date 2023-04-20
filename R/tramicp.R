@@ -19,6 +19,8 @@
 #' @param ... Further arguments passed to \code{modFUN}
 #' @param baseline_fixed Fixed baseline transformation, see
 #'     \code{\link[tramicp]{dicp_controls}}.
+#' @param greedy Logical, whether to perform a greedy version of ICP (default is
+#'     \code{FALSE})
 #'
 #' @return Object of class \code{"dICP"}, containing the invariant set (if exists),
 #'     pvalues from all invariance tests and the tests themselves
@@ -38,11 +40,19 @@
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
 #'      test = "HSIC")
 #'
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint", greedy = TRUE)
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald", greedy = TRUE)
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
+#'     weights = abs(rnorm(nrow(d))), greedy = TRUE)
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE)
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
+#'      test = "HSIC", greedy = TRUE)
+#'
 dicp <- function(
   formula, data, env, modFUN, verbose = TRUE,
   type = c("residual", "wald", "mcheck", "confint"),
   test = "independence", controls = NULL, alpha = 0.05,
-  baseline_fixed = TRUE, ...
+  baseline_fixed = TRUE, greedy = FALSE, ...
 ) {
 
   call <- match.call()
@@ -68,19 +78,48 @@ dicp <- function(
   if (verbose && interactive())
     pb <- txtProgressBar(min = 0, max = length(ps), style = 3)
 
-  # Run
-  tests <- list()
-  for (set in seq_along(ps)) {
+  if (!greedy) {
+    # Run
+    tests <- list()
+    for (set in seq_along(ps)) {
 
-    if (verbose && interactive())
-      setTxtProgressBar(pb, set)
+      if (verbose && interactive())
+        setTxtProgressBar(pb, set)
 
-    ret <- apply(ps[[set]], 2, controls$type_fun, me = me, resp = resp,
-                 set = set, env = etms, modFUN = modFUN, data = data,
-                 controls = controls, ... = ...)
+      ret <- apply(ps[[set]], 2, controls$type_fun, me = me, resp = resp,
+                   set = set, env = etms, modFUN = modFUN, data = data,
+                   controls = controls, ... = ...)
 
-    tests <- c(tests, ret)
+      tests <- c(tests, ret)
 
+    }
+  } else {
+    if(length(me) <= 1)
+      stop("Run greedy ICP only with more than one predictor.")
+    # Run
+    tests <- list()
+    set <- seq_along(me)
+    while (length(set) > 1) {
+
+      if (verbose && interactive())
+        setTxtProgressBar(pb, length(me) - length(set) + 1)
+
+      sets <- combn(set, length(set) - 1)
+
+      ret <- apply(sets, 2, controls$type_fun, me = me, resp = resp,
+                   set = length(set), env = etms, modFUN = modFUN, data = data,
+                   controls = controls, ... = ...)
+
+      pvals <- lapply(ret, \(x) .get_pvalue(x$test))
+      set <- set[-which.max(pvals)[1]]
+      tests <- c(tests, ret)
+
+      if (any(unlist(pvals) < 0.05)) {
+        if (verbose && interactive())
+          cat("\nTerminated early.")
+        set <- 0
+      }
+    }
   }
 
   res <- .extract_results(tests)
@@ -93,7 +132,7 @@ dicp <- function(
   structure(list(candidate_causal_predictors = if (identical(inv, character(0)))
     "Empty" else inv, set_pvals = pvals, predictor_pvals = ipv,
     tests = tests), class = "dICP", type = match.arg(type),
-    test = controls$test_name, env = env, call = call)
+    test = controls$test_name, env = env, greedy = greedy, call = call)
 
 }
 

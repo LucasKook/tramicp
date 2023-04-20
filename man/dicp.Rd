@@ -15,6 +15,7 @@ dicp(
   controls = NULL,
   alpha = 0.05,
   baseline_fixed = TRUE,
+  greedy = FALSE,
   ...
 )
 }
@@ -47,6 +48,9 @@ see \code{dicp_controls}}
 \item{baseline_fixed}{Fixed baseline transformation, see
 \code{\link[tramicp]{dicp_controls}}.}
 
+\item{greedy}{Logical, whether to perform a greedy version of ICP (default is
+\code{FALSE})}
+
 \item{...}{Further arguments passed to \code{modFUN}}
 }
 \value{
@@ -66,5 +70,13 @@ dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
      test = "HSIC")
+
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint", greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald", greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
+    weights = abs(rnorm(nrow(d))), greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
+     test = "HSIC", greedy = TRUE)
 
 }
