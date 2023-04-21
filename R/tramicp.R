@@ -119,7 +119,7 @@ dicp <- function(
       set <- sets[, which.max(pvals)[1]]
       inv <- me[set]
 
-      if (any(unlist(pvals) < alpha)) {
+      if (any(unlist(pvals) < alpha) && !all(unlist(pvals) < alpha)) {
         if (verbose && interactive())
           cat("\nTerminated early.")
         set <- 0

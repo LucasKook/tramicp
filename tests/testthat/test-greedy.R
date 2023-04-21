@@ -91,6 +91,6 @@ test_that("Output of cotramICP and glmICP", {
     ttest <- unname(combs[tcomb])
     res <- glmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
                   test = ttest, verbose = FALSE, family = "binomial", greedy = TRUE)
-    expect_true(res$candidate_causal_predictors %in% c("X2", "Empty"))
+    expect_true(res$candidate_causal_predictors %in% c("X2", "X1"))
   })
 })
