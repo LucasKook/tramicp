@@ -114,12 +114,12 @@ dicp <- function(
       tests <- c(tests, ret)
 
       # if (verbose && interactive())
-      #   cat("\nRemoving", setdiff(set, sets[, which.max(pvals)]), "\n")
+        cat("\nRemoving", setdiff(set, sets[, which.max(pvals)]), "\n")
 
       set <- sets[, which.max(pvals)[1]]
-      # inv <- me[set]
+      inv <- me[set]
 
-      if (any(unlist(pvals) < 0.05)) { # && !all(unlist(pvals) < 0.05)) {
+      if (any(unlist(pvals) < alpha)) {
         if (verbose && interactive())
           cat("\nTerminated early.")
         set <- 0
@@ -129,11 +129,11 @@ dicp <- function(
 
   res <- .extract_results(tests)
   pvals <- structure(res[["pval"]], names = res[["set"]])
-  # if (!greedy) {
-  inv <- try(.inv_set(res, alpha = controls$alpha))
-  if (inherits(inv, "try-error"))
-    inv <- "Cannot be computed."
-  # }
+  if (!greedy) {
+    inv <- try(.inv_set(res, alpha = controls$alpha))
+    if (inherits(inv, "try-error"))
+      inv <- "Cannot be computed."
+  }
   ipv <- .indiv_pvals(me, pvals)
 
   structure(list(candidate_causal_predictors = if (identical(inv, character(0)))
