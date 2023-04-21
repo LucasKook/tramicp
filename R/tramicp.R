@@ -114,7 +114,7 @@ dicp <- function(
       set <- set[-which.max(pvals)[1]]
       tests <- c(tests, ret)
 
-      if (any(unlist(pvals) < 0.05)) {
+      if (any(unlist(pvals) < 0.05) && !all(unlist(pvals) < 0.05)) {
         if (verbose && interactive())
           cat("\nTerminated early.")
         set <- 0
