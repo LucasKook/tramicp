@@ -114,7 +114,7 @@ dicp <- function(
       tests <- c(tests, ret)
 
       # if (verbose && interactive())
-        cat("\nRemoving", setdiff(set, sets[, which.max(pvals)]), "\n")
+        # cat("\nRemoving", setdiff(set, sets[, which.max(pvals)]), "\n")
 
       set <- sets[, which.max(pvals)[1]]
       inv <- me[set]
