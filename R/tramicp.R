@@ -111,7 +111,7 @@ dicp <- function(
         setTxtProgressBar(pb, set)
 
       if (length(MI > 0) && any(unlist(MI) %in% lps[[set]])) {
-        tests[[set]] <- list(set = me[set], test = list(p.value = NA, test = NA))
+        tests[[set]] <- list(set = me[lps[[set]]], test = list(p.value = 0, test = NA))
         next
       }
 
