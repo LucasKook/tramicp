@@ -74,11 +74,14 @@ dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
      test = "HSIC")
 
-dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint", greedy = TRUE)
-dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald", greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint",
+    greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
+    greedy = TRUE)
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
     weights = abs(rnorm(nrow(d))), greedy = TRUE)
-dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE, max_size = 1)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
+    greedy = TRUE)
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
      test = "HSIC", greedy = TRUE)
 
