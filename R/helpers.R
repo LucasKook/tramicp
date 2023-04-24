@@ -239,7 +239,7 @@ residuals.binglm <- function(object, ...) {
 }
 
 .check_depth <- function(x) {
-  if (is_null(x)) {
+  if (is.null(x)) {
     0L
   }
   else if (is.atomic(x)) {
