@@ -16,6 +16,7 @@ dicp(
   alpha = 0.05,
   baseline_fixed = TRUE,
   greedy = FALSE,
+  max_size = NULL,
   ...
 )
 }
@@ -51,6 +52,8 @@ see \code{dicp_controls}}
 \item{greedy}{Logical, whether to perform a greedy version of ICP (default is
 \code{FALSE})}
 
+\item{max_size}{Numeric; maximum support size}
+
 \item{...}{Further arguments passed to \code{modFUN}}
 }
 \value{
@@ -75,7 +78,7 @@ dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint", gre
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald", greedy = TRUE)
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
     weights = abs(rnorm(nrow(d))), greedy = TRUE)
-dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE)
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE, max_size = 1)
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
      test = "HSIC", greedy = TRUE)
 

@@ -15,6 +15,7 @@ cotramICP(
   alpha = 0.05,
   baseline_fixed = TRUE,
   greedy = FALSE,
+  max_size = NULL,
   ...
 )
 }
@@ -44,6 +45,8 @@ see \code{dicp_controls}}
 
 \item{greedy}{Logical, whether to perform a greedy version of ICP (default is
 \code{FALSE})}
+
+\item{max_size}{Numeric; maximum support size}
 
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}

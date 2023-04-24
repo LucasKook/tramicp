@@ -21,6 +21,7 @@
 #'     \code{\link[tramicp]{dicp_controls}}.
 #' @param greedy Logical, whether to perform a greedy version of ICP (default is
 #'     \code{FALSE})
+#' @param max_size Numeric; maximum support size
 #'
 #' @return Object of class \code{"dICP"}, containing the invariant set (if exists),
 #'     pvalues from all invariance tests and the tests themselves
@@ -44,7 +45,7 @@
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald", greedy = TRUE)
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
 #'     weights = abs(rnorm(nrow(d))), greedy = TRUE)
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE)
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual", greedy = TRUE, max_size = 1)
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
 #'      test = "HSIC", greedy = TRUE)
 #'
@@ -52,7 +53,7 @@ dicp <- function(
   formula, data, env, modFUN, verbose = TRUE,
   type = c("residual", "wald", "mcheck", "confint"),
   test = "independence", controls = NULL, alpha = 0.05,
-  baseline_fixed = TRUE, greedy = FALSE, ...
+  baseline_fixed = TRUE, greedy = FALSE, max_size = NULL, ...
 ) {
 
   call <- match.call()
@@ -72,7 +73,10 @@ dicp <- function(
   resp <- tms$response
   etms <- .get_terms(env)
   me <- setdiff(tms$all, etms$all) # no env in main effects
-  ps <- lapply(0:length(me), combn, x = length(me))
+  if (is.null(max_size))
+    max_size <- length(me)
+  max_size <- min(max_size, length(me))
+  ps <- lapply(0:max_size, combn, x = length(me))
 
   # Options
   if (verbose && interactive())
@@ -94,36 +98,36 @@ dicp <- function(
 
     }
   } else {
-    if (length(me) <= 1)
-      stop("Run greedy ICP only with more than one predictor.")
     # Run
     tests <- list()
-    set <- seq_along(me)
-    while (length(set) > 1) {
+    MI <- list()
+    lps <- purrr::flatten(lapply(ps, \(x) apply(x, 2, \(y) y, simplify = FALSE)))
+    for (set in seq_along(lps)) {
 
       if (verbose && interactive())
-        setTxtProgressBar(pb, length(me) - length(set) + 1)
+        setTxtProgressBar(pb, set)
 
-      sets <- combn(set, length(set) - 1)
-
-      ret <- apply(sets, 2, controls$type_fun, me = me, resp = resp,
-                   set = length(set), env = etms, modFUN = modFUN, data = data,
-                   controls = controls, ... = ...)
-
-      pvals <- lapply(ret, \(x) .get_pvalue(x$test))
-      tests <- c(tests, ret)
-
-      # if (verbose && interactive())
-        # cat("\nRemoving", setdiff(set, sets[, which.max(pvals)]), "\n")
-
-      set <- sets[, which.max(pvals)[1]]
-      inv <- me[set]
-
-      if (any(unlist(pvals) < alpha) && !all(unlist(pvals) < alpha)) {
-        if (verbose && interactive())
-          cat("\nTerminated early.")
-        set <- 0
+      if (length(MI > 0) && any(unlist(MI) %in% lps[[set]])) {
+        tests[[set]] <- list(set = me[set], test = list(p.value = NA, test = NA))
+        next
       }
+
+      ret <- controls$type_fun(
+        lps[[set]], me = me, resp = resp, set = set, env = etms,
+        modFUN = modFUN, data = data, controls = controls, ... = ...
+      )
+
+      if (.get_pvalue(ret$test) > alpha) {
+        # cat("\nAdding", lps[[set]], "to MI\n")
+        MI <- c(MI, lps[[set]])
+      }
+
+      UMI <- sort(unique(unlist(MI)))
+      if (length(MI) > 0 && length(UMI) == length(me) && all(UMI == seq_along(me)))
+        break
+
+      tests[[set]] <- ret
+
     }
   }
 
@@ -133,6 +137,8 @@ dicp <- function(
     inv <- try(.inv_set(res, alpha = controls$alpha))
     if (inherits(inv, "try-error"))
       inv <- "Cannot be computed."
+  } else {
+    inv <- me[sort(unique(unlist(MI)))]
   }
   ipv <- .indiv_pvals(me, pvals)
 
