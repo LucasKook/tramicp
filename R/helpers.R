@@ -237,3 +237,29 @@ residuals.binglm <- function(object, ...) {
   as.numeric(model.response(model.frame(object))) - 1 -
     predict(object, type = "response")
 }
+
+.check_depth <- function(x) {
+  if (is_null(x)) {
+    0L
+  }
+  else if (is.atomic(x)) {
+    1L
+  }
+  else if (is.list(x)) {
+    depths <- as.integer(unlist(lapply(x, .check_depth)))
+    1L + max(depths, 0L)
+  }
+  else {
+    stop("`x` must be a vector")
+  }
+}
+
+.unlist_once <- function(x) {
+  if (is.data.frame(x)) {
+    return(lapply(unname(unlist(x)), function(x) c(x)))
+  } else if (.check_depth(x) <= 2L) {
+    return(x)
+  } else {
+    unlist(x, recursive = FALSE)
+  }
+}

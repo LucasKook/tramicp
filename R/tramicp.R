@@ -101,7 +101,7 @@ dicp <- function(
     # Run
     tests <- list()
     MI <- list()
-    lps <- purrr::flatten(lapply(ps, \(x) apply(x, 2, \(y) y, simplify = FALSE)))
+    lps <- .unlist_once(lapply(ps, \(x) apply(x, 2, \(y) y, simplify = FALSE)))
     for (set in seq_along(lps)) {
 
       if (verbose && interactive())
