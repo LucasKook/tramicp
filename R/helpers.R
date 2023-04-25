@@ -234,7 +234,7 @@ makePositive <- function(v, silent = TRUE) {
 
 #' @method residuals binglm
 residuals.binglm <- function(object, ...) {
-  as.numeric(model.response(model.frame(object))) - 1 -
+  as.numeric(model.response(model.frame(object))) -
     predict(object, type = "response")
 }
 
