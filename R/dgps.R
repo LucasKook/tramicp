@@ -93,6 +93,9 @@ dgp_dicp <- function(
     ncY <- as.numeric(cbind(x1, x2) %*% cfx >= rlogis(n))
     Y <- factor(ncY)
     x3 <- tge + c(-0.5, 0.5)[1 + ncY] + ex3
+  } else if (mod == "slm") {
+    Y <- ncY <- - cfb[1] / cfb[2] + cbind(x1, x2) %*% cfx / cfb[2] + rnorm(n)
+    x3 <- tge + Y / sd(Y) + ex3
   } else {
     m <- .tram_from_name(mod, ia = interacting, cfb = cfb, cfx = cfx)
     Y <- simulate(m, newdata = df)

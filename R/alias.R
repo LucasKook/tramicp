@@ -297,9 +297,7 @@ mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   if (type != "residual")
     modF <- function(formula, data, ...) polr(formula, data, Hess = TRUE, ...)
   if (is.character(test))
-    test <- match.arg(
-      test, c("independence", "HSIC", "t.test", "var.test", "combined", "wald")
-    )
+    test <- match.arg(test, .implemented_tests())
   if (is.null(controls))
     controls <- dicp_controls(match.arg(
       type, c("residual", "wald", "mcheck", "confint")), test, alpha = alpha)

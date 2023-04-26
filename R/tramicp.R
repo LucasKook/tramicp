@@ -63,9 +63,7 @@ dicp <- function(
 
   ### Preliminary checks
   if (is.character(test))
-    test <- match.arg(
-      test, c("independence", "HSIC", "t.test", "var.test", "combined", "wald")
-    )
+    test <- match.arg(test, .implemented_tests())
   if (is.null(controls))
     controls <- dicp_controls(match.arg(type), test, alpha = alpha,
                               baseline_fixed = baseline_fixed)
@@ -150,6 +148,11 @@ dicp <- function(
     tests = tests), class = "dICP", type = match.arg(type),
     test = controls$test_name, env = env, greedy = greedy, call = call)
 
+}
+
+.implemented_tests <- function() {
+  c("independence", "HSIC", "t.test", "var.test", "combined", "wald",
+    "cor.test", "spearman")
 }
 
 # Pvalues for individual predictors being a causal parent
@@ -390,6 +393,11 @@ dicp <- function(
   t.test(r ~ e)
 }
 
+#' @importFrom stats cor.test
+.cor_test <- function(r, e, controls) {
+  cor.test(r, e)
+}
+
 .var_test <- function(r, e, controls) {
   var.test(r ~ e)
 }
@@ -399,6 +407,12 @@ dicp <- function(
   scale <- var.test(r ~ e)
   list("p.value" = 2 * min(shift$p.value, scale$p.value),
        shift = shift, scale = scale)
+}
+
+#' @importFrom coin spearman_test
+.spearman_test <- function(r, e, controls) {
+  tst <- spearman_test(r ~ e)
+  list(p.value = pvalue(tst), test = tst)
 }
 
 #' @importFrom coin independence_test pvalue
@@ -446,6 +460,8 @@ dicp <- function(
       "var.test" = .var_test,
       "independence" = .indep_test,
       "combined" = .combined_test,
+      "cor.test" = .cor_test,
+      "spearman" = .spearman_test,
       "custom" = identity
     )
   }
