@@ -150,17 +150,7 @@ dicp <- function(
 
 }
 
-.implemented_tests <- function() {
-  c("independence", "HSIC", "t.test", "var.test", "combined", "wald",
-    "cor.test", "spearman")
-}
-
-# Pvalues for individual predictors being a causal parent
-.indiv_pvals <- function(terms, pvals) {
-  res <- lapply(terms, \(term) suppressWarnings(
-    max(pvals[!grepl(term, names(pvals))], na.rm = TRUE)))
-  structure(unlist(res), names = terms)
-}
+# Type-functions ----------------------------------------------------------
 
 # GOF test
 .modelcheck <- function(
@@ -339,8 +329,9 @@ dicp <- function(
 }
 
 # Partial invariance
-.dicp_partial <- function(tx, me, resp, set, env, modFUN,
-                          data, trt, controls, ...) {
+.dicp_partial <- function(
+    tx, me, resp, set, env, modFUN, data, trt, controls, ...
+) {
 
   if (set == 1) {
     tset <- "1"
@@ -371,143 +362,4 @@ dicp <- function(
   tst$set <- me[tx]
   tst
 
-}
-
-.extract_results <- function(res) {
-  ret <- unlist(lapply(res, \(x) {
-    ret <- .get_pvalue(x$test)
-    names(ret) <- paste(x$set, collapse = "+")
-    ret
-  }))
-  data.frame(set = names(ret), pval = unname(ret))
-}
-
-# Tests -------------------------------------------------------------------
-
-.dhsic_test <- function(r, e, controls) {
-  dhsic.test(r, e, alpha = controls$alpha, method = controls$method,
-             B = controls$B)
-}
-
-.t_test <- function(r, e, controls) {
-  t.test(r ~ e)
-}
-
-#' @importFrom stats cor.test
-.cor_test <- function(r, e, controls) {
-  cor.test(r, e)
-}
-
-.var_test <- function(r, e, controls) {
-  var.test(r ~ e)
-}
-
-.combined_test <- function(r, e, controls) {
-  shift <- t.test(r ~ e)
-  scale <- var.test(r ~ e)
-  list("p.value" = 2 * min(shift$p.value, scale$p.value),
-       shift = shift, scale = scale)
-}
-
-#' @importFrom coin spearman_test
-.spearman_test <- function(r, e, controls) {
-  tst <- spearman_test(r ~ e)
-  list(p.value = pvalue(tst), test = tst)
-}
-
-#' @importFrom coin independence_test pvalue
-.indep_test <- function(r, e, controls) {
-  tst <- independence_test(
-    r ~ e, teststat = controls$teststat, distribution = controls$distribution,
-    xtrafo = controls$xtrafo, ytrafo = controls$ytrafo
-  )
-  list(p.value = pvalue(tst), test = tst)
-}
-
-.get_pvalue <- function(x) {
-  ret <- x[["p.value"]]
-  if (inherits(x, "gtest"))
-    ret <- c(x[["pvalue"]])
-  if (is.null(ret))
-    warning("supplied test has no entry called `p.value`")
-  ret
-}
-
-.type_fun <- function(type) {
-  switch(
-    type,
-    "residual" = .dicp_hsic,
-    "wald" = .dicp_full,
-    "partial" = .dicp_partial,
-    "mcheck" = .modelcheck,
-    "confint" = .crmethod
-  )
-}
-
-#' @importFrom multcomp Chisqtest
-.test_fun <- function(type, test, ctest) {
-  if (is.function(test))
-    return(list(test = "custom", test_fun = test_fun, test_name = ctest))
-
-  if (type %in% c("wald", "partial")) {
-    ctest <- "wald"
-    test_fun <- Chisqtest
-  } else {
-    test_fun <- switch(
-      ctest,
-      "HSIC" = .dhsic_test,
-      "t.test" = .t_test,
-      "var.test" = .var_test,
-      "independence" = .indep_test,
-      "combined" = .combined_test,
-      "cor.test" = .cor_test,
-      "spearman" = .spearman_test,
-      "custom" = identity
-    )
-  }
-
-  if (type == "confint")
-    ctest <- "confint"
-
-  list(test = test, test_fun = test_fun, test_name = ctest)
-}
-
-#' Controls
-#'
-#' @inheritParams dicp
-#' @param baseline_fixed logical; whether or not the baseline transformation
-#'     is allowed to vary with the environments. Only takes effect when
-#'     \code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.
-#'
-#' @return List of dicp controls
-#'
-#' @export
-#'
-#' @importFrom methods as
-#' @importFrom stats as.formula binom.test binomial coef df filter glm logLik
-#'     model.frame model.response optimize plogis predict qchisq qlogis rbinom
-#'     residuals rlogis rmultinom rnorm sd simulate t.test terms update var.test
-#'     vcov model.matrix dexp dlogis dnorm pexp pnorm qexp qnorm
-#' @importFrom utils capture.output combn data setTxtProgressBar stack
-#'     txtProgressBar write.csv
-#' @importFrom coin trafo
-#'
-dicp_controls <- function(
-    type = "residual", test = "independence", baseline_fixed = TRUE, alpha = 0.05
-) {
-
-  # Type of ICP
-  type_fun <- .type_fun(type)
-
-  # Type of test
-  ctest <- if (!is.function(test)) test else "custom"
-  test_info <- .test_fun(type, test, ctest)
-
-  list(
-    type = type, method = "gamma", kernel = c("gaussian", "discrete"), B = 200,
-    alpha = 0.05, vcov = vcov, type_fun = .type_fun(type),
-    ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
-    baseline_fixed = baseline_fixed, teststat = "maximum",
-    distribution = "asymptotic", xtrafo = trafo, ytrafo = trafo
-  )
 }

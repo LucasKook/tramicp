@@ -263,3 +263,28 @@ residuals.binglm <- function(object, ...) {
     unlist(x, recursive = FALSE)
   }
 }
+
+.extract_results <- function(res) {
+  ret <- unlist(lapply(res, \(x) {
+    ret <- .get_pvalue(x$test)
+    names(ret) <- paste(x$set, collapse = "+")
+    ret
+  }))
+  data.frame(set = names(ret), pval = unname(ret))
+}
+
+.get_pvalue <- function(x) {
+  ret <- x[["p.value"]]
+  if (inherits(x, "gtest"))
+    ret <- c(x[["pvalue"]])
+  if (is.null(ret))
+    warning("supplied test has no entry called `p.value`")
+  ret
+}
+
+# Pvalues for individual predictors being a causal parent
+.indiv_pvals <- function(terms, pvals) {
+  res <- lapply(terms, \(term) suppressWarnings(
+    max(pvals[!grepl(term, names(pvals))], na.rm = TRUE)))
+  structure(unlist(res), names = terms)
+}
