@@ -26,26 +26,6 @@
   return(x)
 }
 
-.get_invariant_set <- function(x, alpha = 0.05, sep = "\\+") {
-  sets <- strsplit(names(x), split = sep)
-  idx <- which(x > alpha)
-  if (identical(idx, integer(0)))
-    return("empty")
-  if (length(idx) == 1)
-    return(names(x)[[idx]])
-  res <- paste(do.call(".intersection", sets[idx]), collapse = "+")
-  if (identical(res, character(0)) | res == "")
-    return("empty")
-  return(res)
-}
-
-.intersection <- function(x, y, ...){
-  if (missing(x) | missing(y))
-    return(character(0))
-  if (missing(...)) intersect(x, y)
-  else intersect(x, .intersection(y, ...))
-}
-
 .inv_set <- function(x, alpha = 0.05) {
   sets <- strsplit(x[["set"]], split = "\\+")
   idx <- which(x[["pval"]] > alpha)
@@ -53,7 +33,7 @@
     return(character(0))
   if (length(idx) == 1)
     return(sets[[idx]])
-  do.call(".intersection", sets[idx])
+  Reduce(intersect, sets[idx])
 }
 
 #' @import tram
@@ -110,13 +90,6 @@
 .get_test <- function(type) {
   switch(type, "residual" = "HSIC", "mcheck" = "HSIC", "wald" = "wald",
          "kci" = "KCI")
-}
-
-.intersect <- function(x, y) {
-  ret <- try(intersect(x, y))
-  if (inherits(ret, "try-error"))
-    return(character(0))
-  ret
 }
 
 .setdiff <- function(x, y) {
