@@ -171,9 +171,7 @@ dicp <- function(
   # Set up formula
   tset <- me[tx]
   meff <- paste0(tset, collapse = "+")
-  mfm <- as.formula(
-    paste0(resp, ifelse(controls$baseline_fixed, "", paste("|", env)), "~", meff)
-  )
+  mfm <- reformulate(meff, resp)
 
   # Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
@@ -208,9 +206,7 @@ dicp <- function(
   # Prepare formula
   tset <- if (set == 1) "1" else me[tx]
   meff <- paste0(tset, collapse = "+")
-  mfm <- as.formula(
-    paste0(resp, ifelse(controls$baseline_fixed, "", paste("|", env)), "~", meff)
-  )
+  mfm <- reformulate(meff, resp)
 
   # Fit model
   uevs <- unique(data[, env])
@@ -252,11 +248,7 @@ dicp <- function(
   # Prepare formula
   tset <- me[tx]
   meff <- paste0(tset, collapse = "+")
-  mfm <- as.formula(
-    paste0(resp, ifelse(
-      controls$baseline_fixed, "", paste("|", paste0(env$all, collapse = "+"))), "~",
-      meff)
-  )
+  mfm <- reformulate(meff, resp)
 
   # Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
