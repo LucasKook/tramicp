@@ -193,6 +193,7 @@ dicp <- function(
 
 # Overlapping confidence regions
 #' @importFrom mlt as.mlt
+#' @importFrom stats reformulate
 .crmethod <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
