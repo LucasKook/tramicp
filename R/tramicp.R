@@ -241,13 +241,13 @@ dicp <- function(
 ) {
 
   # Skip empty set
-  if (set == 1)
-    return(structure(list(set = "1", test = list("p.value" = 0),
-                          coef = NA, logLik = NA, tram = NA),
-                     class = "dICPtest"))
+  # if (set == 1)
+  #   return(structure(list(set = "1", test = list("p.value" = 0),
+  #                         coef = NA, logLik = NA, tram = NA),
+  #                    class = "dICPtest"))
 
   # Prepare formula
-  tset <- me[tx]
+  tset <- ifelse(set == "1", 1, me[tx])
   meff <- paste0(tset, collapse = "+")
   mfm <- reformulate(meff, resp)
 
@@ -261,6 +261,9 @@ dicp <- function(
     r <- matrix(residuals(m), ncol = 1)
   e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
   tst <- controls$test_fun(r, e, controls)
+
+  if (set == 1)
+    tset <- "Empty"
 
   structure(list(set = tset, test = tst, coef = coef(m),
                  logLik = logLik(m), tram = m$tram), class = "dICPtest")
