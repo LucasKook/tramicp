@@ -153,7 +153,7 @@ dicp <- function(
 # Type-functions ----------------------------------------------------------
 
 # GOF test
-.modelcheck <- function(
+.gof_invariance <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
@@ -194,7 +194,7 @@ dicp <- function(
 # Overlapping confidence regions
 #' @importFrom mlt as.mlt
 #' @importFrom stats reformulate
-.crmethod <- function(
+.confint_invariance <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
@@ -234,17 +234,11 @@ dicp <- function(
 
 }
 
-# Residual test
-.dicp_hsic <- function(
-    tx, me, resp, set, env, modFUN, data,
-    controls, ...
+# Residual invariance
+#' @importFrom ranger ranger
+.residual_invariance <- function(
+    tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
-
-  # Skip empty set
-  # if (set == 1)
-  #   return(structure(list(set = "1", test = list("p.value" = 0),
-  #                         coef = NA, logLik = NA, tram = NA),
-  #                    class = "dICPtest"))
 
   # Prepare formula
   tset <- ifelse(set == "1", 1, me[tx])
@@ -259,7 +253,20 @@ dicp <- function(
     r <- matrix(residuals.binglm(m), ncol = 1)
   else
     r <- matrix(residuals(m), ncol = 1)
+
   e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
+
+  if (controls$ctest == "gcm.test") {
+    mfe <- reformulate(meff, "e")
+    if (set == "1")
+      e <- e
+    else {
+      dprob <- length(unique(e) == 2)
+      rf <- ranger(mfe, data = data, probability = dprob)
+      e <- if (dprob) e - rf$predictions[, 2] else e - rf$predictions
+    }
+  }
+
   tst <- controls$test_fun(r, e, controls)
 
   if (set == 1)
@@ -270,8 +277,8 @@ dicp <- function(
 
 }
 
-# Full invariance
-.dicp_full <- function(
+# Wald invariance
+.wald_invariance <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
@@ -325,7 +332,7 @@ dicp <- function(
 }
 
 # Partial invariance
-.dicp_partial <- function(
+.partial_invariance <- function(
     tx, me, resp, set, env, modFUN, data, trt, controls, ...
 ) {
 

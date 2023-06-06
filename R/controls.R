@@ -31,7 +31,7 @@ dicp_controls <- function(
   test_info <- .test_fun(type, test, ctest)
 
   list(
-    type = type, method = "gamma", kernel = c("gaussian", "discrete"), B = 200,
+    type = type, method = "gamma", kernel = c("gaussian", "discrete"), B = 499,
     alpha = 0.05, vcov = vcov, type_fun = .type_fun(type),
     ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
     baseline_fixed = baseline_fixed, teststat = "maximum",
@@ -42,11 +42,11 @@ dicp_controls <- function(
 .type_fun <- function(type) {
   switch(
     type,
-    "residual" = .dicp_hsic,
-    "wald" = .dicp_full,
-    "partial" = .dicp_partial,
-    "mcheck" = .modelcheck,
-    "confint" = .crmethod
+    "residual" = .residual_invariance,
+    "wald" = .wald_invariance,
+    "partial" = .partial_invariance,
+    "mcheck" = .gof_invariance,
+    "confint" = .confint_invariance
   )
 }
 
@@ -68,6 +68,7 @@ dicp_controls <- function(
       "combined" = .combined_test,
       "cor.test" = .cor_test,
       "spearman" = .spearman_test,
+      "gcm.test" = .gcm_test,
       "custom" = identity
     )
   }

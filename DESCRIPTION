@@ -12,6 +12,6 @@ Encoding: UTF-8
 RoxygenNote: 7.1.2
 Depends: tram, mlt
 Imports: coin, multcomp, sandwich, survival, variables, basefun, methods, MASS, 
-    cotram, dHSIC
+    cotram, dHSIC, ranger
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
