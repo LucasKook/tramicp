@@ -3,7 +3,7 @@
 .check_args <- function(formula, data, env, modFUN, type, test) {
   stopifnot("formula" %in% class(formula))
   stopifnot("formula" %in% class(env))
-  stopifnot(is.function(modFUN))
+  stopifnot(is.function(modFUN) | is.character(modFUN))
 }
 
 .build_iform <- function(formula) {
@@ -258,6 +258,10 @@ residuals.binglm <- function(object, ...) {
 # Pvalues for individual predictors being a causal parent
 .indiv_pvals <- function(terms, pvals) {
   res <- lapply(terms, \(term) suppressWarnings(
-    max(pvals[!grepl(term, names(pvals))], na.rm = TRUE)))
+    max(pvals[!grepl(term, names(pvals), fixed = TRUE)], na.rm = TRUE)))
   structure(unlist(res), names = terms)
+}
+
+.sub_smooth_terms <- function(tm) {
+  gsub("s\\((.*?)\\)", "\\1", tm)
 }

@@ -79,13 +79,49 @@ dicp <- function(
   max_size <- min(max_size, length(me))
   ps <- lapply(0:max_size, combn, x = length(me))
 
-  # Options
+  ### Options
   if (verbose && interactive())
     pb <- txtProgressBar(min = 0, max = length(ps), style = 3)
 
+  ### Run invariant subset search
+  out <- .invariant_subset_search(ps = ps, controls = controls, me = me,
+                                  resp = resp, etms = etms, modFUN = modFUN,
+                                  data = data, greedy = greedy,
+                                  verbose = verbose, pb = pb, ... = ...)
+
+  ### Process output
+  tests <- out$tests
+  res <- .extract_results(tests)
+
+  ### Extract p-values for each set
+  pvals <- structure(res[["pval"]], names = res[["set"]])
   if (!greedy) {
-    # Run
+    inv <- try(.inv_set(res, alpha = controls$alpha))
+    if (inherits(inv, "try-error"))
+      inv <- "Cannot be computed."
+  } else {
+    inv <- me[sort(unique(unlist(out$MI)))]
+  }
+
+  ### Compute predictor-level p-values
+  ipv <- .indiv_pvals(me, pvals)
+
+  ### Return
+  structure(list(candidate_causal_predictors = if (identical(inv, character(0)))
+    "Empty" else inv, set_pvals = pvals, predictor_pvals = ipv,
+    tests = tests), class = "dICP", type = match.arg(type),
+    test = controls$test_name, env = env, greedy = greedy, call = call)
+
+}
+
+# Run invariant subset search
+.invariant_subset_search <- function(ps, controls, me, resp, etms, modFUN,
+                                     data, greedy, verbose, pb, ...) {
+
+  if (!greedy) {
+    ### Run
     tests <- list()
+    MI <- NULL
     for (set in seq_along(ps)) {
 
       if (verbose && interactive())
@@ -99,7 +135,7 @@ dicp <- function(
 
     }
   } else {
-    # Run
+    ### Run
     tests <- list()
     MI <- list()
     lps <- .unlist_once(lapply(ps, \(x) apply(x, 2, \(y) y, simplify = FALSE)))
@@ -118,7 +154,7 @@ dicp <- function(
         modFUN = modFUN, data = data, controls = controls, ... = ...
       )
 
-      if (.get_pvalue(ret$test) > alpha) {
+      if (.get_pvalue(ret$test) > controls$alpha) {
         # cat("\nAdding", lps[[set]], "to MI\n")
         MI <- c(MI, lps[[set]])
       }
@@ -132,23 +168,9 @@ dicp <- function(
     }
   }
 
-  res <- .extract_results(tests)
-  pvals <- structure(res[["pval"]], names = res[["set"]])
-  if (!greedy) {
-    inv <- try(.inv_set(res, alpha = controls$alpha))
-    if (inherits(inv, "try-error"))
-      inv <- "Cannot be computed."
-  } else {
-    inv <- me[sort(unique(unlist(MI)))]
-  }
-  ipv <- .indiv_pvals(me, pvals)
-
-  structure(list(candidate_causal_predictors = if (identical(inv, character(0)))
-    "Empty" else inv, set_pvals = pvals, predictor_pvals = ipv,
-    tests = tests), class = "dICP", type = match.arg(type),
-    test = controls$test_name, env = env, greedy = greedy, call = call)
-
+  list(tests = tests, MI = MI)
 }
+
 
 # Type-functions ----------------------------------------------------------
 
@@ -241,7 +263,7 @@ dicp <- function(
 ) {
 
   # Prepare formula
-  tset <- ifelse(set == "1", 1, me[tx])
+  tset <- if (set == "1") 1 else me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- reformulate(meff, resp)
 
@@ -257,7 +279,7 @@ dicp <- function(
   e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
 
   if (controls$ctest == "gcm.test") {
-    mfe <- reformulate(meff, "e")
+    mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
     if (set == "1")
       e <- e
     else {
