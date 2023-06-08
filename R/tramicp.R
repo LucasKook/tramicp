@@ -245,7 +245,7 @@ dicp <- function(
                                  ms = ms, nenv = length(uevs))$maximum)
 
   structure(list(set = tset, test = tst, coef = lapply(ms, coef),
-                 logLik = lapply(ms, logLik), tram = ms[[1]]$tram),
+                 tram = ms[[1]]$tram),
             class = "dICPtest")
 
 }
@@ -290,8 +290,7 @@ dicp <- function(
   if (set == 1)
     tset <- "Empty"
 
-  structure(list(set = tset, test = tst, coef = coef(m),
-                 logLik = logLik(m), tram = m$tram), class = "dICPtest")
+  structure(list(set = tset, test = tst, coef = coef(m)), class = "dICPtest")
 
 }
 
