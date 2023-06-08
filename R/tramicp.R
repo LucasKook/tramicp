@@ -179,9 +179,6 @@ dicp <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
-  if (length(env$all) != 1)
-    stop("`type = \"mcheck\"` not implemented for multivariable environments")
-
   env <- env$all
 
   # Empty set skipped
@@ -220,11 +217,8 @@ dicp <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
-  if (length(env$all) != 1)
-    stop("`type = \"confint\"` not implemented for multivariable environments")
-
   env <- env$all
-  stopifnot(is.factor(data[[env]]))
+  stopifnot("`data[[env]]` has to be a factor." = is.factor(data[[env]]))
 
   # Prepare formula
   tset <- if (set == 1) "1" else me[tx]
@@ -262,15 +256,15 @@ dicp <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
-  # Prepare formula
+  ### Prepare formula
   tset <- if (set == "1") 1 else me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- reformulate(meff, resp)
 
-  # Fit model
+  ### Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
 
-  # Test
+  ### Test
   if ("glm" %in% class(m) && m$family$family == "binomial")
     r <- matrix(residuals.binglm(m), ncol = 1)
   else
@@ -280,12 +274,14 @@ dicp <- function(
 
   if (controls$ctest == "gcm.test") {
     mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
-    if (set == "1")
-      e <- e
-    else {
-      dprob <- length(unique(e) == 2)
+    if (set != "1") {
+      if (dprob <- length(unique(e) == 2)) {
+        fe <- as.factor(e)
+        mfe <- update(mfe, fe ~ .)
+      }
       rf <- ranger(mfe, data = data, probability = dprob)
-      e <- if (dprob) e - rf$predictions[, 2] else e - rf$predictions
+      e <- if (dprob) e - predict(rf, data = data)$predictions[, 2] else
+        e - rf$predictions
     }
   }
 
@@ -303,9 +299,6 @@ dicp <- function(
 .wald_invariance <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
-
-  if (length(env$all) != 1)
-    stop("`type = \"wald\"` not implemented for multivariable environments")
 
   env <- env$all
 

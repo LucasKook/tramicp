@@ -101,3 +101,16 @@ test_that("Output of cotramICP and glmICP", {
     expect_true(res$candidate_causal_predictors %in% c("X2", "Empty"))
   })
 })
+
+test_that("argument checks work", {
+  d <- dgp_dicp(mod = "boxcox")
+  expect_error(BoxCoxICP("Y ~ X1", d, ~ E))
+  expect_error(BoxCoxICP(Y ~ X1, d, "E"))
+  expect_error(dicp(Y ~ X1, d, ~ E, modFUN = NA))
+  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "confint"))
+  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "mcheck"))
+  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "wald"))
+  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "gcm.test"))
+  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "cor.test"))
+  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "t.test"))
+})

@@ -1,9 +1,17 @@
 # Helpers
 
 .check_args <- function(formula, data, env, modFUN, type, test) {
-  stopifnot("formula" %in% class(formula))
-  stopifnot("formula" %in% class(env))
-  stopifnot(is.function(modFUN) | is.character(modFUN))
+  stopifnot("`formula` should be of class 'formula'." = "formula" %in% class(formula))
+  stopifnot("`env` should be of class 'formula'." = "formula" %in% class(env))
+  stopifnot("`modFUN` should be a function or a character referring to the
+            name of a function." = is.function(modFUN) | is.character(modFUN))
+  etms <- .get_terms(env)
+  if (length(etms$all) != 1 && type %in% c("confint", "mcheck", "wald"))
+    stop("Invariance types `\"confint\"`, `\"mcheck\"` and `\"wald\"` are not
+         implemented for multivariable environments.")
+  if (length(etms$all) != 1 && test %in% c("gcm.test", "cor.test", "t.test"))
+    stop("Invariance tests `\"gcm.test\"`, `\"cor.test\"` and `\"t.test\"`
+         are not implemented for multivariable environments.")
 }
 
 .build_iform <- function(formula) {
@@ -207,8 +215,10 @@ makePositive <- function(v, silent = TRUE) {
 
 #' @method residuals binglm
 residuals.binglm <- function(object, ...) {
-  as.numeric(model.response(model.frame(object))) -
-    predict(object, type = "response")
+  resp <- model.response(model.frame(object))
+  success <- levels(resp)[2]
+  y <- c(0, 1)[1 + as.numeric(resp == success)]
+  y - predict(object, type = "response")
 }
 
 .check_depth <- function(x) {
