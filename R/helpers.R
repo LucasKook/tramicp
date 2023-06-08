@@ -273,5 +273,5 @@ residuals.binglm <- function(object, ...) {
 }
 
 .sub_smooth_terms <- function(tm) {
-  gsub("s\\((.*?)\\)", "\\1", tm)
+  gsub("\\w+\\(([^,)]+).*\\)", "\\1", tm)
 }

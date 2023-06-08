@@ -54,9 +54,11 @@ summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
   mod <- object[["tests"]][[2]]$model$tram
   if (is.null(mod)) mod <- object[["tests"]][[2]]$tram
   cat(mod, "\n")
-  cat("\nCall: ")
-  print(attr(object, "call"))
-  cat("\n")
+  if (length(deparse(tcall <- attr(object, "call"))) < 10) {
+    cat("\nCall: ")
+    print(tcall)
+    cat("\n")
+  }
   # cat(" Invariance type:", attr(object, "type"), "\n")
   cat(" Invariance test:", attr(object, "test"), "\n")
   # cat(" Environment:", deparse(attr(object, "env")), "\n")
