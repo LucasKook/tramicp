@@ -216,8 +216,8 @@ makePositive <- function(v, silent = TRUE) {
 #' @method residuals binglm
 residuals.binglm <- function(object, ...) {
   resp <- model.response(model.frame(object))
-  success <- levels(resp)[2]
-  y <- c(0, 1)[1 + as.numeric(resp == success)]
+  success <- if (is.factor(resp)) levels(resp)[2] else sort(unique(resp))[2]
+    y <- c(0, 1)[1 + as.numeric(resp == success)]
   y - predict(object, type = "response")
 }
 

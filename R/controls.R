@@ -5,6 +5,14 @@
 #' @param baseline_fixed logical; whether or not the baseline transformation
 #'     is allowed to vary with the environments. Only takes effect when
 #'     \code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.
+#' @param method See \code{\link[dHSIC]{dhsic.test}}.
+#' @param B See \code{\link[dHSIC]{dhsic.test}}.
+#' @param kernel See \code{\link[dHSIC]{dhsic.test}}.
+#' @param vcov Function for computing the variance-covariance matrix of a model.
+#' @param teststat See \code{\link[coin]{independence_test}}.
+#' @param distribution See \code{\link[coin]{independence_test}}.
+#' @param xtrafo See \code{\link[coin]{independence_test}}.
+#' @param ytrafo See \code{\link[coin]{independence_test}}.
 #'
 #' @return List of dicp controls
 #'
@@ -20,22 +28,26 @@
 #' @importFrom coin trafo
 #'
 dicp_controls <- function(
-    type = "residual", test = "independence", baseline_fixed = TRUE, alpha = 0.05
+    type = "residual", test = "independence", baseline_fixed = TRUE,
+    alpha = 0.05, method = "gamma", kernel = c("gaussian", "discrete"),
+    B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
+    xtrafo = trafo, ytrafo = trafo
 ) {
 
   # Type of ICP
   type_fun <- .type_fun(type)
+  vcov <- match.fun(vcov)
 
   # Type of test
   ctest <- if (!is.function(test)) test else "custom"
   test_info <- .test_fun(type, test, ctest)
 
   list(
-    type = type, method = "gamma", kernel = c("gaussian", "discrete"), B = 499,
-    alpha = 0.05, vcov = vcov, type_fun = .type_fun(type),
+    type = type, method = method, kernel = kernel, B = B,
+    alpha = alpha, vcov = vcov, type_fun = .type_fun(type),
     ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
-    baseline_fixed = baseline_fixed, teststat = "maximum",
-    distribution = "asymptotic", xtrafo = trafo, ytrafo = trafo
+    baseline_fixed = baseline_fixed, teststat = teststat,
+    distribution = distribution, xtrafo = xtrafo, ytrafo = ytrafo
   )
 }
 

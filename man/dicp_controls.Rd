@@ -8,7 +8,15 @@ dicp_controls(
   type = "residual",
   test = "independence",
   baseline_fixed = TRUE,
-  alpha = 0.05
+  alpha = 0.05,
+  method = "gamma",
+  kernel = c("gaussian", "discrete"),
+  B = 499,
+  vcov = "vcov",
+  teststat = "maximum",
+  distribution = "asymptotic",
+  xtrafo = trafo,
+  ytrafo = trafo
 )
 }
 \arguments{
@@ -24,6 +32,22 @@ is allowed to vary with the environments. Only takes effect when
 \code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.}
 
 \item{alpha}{Level of invariance test, default}
+
+\item{method}{See \code{\link[dHSIC]{dhsic.test}}.}
+
+\item{kernel}{See \code{\link[dHSIC]{dhsic.test}}.}
+
+\item{B}{See \code{\link[dHSIC]{dhsic.test}}.}
+
+\item{vcov}{Function for computing the variance-covariance matrix of a model.}
+
+\item{teststat}{See \code{\link[coin]{independence_test}}.}
+
+\item{distribution}{See \code{\link[coin]{independence_test}}.}
+
+\item{xtrafo}{See \code{\link[coin]{independence_test}}.}
+
+\item{ytrafo}{See \code{\link[coin]{independence_test}}.}
 }
 \value{
 List of dicp controls
