@@ -205,6 +205,7 @@ dicp <- function(
   tst <- controls$test_fun(r, x, controls)
 
   # Return
+  if (set == 1) tset <- "Empty"
   structure(list(set = tset, test = tst, coef = coef(m),
                  logLik = logLik(m), tram = m$tram), class = "dICPtest")
 
@@ -244,6 +245,7 @@ dicp <- function(
   tst <- list(p.value = optimize(.ci, interval = c(0, 1), maximum = TRUE,
                                  ms = ms, nenv = length(uevs))$maximum)
 
+  if (set == 1) tset <- "Empty"
   structure(list(set = tset, test = tst, coef = lapply(ms, coef),
                  tram = ms[[1]]$tram),
             class = "dICPtest")
@@ -287,8 +289,7 @@ dicp <- function(
 
   tst <- controls$test_fun(r, e, controls)
 
-  if (set == 1)
-    tset <- "Empty"
+  if (set == 1) tset <- "Empty"
 
   structure(list(set = tset, test = tst, coef = coef(m)), class = "dICPtest")
 
@@ -338,6 +339,7 @@ dicp <- function(
     return(empty_res)
   }
 
+  if (set == 1) tset <- "Empty"
   tst$set <- tset
 
   # Return
@@ -376,6 +378,7 @@ dicp <- function(
     return(empty_res)
   }
 
+  if (set == 1) tset <- "Empty"
   tst$set <- me[tx]
   tst
 
