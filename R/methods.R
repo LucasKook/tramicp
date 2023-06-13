@@ -47,7 +47,7 @@ print.dICP <- function(x, ...) {
 summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
 
   ttitle <- paste(
-    "\n", ifelse(attr(object, "greedy"), "Greedy", "Distributional"),
+    "\n", ifelse(attr(object, "greedy"), "Greedy model-based", "Model-based"),
     "Invariant Causal Prediction\n"
   )
   cat(ttitle)
