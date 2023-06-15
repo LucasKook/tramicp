@@ -145,7 +145,7 @@ dicp <- function(
         setTxtProgressBar(pb, set)
 
       if (length(MI > 0) && any(unlist(MI) %in% lps[[set]])) {
-        tests[[set]] <- list(set = me[lps[[set]]], test = list(p.value = 0, test = NA))
+        tests[[set]] <- .empty_output(me[lps[[set]]], 0)
         next
       }
 
@@ -171,7 +171,6 @@ dicp <- function(
   list(tests = tests, MI = MI)
 }
 
-
 # Type-functions ----------------------------------------------------------
 
 # GOF test
@@ -181,33 +180,27 @@ dicp <- function(
 
   env <- env$all
 
-  # Empty set skipped
+  ### Empty set skipped
   if (set == 1)
-    return(structure(list(set = "1", test = list("p.value" = 0),
-                          coef = NA, logLik = NA, tram = NA),
-                     class = "dICPtest"))
+    return(.empty_output("Empty"))
 
-  # Set up formula
+  ### Set up formula
   tset <- me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- reformulate(meff, resp)
 
-  # Fit model
+  ### Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
 
-  # Test
-  if ("glm" %in% class(m) && m$family$family == "binomial")
-    r <- matrix(residuals.binglm(m), ncol = 1)
-  else
-    r <- matrix(residuals(m), ncol = 1)
+  ### Test
+  r <- matrix(controls$residuals(m), ncol = 1)
   x <- model.matrix(update(mfm, NULL ~ .), data = data)
-  x <- if (all(x[, 1] == 1)) x[, -1]
+  x <- if (all(x[, 1] == 1)) x[, -1, drop = FALSE]
   tst <- controls$test_fun(r, x, controls)
 
-  # Return
-  if (set == 1) tset <- "Empty"
-  structure(list(set = tset, test = tst, coef = coef(m),
-                 logLik = logLik(m), tram = m$tram), class = "dICPtest")
+  ### Return
+  structure(list(set = tset, test = tst, coef = coef(m), tram = m$tram),
+            class = "dICPtest")
 
 }
 
@@ -218,15 +211,16 @@ dicp <- function(
     tx, me, resp, set, env, modFUN, data, controls, ...
 ) {
 
+  ### Checks
   env <- env$all
-  stopifnot("`data[[env]]` has to be a factor." = is.factor(data[[env]]))
+  stopifnot("`data[[env]]` needs to be a factor." = is.factor(data[[env]]))
 
-  # Prepare formula
+  ### Prepare formula
   tset <- if (set == 1) "1" else me[tx]
   meff <- paste0(tset, collapse = "+")
   mfm <- reformulate(meff, resp)
 
-  # Fit model
+  ### Fit model
   uevs <- unique(data[, env])
   dots <- list(...)
   dots$weights <- NULL
@@ -241,14 +235,13 @@ dicp <- function(
     }
   )
 
-  # Test
+  ### Test
   tst <- list(p.value = optimize(.ci, interval = c(0, 1), maximum = TRUE,
                                  ms = ms, nenv = length(uevs))$maximum)
-
+  ## Return
   if (set == 1) tset <- "Empty"
   structure(list(set = tset, test = tst, coef = lapply(ms, coef),
-                 tram = ms[[1]]$tram),
-            class = "dICPtest")
+                 tram = ms[[1]]$tram), class = "dICPtest")
 
 }
 
@@ -267,30 +260,14 @@ dicp <- function(
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
 
   ### Test
-  if ("glm" %in% class(m) && m$family$family == "binomial")
-    r <- matrix(residuals.binglm(m), ncol = 1)
-  else
-    r <- matrix(residuals(m), ncol = 1)
-
+  r <- matrix(controls$residuals(m), ncol = 1)
   e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
-
-  if (controls$ctest == "gcm.test") {
-    mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
-    if (set != "1") {
-      if (dprob <- length(unique(e) == 2)) {
-        fe <- as.factor(e)
-        mfe <- update(mfe, fe ~ .)
-      }
-      rf <- ranger(mfe, data = data, probability = dprob)
-      e <- if (dprob) e - predict(rf, data = data)$predictions[, 2] else
-        e - rf$predictions
-    }
-  }
-
+  if (controls$ctest == "gcm.test" & set != "1")
+    e <- .ranger_gcm(e, meff, set, data, controls) # Fit random forest for GCM-type test
   tst <- controls$test_fun(r, e, controls)
 
+  ### Return
   if (set == 1) tset <- "Empty"
-
   structure(list(set = tset, test = tst, coef = coef(m)), class = "dICPtest")
 
 }
@@ -302,25 +279,27 @@ dicp <- function(
 
   env <- env$all
 
-  # Empty set treated separately
+  ### Empty set treated separately
   if (set == 1) {
     tset <- "1"
     meff <- ifelse(controls$baseline_fixed, env, "1")
     mint <- ""
   } else {
     tset <- me[tx]
-    meff <- if (controls$baseline_fixed) paste0(c(me[tx], env), collapse = "+") else
+    meff <- if (controls$baseline_fixed)
+      paste0(c(me[tx], env), collapse = "+")
+    else
       paste0(me[tx], collapse = "+")
     mint <- paste0(c(paste0(me[tx], ":", env)), collapse = "+")
   }
 
-  # Prepare formula
+  ### Prepare formula
   mfm <- as.formula(
     paste0(resp, ifelse(controls$baseline_fixed, "", paste0("|", env)),
            "~", meff, if (mint != "") "+", mint)
   )
 
-  # Fit
+  ### Fit
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
   if (inherits(m, "tram"))
     m <- as.mlt(m)
@@ -328,21 +307,19 @@ dicp <- function(
   tcfs <- union(grep(paste0(":", env), cfs, value = TRUE),
                 grep(env, cfs, value = TRUE))
 
-  # Test
+  ### Test
   tst <- try(summary(glht(m, linfct = paste(tcfs, "== 0"),
                           vcov = controls$vcov),
                      test = controls$test_fun()), silent = FALSE)
 
-  # Catch failure cases
+  ### Catch failure cases
   if (inherits(tst, "try-error")) {
-    empty_res <- list(test = list(p.value = NA), set = me[tx])
-    return(empty_res)
+    return(.empty_output(me[tx], NA))
   }
 
+  ### Return
   if (set == 1) tset <- "Empty"
   tst$set <- tset
-
-  # Return
   tst
 
 }

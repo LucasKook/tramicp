@@ -275,3 +275,19 @@ residuals.binglm <- function(object, ...) {
 .sub_smooth_terms <- function(tm) {
   gsub("\\w+\\(([^,)]+).*\\)", "\\1", tm)
 }
+
+.empty_output <- function(set, pv = 0) {
+  structure(list(set = set, test = list("p.value" = pv, test = NA), coef = NA, tram = NA),
+            class = "dICPtest")
+}
+
+.ranger_gcm <- function(e, meff, set, data, controls) {
+  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
+  if (dprob <- length(unique(e) == 2)) {
+    fe <- as.factor(e)
+    mfe <- update(mfe, fe ~ .)
+  }
+  rf <- ranger(mfe, data = data, probability = dprob)
+  if (dprob) e - predict(rf, data = data)$predictions[, 2] else
+    e - rf$predictions
+}

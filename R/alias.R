@@ -346,6 +346,15 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                    ...) {
   call <- match.call()
+  if (is.character(test))
+    test <- match.arg(test, .implemented_tests())
+  if (!is.null(fam <- list(...)$family) && (identical(fam, binomial) || fam == "binomial")) {
+    resid <- "residuals.binglm"
+  }
+  if (is.null(controls))
+    controls <- dicp_controls(type, test, alpha = alpha,
+                              baseline_fixed = baseline_fixed,
+                              residuals = resid)
   ret <- dicp(formula = formula, data = data, env = env, modFUN = glm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,

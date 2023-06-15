@@ -16,7 +16,8 @@ dicp_controls(
   teststat = "maximum",
   distribution = "asymptotic",
   xtrafo = trafo,
-  ytrafo = trafo
+  ytrafo = trafo,
+  residuals = "residuals"
 )
 }
 \arguments{
@@ -39,7 +40,7 @@ is allowed to vary with the environments. Only takes effect when
 
 \item{B}{See \code{\link[dHSIC]{dhsic.test}}.}
 
-\item{vcov}{Function for computing the variance-covariance matrix of a model.}
+\item{vcov}{(Name of) function for computing the variance-covariance matrix of a model.}
 
 \item{teststat}{See \code{\link[coin]{independence_test}}.}
 
@@ -48,6 +49,8 @@ is allowed to vary with the environments. Only takes effect when
 \item{xtrafo}{See \code{\link[coin]{independence_test}}.}
 
 \item{ytrafo}{See \code{\link[coin]{independence_test}}.}
+
+\item{residuals}{(Name of) function for computing model residuals.}
 }
 \value{
 List of dicp controls

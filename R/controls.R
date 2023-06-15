@@ -8,11 +8,12 @@
 #' @param method See \code{\link[dHSIC]{dhsic.test}}.
 #' @param B See \code{\link[dHSIC]{dhsic.test}}.
 #' @param kernel See \code{\link[dHSIC]{dhsic.test}}.
-#' @param vcov Function for computing the variance-covariance matrix of a model.
+#' @param vcov (Name of) function for computing the variance-covariance matrix of a model.
 #' @param teststat See \code{\link[coin]{independence_test}}.
 #' @param distribution See \code{\link[coin]{independence_test}}.
 #' @param xtrafo See \code{\link[coin]{independence_test}}.
 #' @param ytrafo See \code{\link[coin]{independence_test}}.
+#' @param residuals (Name of) function for computing model residuals.
 #'
 #' @return List of dicp controls
 #'
@@ -31,12 +32,13 @@ dicp_controls <- function(
     type = "residual", test = "independence", baseline_fixed = TRUE,
     alpha = 0.05, method = "gamma", kernel = c("gaussian", "discrete"),
     B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
-    xtrafo = trafo, ytrafo = trafo
+    xtrafo = trafo, ytrafo = trafo, residuals = "residuals"
 ) {
 
   # Type of ICP
   type_fun <- .type_fun(type)
   vcov <- match.fun(vcov)
+  residuals <- match.fun(residuals)
 
   # Type of test
   ctest <- if (!is.function(test)) test else "custom"
@@ -47,7 +49,8 @@ dicp_controls <- function(
     alpha = alpha, vcov = vcov, type_fun = .type_fun(type),
     ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
     baseline_fixed = baseline_fixed, teststat = teststat,
-    distribution = distribution, xtrafo = xtrafo, ytrafo = ytrafo
+    distribution = distribution, xtrafo = xtrafo, ytrafo = ytrafo,
+    residuals = residuals
   )
 }
 
