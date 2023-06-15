@@ -1,7 +1,5 @@
-# combs <- c("confint" = "independence", "wald" = "wald",
-#            "residual" = "independence", "residual" = "HSIC")
-
-combs <- c("wald" = "wald")
+combs <- c("confint" = "independence", "wald" = "wald",
+           "residual" = "independence", "residual" = "cor.test")
 
 dtypes <- list(
   "boxcox" = BoxCoxICP,
