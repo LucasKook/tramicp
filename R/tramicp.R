@@ -1,30 +1,42 @@
 #' Invariant causal prediction for transformation models
 #'
-#' @param formula Formula including response and shift terms
-#' @param data Data.frame containing response and explanatory variables
-#' @param env Formula specifying the exogenous environment variables
-#' @param modFUN Model function from package 'tram', i.e. \code{BoxCox},
-#'     \code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
-#'     \code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
-#'     \code{\link[MASS]{polr}} are also supported.
-#' @param verbose Logical, whether output should be verbose (default \code{TRUE})
+#' @param formula A \code{formula} including response and covariate terms.
+#' @param data A \code{data.frame} containing response and explanatory variables.
+#' @param env A \code{formula} specifying the environment variables (see details).
+#' @param modFUN Model function from package 'tram', i.e.,
+#'     \code{\link[tram]{BoxCox}}, \code{\link[tram]{Colr}},
+#'     \code{\link[tram]{Polr}}, \code{\link[tram]{Lm}},
+#'     \code{\link[tram]{Coxph}}, \code{\link[tram]{Survreg}},
+#'     \code{\link[tram]{Lehmann}}. Standard implementations
+#'     \code{\link[stats]{lm}}, \code{\link[MASS]{glm}},
+#'     \code{\link[survival]{survreg}}, \code{\link[survival]{coxph}},
+#'     and \code{\link[MASS]{polr}} are also supported. See the corresponding
+#'     alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}}.
+#' @param verbose Logical, whether output should be verbose (default \code{TRUE}).
 #' @param type Character, type of invariance (\code{"residual"}, \code{"wald"},
-#'     or \code{"partial"})
+#'     or \code{"partial"}).
 #' @param test Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
 #'     \code{"var.test"}, \code{"wald"}) or custom function for testing
 #'     invariance.
 #' @param controls Controls for the used tests and the overall procedure,
-#'     see \code{dicp_controls}
-#' @param alpha Level of invariance test, default
-#' @param ... Further arguments passed to \code{modFUN}
+#'     see \code{dicp_controls}.
+#' @param alpha Level of invariance test, default \code{0.05}.
+#' @param ... Further arguments passed to \code{modFUN}.
 #' @param baseline_fixed Fixed baseline transformation, see
 #'     \code{\link[tramicp]{dicp_controls}}.
 #' @param greedy Logical, whether to perform a greedy version of ICP (default is
-#'     \code{FALSE})
-#' @param max_size Numeric; maximum support size
+#'     \code{FALSE}).
+#' @param max_size Numeric; maximum support size.
 #'
-#' @return Object of class \code{"dICP"}, containing the invariant set (if exists),
-#'     pvalues from all invariance tests and the tests themselves
+#' @return Object of class \code{"dICP"}, containing
+#'     \itemize{
+#'     \item{\code{candidate_causal_predictors}: Character; intersection of all
+#'     non-rejected sets,}
+#'     \item{\code{set_pvals}: Numeric vector; set-specific p-values of the invariance
+#'     test,}
+#'     \item{\code{predictor_pvals}: Numeric vector; predictor-specific p-values,}
+#'     \item{\code{tests}: List of invariance tests.}
+#'     }
 #'
 #' @export
 #' @importFrom dHSIC dhsic.test

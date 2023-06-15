@@ -20,41 +20,46 @@ cotramICP(
 )
 }
 \arguments{
-\item{formula}{Formula including response and shift terms}
+\item{formula}{A \code{formula} including response and covariate terms.}
 
-\item{data}{Data.frame containing response and explanatory variables}
+\item{data}{A \code{data.frame} containing response and explanatory variables.}
 
-\item{env}{Formula specifying the exogenous environment variables}
+\item{env}{A \code{formula} specifying the environment variables (see details).}
 
-\item{verbose}{Logical, whether output should be verbose (default \code{TRUE})}
+\item{verbose}{Logical, whether output should be verbose (default \code{TRUE}).}
 
 \item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
-or \code{"partial"})}
+or \code{"partial"}).}
 
 \item{test}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
 \code{"var.test"}, \code{"wald"}) or custom function for testing
 invariance.}
 
 \item{controls}{Controls for the used tests and the overall procedure,
-see \code{dicp_controls}}
+see \code{dicp_controls}.}
 
-\item{alpha}{Level of invariance test, default}
+\item{alpha}{Level of invariance test, default \code{0.05}.}
 
 \item{baseline_fixed}{Fixed baseline transformation, see
 \code{\link[tramicp]{dicp_controls}}.}
 
 \item{greedy}{Logical, whether to perform a greedy version of ICP (default is
-\code{FALSE})}
+\code{FALSE}).}
 
-\item{max_size}{Numeric; maximum support size}
+\item{max_size}{Numeric; maximum support size.}
 
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}
   \describe{
-    \item{\code{modFUN}}{Model function from package 'tram', i.e. \code{BoxCox},
-\code{Colr}, \code{Polr}, \code{Lm}, \code{Coxph}, \code{Survreg},
-\code{Lehmann}. Standard implementations \code{lm}, \code{glm}, and
-\code{\link[MASS]{polr}} are also supported.}
+    \item{\code{modFUN}}{Model function from package 'tram', i.e.,
+\code{\link[tram]{BoxCox}}, \code{\link[tram]{Colr}},
+\code{\link[tram]{Polr}}, \code{\link[tram]{Lm}},
+\code{\link[tram]{Coxph}}, \code{\link[tram]{Survreg}},
+\code{\link[tram]{Lehmann}}. Standard implementations
+\code{\link[stats]{lm}}, \code{\link[MASS]{glm}},
+\code{\link[survival]{survreg}}, \code{\link[survival]{coxph}},
+and \code{\link[MASS]{polr}} are also supported. See the corresponding
+alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}}.}
   }}
 }
 \value{

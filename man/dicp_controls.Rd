@@ -22,7 +22,7 @@ dicp_controls(
 }
 \arguments{
 \item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
-or \code{"partial"})}
+or \code{"partial"}).}
 
 \item{test}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
 \code{"var.test"}, \code{"wald"}) or custom function for testing
@@ -32,7 +32,7 @@ invariance.}
 is allowed to vary with the environments. Only takes effect when
 \code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.}
 
-\item{alpha}{Level of invariance test, default}
+\item{alpha}{Level of invariance test, default \code{0.05}.}
 
 \item{method}{See \code{\link[dHSIC]{dhsic.test}}.}
 
