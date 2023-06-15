@@ -8,7 +8,7 @@
 #'     \code{\link[tram]{Polr}}, \code{\link[tram]{Lm}},
 #'     \code{\link[tram]{Coxph}}, \code{\link[tram]{Survreg}},
 #'     \code{\link[tram]{Lehmann}}. Standard implementations
-#'     \code{\link[stats]{lm}}, \code{\link[MASS]{glm}},
+#'     \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
 #'     \code{\link[survival]{survreg}}, \code{\link[survival]{coxph}},
 #'     and \code{\link[MASS]{polr}} are also supported. See the corresponding
 #'     alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}}.
