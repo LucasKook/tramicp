@@ -16,6 +16,7 @@ glmICP(
   baseline_fixed = TRUE,
   greedy = FALSE,
   max_size = NULL,
+  mandatory = NULL,
   ...
 )
 }
@@ -47,6 +48,11 @@ see \code{dicp_controls}.}
 \code{FALSE}).}
 
 \item{max_size}{Numeric; maximum support size.}
+
+\item{mandatory}{A \code{formula} containing mandatory covariates, i.e.,
+covariates which by a priori knowledge are believed to be parents
+of the response or are in another way required for the model to be
+valid (for instance, random effects in a mixed model).}
 
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}

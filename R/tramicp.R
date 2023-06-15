@@ -27,6 +27,10 @@
 #' @param greedy Logical, whether to perform a greedy version of ICP (default is
 #'     \code{FALSE}).
 #' @param max_size Numeric; maximum support size.
+#' @param mandatory A \code{formula} containing mandatory covariates, i.e.,
+#'     covariates which by a priori knowledge are believed to be parents
+#'     of the response or are in another way required for the model to be
+#'     valid (for instance, random effects in a mixed model).
 #'
 #' @return Object of class \code{"dICP"}, containing
 #'     \itemize{
@@ -53,6 +57,11 @@
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
 #'      test = "HSIC")
 #'
+#' dicp(Y ~ X1 + X2, data = d, env = ~ E, modFUN = Polr, type = "residual",
+#'      mandatory = ~ X3)
+#' dicp(Y ~ X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
+#'      mandatory = ~ X1)
+#'
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint",
 #'     greedy = TRUE)
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
@@ -68,7 +77,8 @@ dicp <- function(
   formula, data, env, modFUN, verbose = TRUE,
   type = c("residual", "wald", "mcheck", "confint"),
   test = "independence", controls = NULL, alpha = 0.05,
-  baseline_fixed = TRUE, greedy = FALSE, max_size = NULL, ...
+  baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
+  mandatory = NULL, ...
 ) {
 
   call <- match.call()
@@ -99,7 +109,8 @@ dicp <- function(
   out <- .invariant_subset_search(ps = ps, controls = controls, me = me,
                                   resp = resp, etms = etms, modFUN = modFUN,
                                   data = data, greedy = greedy,
-                                  verbose = verbose, pb = pb, ... = ...)
+                                  verbose = verbose, pb = pb,
+                                  mandatory = mandatory, ... = ...)
 
   ### Process output
   tests <- out$tests
@@ -128,7 +139,8 @@ dicp <- function(
 
 # Run invariant subset search
 .invariant_subset_search <- function(ps, controls, me, resp, etms, modFUN,
-                                     data, greedy, verbose, pb, ...) {
+                                     data, greedy, verbose, pb, mandatory,
+                                     ...) {
 
   if (!greedy) {
     ### Run
@@ -141,7 +153,7 @@ dicp <- function(
 
       ret <- apply(ps[[set]], 2, controls$type_fun, me = me, resp = resp,
                    set = set, env = etms, modFUN = modFUN, data = data,
-                   controls = controls, ... = ...)
+                   controls = controls, mandatory = mandatory, ... = ...)
 
       tests <- c(tests, ret)
 
@@ -163,7 +175,8 @@ dicp <- function(
 
       ret <- controls$type_fun(
         lps[[set]], me = me, resp = resp, set = set, env = etms,
-        modFUN = modFUN, data = data, controls = controls, ... = ...
+        modFUN = modFUN, data = data, controls = controls,
+        mandatory = mandatory, ... = ...
       )
 
       if (.get_pvalue(ret$test) > controls$alpha) {
@@ -187,10 +200,11 @@ dicp <- function(
 
 # GOF test
 .gof_invariance <- function(
-    tx, me, resp, set, env, modFUN, data, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, mandatory, ...
 ) {
 
   env <- env$all
+  mand <- .get_terms(mandatory)$all
 
   ### Empty set skipped
   if (set == 1)
@@ -199,7 +213,7 @@ dicp <- function(
   ### Set up formula
   tset <- me[tx]
   meff <- paste0(tset, collapse = "+")
-  mfm <- reformulate(meff, resp)
+  mfm <- reformulate(c(meff, mand), resp)
 
   ### Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
@@ -220,17 +234,18 @@ dicp <- function(
 #' @importFrom mlt as.mlt
 #' @importFrom stats reformulate
 .confint_invariance <- function(
-    tx, me, resp, set, env, modFUN, data, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, mandatory, ...
 ) {
 
   ### Checks
   env <- env$all
   stopifnot("`data[[env]]` needs to be a factor." = is.factor(data[[env]]))
+  mand <- .get_terms(mandatory)$all
 
   ### Prepare formula
   tset <- if (set == 1) "1" else me[tx]
   meff <- paste0(tset, collapse = "+")
-  mfm <- reformulate(meff, resp)
+  mfm <- reformulate(c(meff, mand), resp)
 
   ### Fit model
   uevs <- unique(data[, env])
@@ -260,13 +275,15 @@ dicp <- function(
 # Residual invariance
 #' @importFrom ranger ranger
 .residual_invariance <- function(
-    tx, me, resp, set, env, modFUN, data, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, mandatory, ...
 ) {
+
+  mand <- .get_terms(mandatory)$all
 
   ### Prepare formula
   tset <- if (set == "1") 1 else me[tx]
   meff <- paste0(tset, collapse = "+")
-  mfm <- reformulate(meff, resp)
+  mfm <- reformulate(c(meff, mand), resp)
 
   ### Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
@@ -274,8 +291,8 @@ dicp <- function(
   ### Test
   r <- matrix(controls$residuals(m), ncol = 1)
   e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
-  if (controls$ctest == "gcm.test" & set != "1")
-    e <- .ranger_gcm(e, meff, set, data, controls) # Fit random forest for GCM-type test
+  if (controls$ctest == "gcm.test" & set != "1") # Fit RF for GCM-type test
+    e <- .ranger_gcm(e, c(meff, mand), set, data, controls)
   tst <- controls$test_fun(r, e, controls)
 
   ### Return
@@ -286,23 +303,24 @@ dicp <- function(
 
 # Wald invariance
 .wald_invariance <- function(
-    tx, me, resp, set, env, modFUN, data, controls, ...
+    tx, me, resp, set, env, modFUN, data, controls, mandatory, ...
 ) {
 
   env <- env$all
+  mand <- .get_terms(mandatory)$all
 
   ### Empty set treated separately
   if (set == 1) {
     tset <- "1"
-    meff <- ifelse(controls$baseline_fixed, env, "1")
+    meff <- paste0(c(ifelse(controls$baseline_fixed, env, "1"), mand), collapse = "+")
     mint <- ""
   } else {
     tset <- me[tx]
     meff <- if (controls$baseline_fixed)
-      paste0(c(me[tx], env), collapse = "+")
+      paste0(c(me[tx], env, mand), collapse = "+")
     else
-      paste0(me[tx], collapse = "+")
-    mint <- paste0(c(paste0(me[tx], ":", env)), collapse = "+")
+      paste0(c(me[tx], mand), collapse = "+")
+    mint <- paste0(c(paste0(c(me[tx], mand), ":", env)), collapse = "+")
   }
 
   ### Prepare formula
@@ -338,8 +356,10 @@ dicp <- function(
 
 # Partial invariance
 .partial_invariance <- function(
-    tx, me, resp, set, env, modFUN, data, trt, controls, ...
+    tx, me, resp, set, env, modFUN, data, trt, controls, mandatory, ...
 ) {
+
+  mand <- .get_terms(mandatory)$all
 
   if (set == 1) {
     tset <- "1"

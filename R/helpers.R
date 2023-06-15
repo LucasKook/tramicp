@@ -20,6 +20,8 @@
 }
 
 .get_terms <- function(formula) {
+  if (is.null(formula))
+    return(NULL)
   atms <- terms(formula)
   tms <- attr(atms, "term.labels")
   resp <- all.vars(formula)[1]

@@ -16,6 +16,7 @@ BoxCoxICP(
   baseline_fixed = TRUE,
   greedy = FALSE,
   max_size = NULL,
+  mandatory = NULL,
   ...
 )
 }
@@ -48,6 +49,11 @@ see \code{dicp_controls}.}
 
 \item{max_size}{Numeric; maximum support size.}
 
+\item{mandatory}{A \code{formula} containing mandatory covariates, i.e.,
+covariates which by a priori knowledge are believed to be parents
+of the response or are in another way required for the model to be
+valid (for instance, random effects in a mixed model).}
+
 \item{...}{
   Arguments passed on to \code{\link[=dicp]{dicp}}
   \describe{
@@ -76,6 +82,8 @@ BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald",
     greedy = TRUE)
 BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
 BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
+BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep",
+          mandatory = ~ X1)
 BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 
 }

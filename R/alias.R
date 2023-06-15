@@ -16,17 +16,19 @@
 #'     greedy = TRUE)
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
+#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep",
+#'           mandatory = ~ X1)
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "independence", controls = NULL, alpha = 0.05,
                       baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                      ...) {
+                      mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = BoxCox,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -55,12 +57,12 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "independence", controls = NULL, alpha = 0.05,
                        baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                       ...) {
+                       mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = Survreg,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -85,12 +87,12 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                         test = "independence", controls = NULL, alpha = 0.05,
                         baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                        ...) {
+                        mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = survreg,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -113,12 +115,12 @@ ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "independence", controls = NULL, alpha = 0.05,
                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                    ...) {
+                    mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = Colr,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -141,12 +143,12 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "independence", controls = NULL, alpha = 0.05,
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                     ...) {
+                     mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = Coxph,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -169,12 +171,12 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "independence", controls = NULL, alpha = 0.05,
                        baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                       ...) {
+                       mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = Lehmann,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -198,12 +200,12 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   test = "independence", controls = NULL, alpha = 0.05,
                   baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                  ...) {
+                  mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = Lm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -228,12 +230,12 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "independence", controls = NULL, alpha = 0.05,
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                   ...) {
+                   mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = lm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -256,12 +258,12 @@ slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "independence", controls = NULL, alpha = 0.05,
                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                    ...) {
+                    mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = Polr,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -289,7 +291,7 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "independence", controls = NULL, alpha = 0.05,
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                     ...) {
+                     mandatory = NULL, ...) {
   call <- match.call()
   if (type == "confint")
     stop("`type = \"confint\"` not implemented for ICP with `MASS::polr()`.")
@@ -309,7 +311,7 @@ mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   ret <- dicp(formula = formula, data = data, env = env, modFUN = modF,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -344,7 +346,7 @@ residuals.polr <- function(object, ...) {
 glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "independence", controls = NULL, alpha = 0.05,
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                   ...) {
+                   mandatory = NULL, ...) {
   call <- match.call()
   if (is.character(test))
     test <- match.arg(test, .implemented_tests())
@@ -358,7 +360,7 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   ret <- dicp(formula = formula, data = data, env = env, modFUN = glm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
@@ -383,12 +385,12 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "independence", controls = NULL, alpha = 0.05,
                       baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
-                      ...) {
+                      mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = cotram::cotram,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
-              max_size = max_size, ... = ...)
+              max_size = max_size, mandatory = mandatory, ... = ...)
   attr(ret, "call") <- call
   ret
 }
