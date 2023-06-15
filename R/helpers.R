@@ -25,6 +25,8 @@
   atms <- terms(formula)
   tms <- attr(atms, "term.labels")
   resp <- all.vars(formula)[1]
+  ridx <- grep("|", tms, fixed = TRUE)
+  tms[ridx] <- paste0("(", tms[ridx], ")")
   ie <- grep(":", tms, value = TRUE)
   me <- grep(":", tms, value = TRUE, invert = TRUE)
   list(all = tms, me = me, ie = ie, response = resp, terms = atms, fml = formula)
