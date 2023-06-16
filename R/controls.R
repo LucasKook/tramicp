@@ -32,7 +32,8 @@ dicp_controls <- function(
     type = "residual", test = "independence", baseline_fixed = TRUE,
     alpha = 0.05, method = "gamma", kernel = c("gaussian", "discrete"),
     B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
-    xtrafo = trafo, ytrafo = trafo, residuals = "residuals"
+    xtrafo = trafo, ytrafo = trafo, residuals = "residuals",
+    stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default = FALSE)
 ) {
 
   # Type of ICP
@@ -50,7 +51,8 @@ dicp_controls <- function(
     ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
     baseline_fixed = baseline_fixed, teststat = teststat,
     distribution = distribution, xtrafo = xtrafo, ytrafo = ytrafo,
-    residuals = residuals
+    residuals = residuals,
+    stop_if_empty_set_invariant = stop_if_empty_set_invariant
   )
 }
 

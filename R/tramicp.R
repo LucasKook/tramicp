@@ -137,7 +137,7 @@ dicp <- function(
 
 }
 
-# Run invariant subset search
+# Invariant subset search
 .invariant_subset_search <- function(ps, controls, me, resp, etms, modFUN,
                                      data, greedy, verbose, pb, mandatory,
                                      ...) {
@@ -154,6 +154,14 @@ dicp <- function(
       ret <- apply(ps[[set]], 2, controls$type_fun, me = me, resp = resp,
                    set = set, env = etms, modFUN = modFUN, data = data,
                    controls = controls, mandatory = mandatory, ... = ...)
+
+      if (set == 1 && controls$stop_if_empty_set_invariant &&
+          ret[[1]]$test$p.value > controls$alpha) {
+      if (verbose && interactive())
+        message("\nEmpty set is not rejected. Stopping.")
+        tests <- ret
+        break
+      }
 
       tests <- c(tests, ret)
 

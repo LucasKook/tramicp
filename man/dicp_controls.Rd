@@ -17,7 +17,9 @@ dicp_controls(
   distribution = "asymptotic",
   xtrafo = trafo,
   ytrafo = trafo,
-  residuals = "residuals"
+  residuals = "residuals",
+  stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default =
+    FALSE)
 )
 }
 \arguments{

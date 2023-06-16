@@ -51,9 +51,10 @@ summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
     "Invariant Causal Prediction\n"
   )
   cat(ttitle)
-  mod <- object[["tests"]][[2]]$model$tram
-  if (is.null(mod)) mod <- object[["tests"]][[2]]$tram
-  cat(mod, "\n")
+  if (is.null(mod <- object[["tests"]][[1]]$model$tram))
+    mod <- object[["tests"]][[1]]$tram
+  if (!is.null(mod))
+    cat(mod, "\n")
   if (length(deparse(tcall <- attr(object, "call"))) < 10) {
     cat("\nCall: ")
     print(tcall)
