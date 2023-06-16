@@ -14,6 +14,10 @@
 #' @param xtrafo See \code{\link[coin]{independence_test}}.
 #' @param ytrafo See \code{\link[coin]{independence_test}}.
 #' @param residuals (Name of) function for computing model residuals.
+#' @param stop_if_empty_set_invariant Logical; \code{dicp} halts if the empty
+#'     set is not rejected (the resulting intersection will always be empty).
+#'     Default is \code{FALSE} and can be over-written by setting
+#'     \code{options(stop_if_empty_set_invariant = TRUE)}.
 #'
 #' @return List of dicp controls
 #'
