@@ -85,7 +85,7 @@ Invariant causal prediction for transformation models
 set.seed(123)
 d <- dgp_dicp(n = 1e3, mod = "polr")
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
-dicp(Y ~ X1 + X2, data = d, env = ~ E + X3, modFUN = Polr, type = "wald")
+dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald")
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
     weights = abs(rnorm(nrow(d))))
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")

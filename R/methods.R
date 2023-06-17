@@ -55,7 +55,7 @@ summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
     mod <- object[["tests"]][[1]]$tram
   if (!is.null(mod))
     cat(mod, "\n")
-  if (length(deparse(tcall <- attr(object, "call"))) < 10) {
+  if (length(deparse(tcall <- object$call)) < 10) {
     cat("\nCall: ")
     print(tcall)
     cat("\n")
