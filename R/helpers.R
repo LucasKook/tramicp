@@ -1,13 +1,13 @@
 # Helpers
 
 .check_args <- function(formula, data, env, modFUN, type, test) {
-  stopifnot("`formula` should be of class 'formula'." = "formula" %in% class(formula))
-  stopifnot("`env` should be of class 'formula'." = "formula" %in% class(env))
-  stopifnot("`modFUN` should be a function or a character referring to the
-            name of a function." = is.function(modFUN) | is.character(modFUN))
+  stopifnot("`formula` should be a formula." = "formula" %in% class(formula))
+  stopifnot("`env` should be a formula." = "formula" %in% class(env))
+  stopifnot("`modFUN` should be a function or a character matching a
+            function name." = is.function(modFUN) | is.character(modFUN))
   etms <- .get_terms(env)
-  if (length(etms$all) != 1 && type %in% c("confint", "mcheck", "wald"))
-    stop("Invariance types `\"confint\"`, `\"mcheck\"` and `\"wald\"` are not
+  if (length(etms$all) != 1 && type %in% c("confint", "mcheck"))
+    stop("Invariance types `\"confint\"` and `\"mcheck\"` are not
          implemented for multivariable environments.")
   if (length(etms$all) != 1 && test %in% c("gcm.test", "cor.test", "t.test"))
     stop("Invariance tests `\"gcm.test\"`, `\"cor.test\"` and `\"t.test\"`
@@ -285,6 +285,7 @@ residuals.binglm <- function(object, ...) {
             class = "dICPtest")
 }
 
+#' @importFrom ranger ranger
 .ranger_gcm <- function(e, meff, set, data, controls) {
   mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
   if (dprob <- length(unique(e) == 2)) {
@@ -294,4 +295,8 @@ residuals.binglm <- function(object, ...) {
   rf <- ranger(mfe, data = data, probability = dprob)
   if (dprob) e - predict(rf, data = data)$predictions[, 2] else
     e - rf$predictions
+}
+
+.pplus <- function(terms) {
+  paste0(terms, collapse = "+")
 }

@@ -50,7 +50,7 @@
 #' set.seed(123)
 #' d <- dgp_dicp(n = 1e3, mod = "polr")
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald")
+#' dicp(Y ~ X1 + X2, data = d, env = ~ E + X3, modFUN = Polr, type = "wald")
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
 #'     weights = abs(rnorm(nrow(d))))
 #' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")
@@ -220,7 +220,7 @@ dicp <- function(
 
   ### Set up formula
   tset <- me[tx]
-  meff <- paste0(tset, collapse = "+")
+  meff <- .pplus(tset)
   mfm <- reformulate(c(meff, mand), resp)
 
   ### Fit model
@@ -252,7 +252,7 @@ dicp <- function(
 
   ### Prepare formula
   tset <- if (set == 1) "1" else me[tx]
-  meff <- paste0(tset, collapse = "+")
+  meff <- .pplus(tset)
   mfm <- reformulate(c(meff, mand), resp)
 
   ### Fit model
@@ -281,7 +281,6 @@ dicp <- function(
 }
 
 # Residual invariance
-#' @importFrom ranger ranger
 .residual_invariance <- function(
     tx, me, resp, set, env, modFUN, data, controls, mandatory, ...
 ) {
@@ -290,7 +289,7 @@ dicp <- function(
 
   ### Prepare formula
   tset <- if (set == "1") 1 else me[tx]
-  meff <- paste0(tset, collapse = "+")
+  meff <- .pplus(tset)
   mfm <- reformulate(c(meff, mand), resp)
 
   ### Fit model
@@ -320,21 +319,20 @@ dicp <- function(
   ### Empty set treated separately
   if (set == 1) {
     tset <- "1"
-    meff <- paste0(c(ifelse(controls$baseline_fixed, env, "1"), mand), collapse = "+")
+    meff <- .pplus(c(ifelse(controls$baseline_fixed, env, "1"), mand))
     mint <- ""
   } else {
     tset <- me[tx]
-    meff <- if (controls$baseline_fixed)
-      paste0(c(me[tx], env, mand), collapse = "+")
-    else
-      paste0(c(me[tx], mand), collapse = "+")
-    mint <- paste0(c(paste0(c(me[tx], mand), ":", env)), collapse = "+")
+    meff <- if (controls$baseline_fixed) .pplus(c(me[tx], env, mand)) else
+      .pplus(c(me[tx], mand))
+    mint <- .pplus(c(paste0(c(me[tx], mand), ":", env)))
   }
 
   ### Prepare formula
   mfm <- as.formula(
-    paste0(resp, ifelse(controls$baseline_fixed, "", paste0("|", env)),
-           "~", meff, if (mint != "") "+", mint)
+    paste0(resp, ifelse(
+      controls$baseline_fixed, "", paste0("|", .pplus(env))),
+      "~", meff, if (mint != "") "+", mint)
   )
 
   ### Fit
@@ -342,13 +340,14 @@ dicp <- function(
   if (inherits(m, "tram"))
     m <- as.mlt(m)
   cfs <- names(coef(m))
-  tcfs <- union(grep(paste0(":", env), cfs, value = TRUE),
-                grep(env, cfs, value = TRUE))
+  tcfs <- union(unlist(sapply(paste0(":", env), \(pat) grep(pat, cfs, value = TRUE))),
+                unlist(sapply(env, \(pat) grep(pat, cfs, value = TRUE))))
 
   ### Test
-  tst <- try(summary(glht(m, linfct = paste(tcfs, "== 0"),
-                          vcov = controls$vcov),
-                     test = controls$test_fun()), silent = FALSE)
+  tst <- try(summary(
+    glht(m, linfct = paste(tcfs, "== 0"), vcov = controls$vcov),
+    test = controls$test_fun()), silent = FALSE
+  )
 
   ### Catch failure cases
   if (inherits(tst, "try-error")) {
@@ -376,10 +375,10 @@ dicp <- function(
     mint2 <- ""
   } else {
     tset <- me[tx]
-    meff <- paste0(me, collapse = "+")
-    mint1 <- paste0(c(paste0(trt, ":", tset), paste0(env, ":", tset),
-                      paste0(trt, ":", env)), collapse = "+")
-    mint2 <- paste0(paste0(trt, ":", env, ":", tset), collapse = "+")
+    meff <- .pplus(me)
+    mint1 <- .pplus(c(
+      paste0(trt, ":", tset), paste0(env, ":", tset), paste0(trt, ":", env)))
+    mint2 <- .pplus(paste0(trt, ":", env, ":", tset))
   }
   mfm <- as.formula(paste0(resp, "~", meff, "+", mint1, if (mint2 != "") "+",
                            mint2))
