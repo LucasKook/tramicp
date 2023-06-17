@@ -162,24 +162,23 @@
 ) {
 
   mand <- .get_terms(mandatory)$all
+  env <- env$all
 
   if (set == 1) {
     tset <- "1"
-    meff <- paste0(trt, "+", env)
-    mint1 <- paste0(trt, ":", env)
-    mint2 <- ""
+    meff <- .pplus(c(mand, env))
+    mint1 <- .pplus(paste0(mand, ":", env))
+    mint2 <- NULL
   } else {
     tset <- me[tx]
-    meff <- .pplus(me)
-    mint1 <- .pplus(c(
-      paste0(trt, ":", tset), paste0(env, ":", tset), paste0(trt, ":", env)))
-    mint2 <- .pplus(paste0(trt, ":", env, ":", tset))
+    meff <- .pplus(c(me[tx], mand, env))
+    mint1 <- .pplus(c(paste0(mand, ":", tset), paste0(env, ":", tset)))
+    mint2 <- .pplus(paste0(mand, ":", env, ":", tset))
   }
-  mfm <- as.formula(paste0(resp, "~", meff, "+", mint1, if (mint2 != "") "+",
-                           mint2))
+  mfm <- reformulate(c(meff, mint1, mint2), resp)
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
   cfs <- names(coef(m))
-  tcfs <- grep(paste0(":", env), grep(paste0(if (set != 1) ":", trt),
+  tcfs <- grep(paste0(":", env), grep(paste0(if (set != 1) ":", mand),
                                       cfs, value = TRUE), value = TRUE)
   tst <- try(summary(glht(m, linfct = paste(tcfs, "== 0"),
                           vcov = controls$vcov),
@@ -190,7 +189,7 @@
   }
 
   if (set == 1) tset <- "Empty"
-  tst$set <- me[tx]
+  tst$set <- tset
   tst
 
 }
