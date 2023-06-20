@@ -32,6 +32,12 @@ test_that("main function works", {
   expect_length(pvalues(ww, "set"), 2^3)
   expect_length(pvalues(ww, "predictor"), 3)
 
+  ### Mandatory
+  md <- dicp(Y ~ X1 + X3, data = d, env = ~ E, mandatory = ~ X2, modFUN = Polr,
+             type = "wald", verbose = FALSE, baseline_fixed = FALSE)
+  expect_length(pvalues(md, "set"), 2^2)
+  expect_length(pvalues(md, "predictor"), 2)
+
 })
 
 test_that("All aliases work", {
