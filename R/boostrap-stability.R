@@ -22,7 +22,7 @@ bootstrap_stability <- function(
 ) {
 
   ### Get the call and data
-  call <- object$call <- attr(object, "call")
+  call <- object$call
   d <- eval(call$data, envir = parent.frame())
 
   ### Default bootstrap size is nrow(d)
