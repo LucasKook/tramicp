@@ -99,7 +99,8 @@
 
   ### Return
   if (set == 1) tset <- "Empty"
-  structure(list(set = tset, test = tst, coef = coef(m)), class = "dICPtest")
+  structure(list(set = tset, test = tst, coef = coef(m), tram = m$tram),
+            class = "dICPtest")
 
 }
 
@@ -152,6 +153,7 @@
   ### Return
   if (set == 1) tset <- "Empty"
   tst$set <- tset
+  tst$tram <- m$tram
   tst
 
 }

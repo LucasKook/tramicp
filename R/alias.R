@@ -29,7 +29,7 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -63,7 +63,7 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -93,7 +93,7 @@ ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -121,7 +121,7 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -149,7 +149,7 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -177,7 +177,7 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -206,7 +206,7 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -236,7 +236,7 @@ slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -264,7 +264,7 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -312,7 +312,7 @@ mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -361,7 +361,7 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
 
@@ -391,6 +391,6 @@ cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
-  attr(ret, "call") <- call
+  ret$call <- call
   ret
 }
