@@ -270,10 +270,13 @@ residuals.binglm <- function(object, ...) {
 }
 
 # Pvalues for individual predictors being a causal parent
-.indiv_pvals <- function(terms, pvals) {
+.indiv_pvals <- function(terms, pvals, alpha) {
   res <- lapply(terms, \(term) suppressWarnings(
     max(pvals[!grepl(term, names(pvals), fixed = TRUE)], na.rm = TRUE)))
-  structure(unlist(res), names = terms)
+  ret <- structure(unlist(res), names = terms)
+  if (all(ret < alpha))
+    ret[] <- 1
+  ret
 }
 
 .sub_smooth_terms <- function(tm) {

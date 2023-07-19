@@ -126,7 +126,7 @@ dicp <- function(
   }
 
   ### Compute predictor-level p-values
-  ipv <- .indiv_pvals(me, pvals)
+  ipv <- .indiv_pvals(me, pvals, alpha = alpha)
   if (identical(inv, character(0)))
     inv <- "Empty"
   ### Return
