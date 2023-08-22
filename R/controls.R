@@ -33,7 +33,7 @@
 #' @importFrom coin trafo
 #'
 dicp_controls <- function(
-    type = "residual", test = "independence", baseline_fixed = TRUE,
+    type = "residual", test = "gcm.test", baseline_fixed = TRUE,
     alpha = 0.05, method = "gamma", kernel = c("gaussian", "discrete"),
     B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
     xtrafo = trafo, ytrafo = trafo, residuals = "residuals",

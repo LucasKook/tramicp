@@ -10,7 +10,7 @@ ColrICP(
   env,
   verbose = TRUE,
   type = "residual",
-  test = "independence",
+  test = "gcm.test",
   controls = NULL,
   alpha = 0.05,
   baseline_fixed = TRUE,

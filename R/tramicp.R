@@ -76,7 +76,7 @@
 dicp <- function(
   formula, data, env, modFUN, verbose = TRUE,
   type = c("residual", "wald", "mcheck", "confint", "partial"),
-  test = "independence", controls = NULL, alpha = 0.05,
+  test = "gcm.test", controls = NULL, alpha = 0.05,
   baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
   mandatory = NULL, ...
 ) {

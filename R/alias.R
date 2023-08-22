@@ -21,7 +21,7 @@
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                      test = "independence", controls = NULL, alpha = 0.05,
+                      test = "gcm.test", controls = NULL, alpha = 0.05,
                       baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                       mandatory = NULL, ...) {
   call <- match.call()
@@ -55,7 +55,7 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'     test = "indep")
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                       test = "independence", controls = NULL, alpha = 0.05,
+                       test = "gcm.test", controls = NULL, alpha = 0.05,
                        baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                        mandatory = NULL, ...) {
   call <- match.call()
@@ -85,7 +85,7 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' ssurvregICP(surv ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
 #'
 ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                        test = "independence", controls = NULL, alpha = 0.05,
+                        test = "gcm.test", controls = NULL, alpha = 0.05,
                         baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                         mandatory = NULL, ...) {
   call <- match.call()
@@ -113,7 +113,7 @@ ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' ColrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                    test = "independence", controls = NULL, alpha = 0.05,
+                    test = "gcm.test", controls = NULL, alpha = 0.05,
                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                     mandatory = NULL, ...) {
   call <- match.call()
@@ -141,7 +141,7 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                     test = "independence", controls = NULL, alpha = 0.05,
+                     test = "gcm.test", controls = NULL, alpha = 0.05,
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                      mandatory = NULL, ...) {
   call <- match.call()
@@ -169,7 +169,7 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                       test = "independence", controls = NULL, alpha = 0.05,
+                       test = "gcm.test", controls = NULL, alpha = 0.05,
                        baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                        mandatory = NULL, ...) {
   call <- match.call()
@@ -198,7 +198,7 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' dicp(Y ~ X2, data = d, env = ~ E, type = "confint", modFUN = lm)
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                  test = "independence", controls = NULL, alpha = 0.05,
+                  test = "gcm.test", controls = NULL, alpha = 0.05,
                   baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                   mandatory = NULL, ...) {
   call <- match.call()
@@ -228,7 +228,7 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' slmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                   test = "independence", controls = NULL, alpha = 0.05,
+                   test = "gcm.test", controls = NULL, alpha = 0.05,
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                    mandatory = NULL, ...) {
   call <- match.call()
@@ -256,7 +256,7 @@ slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' PolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                    test = "independence", controls = NULL, alpha = 0.05,
+                    test = "gcm.test", controls = NULL, alpha = 0.05,
                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                     mandatory = NULL, ...) {
   call <- match.call()
@@ -289,7 +289,7 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' # mpolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
 #'
 mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                     test = "independence", controls = NULL, alpha = 0.05,
+                     test = "gcm.test", controls = NULL, alpha = 0.05,
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                      mandatory = NULL, ...) {
   call <- match.call()
@@ -344,7 +344,7 @@ residuals.polr <- function(object, ...) {
 #' dicp(Y ~ X2, data = d, env = ~ E, modFUN = tramicp:::.mod_from_name("binary"))
 #'
 glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                   test = "independence", controls = NULL, alpha = 0.05,
+                   test = "gcm.test", controls = NULL, alpha = 0.05,
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                    mandatory = NULL, ...) {
   call <- match.call()
@@ -383,7 +383,7 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' glmICP(Y ~ X2, data = d, env = ~ E, family = "poisson", test = "indep")
 #'
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
-                      test = "independence", controls = NULL, alpha = 0.05,
+                      test = "gcm.test", controls = NULL, alpha = 0.05,
                       baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                       mandatory = NULL, ...) {
   call <- match.call()

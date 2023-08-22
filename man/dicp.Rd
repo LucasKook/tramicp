@@ -11,7 +11,7 @@ dicp(
   modFUN,
   verbose = TRUE,
   type = c("residual", "wald", "mcheck", "confint", "partial"),
-  test = "independence",
+  test = "gcm.test",
   controls = NULL,
   alpha = 0.05,
   baseline_fixed = TRUE,

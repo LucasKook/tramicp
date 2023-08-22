@@ -6,7 +6,7 @@
 \usage{
 dicp_controls(
   type = "residual",
-  test = "independence",
+  test = "gcm.test",
   baseline_fixed = TRUE,
   alpha = 0.05,
   method = "gamma",
