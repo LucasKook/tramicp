@@ -20,7 +20,7 @@
     R_mat <- R_mat/sqrt((rowMeans(R_mat^2) - rowMeans(R_mat)^2))
     test.statistic <- max(abs(rowMeans(R_mat))) * sqrt(nn)
     test.statistic.sim <- apply(abs(R_mat %*% matrix(
-      rnorm(nn * nsim), nn, nsim)), 2, max)/sqrt(nn)
+      rnorm(nn * nsim), nn, nsim)), 2, max) / sqrt(nn)
     p.value <- (sum(test.statistic.sim >= test.statistic) + 1)/(nsim + 1)
   }
   else {

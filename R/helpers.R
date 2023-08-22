@@ -9,8 +9,8 @@
   if (length(etms$all) != 1 && type %in% c("confint", "mcheck"))
     stop("Invariance types `\"confint\"` and `\"mcheck\"` are not
          implemented for multivariable environments.")
-  if (length(etms$all) != 1 && test %in% c("gcm.test", "cor.test", "t.test"))
-    stop("Invariance tests `\"gcm.test\"`, `\"cor.test\"` and `\"t.test\"`
+  if (length(etms$all) != 1 && test %in% c("cor.test", "t.test"))
+    stop("Invariance tests `\"cor.test\"` and `\"t.test\"`
          are not implemented for multivariable environments.")
 }
 
@@ -290,8 +290,13 @@ residuals.binglm <- function(object, ...) {
 
 #' @importFrom ranger ranger
 .ranger_gcm <- function(e, meff, set, data, controls) {
+  if (NCOL(e) != 1L) {
+    resids <- apply(e, 2, .ranger_gcm, meff = meff, set = set, data = data,
+                    controls = controls)
+    return(resids)
+  }
   mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
-  if (dprob <- length(unique(e) == 2)) {
+  if (dprob <- (length(unique(e)) == 2)) {
     fe <- as.factor(e)
     mfe <- update(mfe, fe ~ .)
   }

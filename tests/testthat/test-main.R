@@ -109,7 +109,6 @@ test_that("argument checks work", {
   expect_error(dicp(Y ~ X1, d, ~ E, modFUN = NA))
   expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "confint"))
   expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "mcheck"))
-  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "gcm.test"))
   expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "cor.test"))
   expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "t.test"))
 })
