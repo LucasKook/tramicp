@@ -6,7 +6,9 @@
 
 Package `tramicp` [1] implements invariant causal prediction (ICP) [2] for 
 transformation models [3], including binary logistic regression, Weibull 
-regression, the Cox model, linear regression and many others.
+regression, the Cox model, linear regression and many others. The aim of ICP
+is to discover the direct causes of a response given data from heterogeneous
+experimental settings and a potentially large pool of candidate predictors.
 
 # Installation
 
