@@ -8,4 +8,5 @@ inst/results
 inst/figures
 inst/helpers
 inst/code
+inst/Makefile
 
