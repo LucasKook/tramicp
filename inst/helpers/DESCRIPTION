@@ -1,0 +1,15 @@
+Package: simtramicp
+Type: Package
+Title: Simulation tools for invariant causal prediction for transformation models
+Version: 0.1.0
+Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
+    email = "lucasheinrich.kook@gmail.com"))
+Description: Simulation tools for 'tramicp'
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.1.2
+Depends: tramicp
+Imports: CondIndTests, pcalg, GeneralisedCovarianceMeasure, Rgraphviz, coin,
+    dplyr, tidyr, multcomp, sandwich, survival, dHSIC, variables, basefun, 
+    tidyverse, ggplot2, ggpubr, trtf, magrittr, methods, tibble, MASS, RCIT
+Suggests: cotram

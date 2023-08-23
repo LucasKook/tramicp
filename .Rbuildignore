@@ -3,3 +3,8 @@
 README.md
 ^\.github$
 inst/ignore
+inst/experiments
+inst/results
+inst/figures
+inst/helpers
+

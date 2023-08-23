@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+inst/simulations/
+inst/illustration/
+inst/data/
+Makefile
+tmp-res
+inst/demos/
