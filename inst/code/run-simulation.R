@@ -2,8 +2,8 @@
 # Simulation setup for reproducing the results in Section 4 and Appendix B2
 # Lucas Kook, 2023
 
-specs <- c("correct", "link", "hidden")
-spec <- specs[as.numeric(commandArgs(TRUE))]
+specs <- c("correct", "link", "hidden", "roc")
+spec <- specs[as.numeric(commandArgs(TRUE))[1]]
 if (is.na(spec))
   spec <- specs[1]
 
@@ -25,7 +25,6 @@ save <- TRUE # Save simulation results in current R session
 store <- FALSE # Store simulation results in folder
 fixed <- TRUE # Same DAGs for all models
 
-
 # Params ------------------------------------------------------------------
 
 # Models
@@ -43,6 +42,16 @@ tests <- c("wald", "cor.test", "KCI", "gcm.test")
 names(types) <- tests
 ltest <- c("Wald", "cor.test", "KCI", "gcm.test")
 names(ltest) <- tests
+
+# ROC-specific args
+pkgs <- c("magrittr", "tramicp")
+tANA <- ANA
+if (spec == "roc") {
+  mods <- mods[1]
+  lmods <- lmods[1]
+  tANA <- AUCANA
+  pkgs <- c(pkgs, "pROC")
+}
 
 # Params
 ndags <- ifelse(spec == "correct", 100, 50) # Number of DAGs
@@ -94,7 +103,7 @@ if (save) {
             "stdz", stdz, "sde", round(sde, 2), "errDist", errDistAnY, errDistDeY,
             "spec", spec)
   outdir <- file.path(
-    "inst", "results", Sys.Date(), "rdag-all", paste0(paste0(
+    "inst", "results", Sys.Date(), paste0(paste0(
       names(pvec), pvec, collapse = ""), collapse = "_"))
   if (!dir.exists(outdir))
     dir.create(outdir, recursive = TRUE)
@@ -114,7 +123,7 @@ res <- runSimulation(
   design = Design,
   replications = nsim,
   generate = if (fixed) GENFIX else GEN,
-  analyse = ANA,
+  analyse = tANA,
   summarise = NA,
   save_results = save,
   store_results = store,
@@ -122,7 +131,7 @@ res <- runSimulation(
   parallel = parall,
   ncores = ncores,
   fixed_objects = fobs,
-  packages = c("magrittr", "tramicp"),
+  packages = pkgs,
   filename = "sim-results.rds",
   save_details = list(
     safe = TRUE, save_results_dirname = file.path(outdir, "results"),

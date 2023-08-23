@@ -28,7 +28,7 @@ make dependencies
 ## Running the simulation studies
 
 ```
-make sim
+make sim-all
 ```
 
 ## Reproducing Figures in Section 4.4 and Appendix B2
