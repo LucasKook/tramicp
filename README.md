@@ -70,18 +70,18 @@ with an alias, as shown in the table below.
 
 | **Function alias**  | **Corresponding `modFUN`** |
 |---------------------|----------------------------|
-| `BoxCoxICP()`       |           `tram::BoxCox()` |
-| `ColrICP()`         |             `tram::Colr()` |
-| `cotramICP()`       |         `cotram::cotram()` |
-| `CoxphICP()`        |            `tram::Coxph()` |
-| `glmICP()`          |             `stats::glm()` |
-| `LehmannICP()`      |          `tram::Lehmann()` |
-| `LmICP()`           |               `tram::Lm()` |
-| `slmICP()`          |              `stats::lm()` |
-| `PolrICP()`         |             `tram::Polr()` |
-| `mpolrICP()`        |             `MASS::polr()` |
-| `SurvregICP()`      |          `tram::Survreg()` |
-| `ssurvregICP()`     |          `tram::Survreg()` |
+| `BoxCoxICP()`       | `tram::BoxCox()`           | 
+| `ColrICP()`         | `tram::Colr()`             |
+| `cotramICP()`       | `cotram::cotram()`         |
+| `CoxphICP()`        | `tram::Coxph()`            |
+| `glmICP()`          | `stats::glm()`             |
+| `LehmannICP()`      | `tram::Lehmann()`          |
+| `LmICP()`           | `tram::Lm()`               |
+| `slmICP()`          | `stats::lm()`              |
+| `PolrICP()`         | `tram::Polr()`             |
+| `mpolrICP()`        | `MASS::polr()`             |
+| `SurvregICP()`      | `tram::Survreg()`          |
+| `ssurvregICP()`     | `tram::Survreg()`          |
 
 Other implementations, such as additive TRAMs in `tramME`, can still be used via
 the `dicp()` function, for instance, after loading `tramME`, `dicp(..., modFUN =
