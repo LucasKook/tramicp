@@ -69,7 +69,7 @@ Instead of using `dicp()`, `tramicp` directly implements several model classes
 with an alias, as shown in the table below.
 
 | **Function alias**  | **Corresponding `modFUN`** |
-----------------------------------------------------
+|---------------------|----------------------------|
 | `BoxCoxICP()`       |           `tram::BoxCox()` |
 | `ColrICP()`         |             `tram::Colr()` |
 | `cotramICP()`       |         `cotram::cotram()` |
