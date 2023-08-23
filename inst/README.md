@@ -1,5 +1,5 @@
 
-# Replication material
+# Replication materials
 
 This folder contains the replication material and is structured as follows.
 

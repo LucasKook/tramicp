@@ -5,9 +5,9 @@
 # Invariant causal prediction for transformation models
 
 Package `tramicp` [1] implements invariant causal prediction (ICP) [2] for 
-transformation models [3], including binary logistic regression, Weibull 
-regression, the Cox model, linear regression and many others. The aim of ICP
-is to discover the direct causes of a response given data from heterogeneous
+transformation models (TRAMICP) [3], including binary logistic regression,
+Weibull regression, the Cox model, linear regression and many others. The aim of
+ICP is to discover the direct causes of a response given data from heterogeneous
 experimental settings and a potentially large pool of candidate predictors.
 
 # Installation
@@ -39,7 +39,7 @@ the correctly specified model, `Y ~ X1`, this correlation will be zero.
 To obtain an estimator for the parent set, ICP takes the intersection over all
 sets for which the invariance hypothesis is failed to be rejected.
 
-The code chunk below shows how to use `tramicp` on the data above.
+The code chunk below shows how to use TRAMICP on the data above.
 ```r
 icp <- glmICP(Y ~ X1 + X2, data = df, env = ~ E, family = "binomial",
               test = "gcm.test", verbose = FALSE)
@@ -57,7 +57,37 @@ The environments are also specified as a formula (RHS only). Details on the
 test and other options can be found in the manuscript and documentation of the
 package.
 
-# Reproducibility
+# General usage
+
+In full generality, TRAMICP is implemented in the `dicp()` function, which takes
+the argument `modFUN` (model function). For instance, the `glmICP` call from
+above is equivalent to `dicp(..., modFUN = glm, family = "binomial")`.
+
+# Implemented model classes
+
+Instead of using `dicp()`, `tramicp` directly implements several model classes
+with an alias, as shown in the table below.
+
+| **Function alias**  | **Corresponding `modFUN`** |
+----------------------------------------------------
+| `BoxCoxICP()`       |           `tram::BoxCox()` |
+| `ColrICP()`         |             `tram::Colr()` |
+| `cotramICP()`       |         `cotram::cotram()` |
+| `CoxphICP()`        |            `tram::Coxph()` |
+| `glmICP()`          |             `stats::glm()` |
+| `LehmannICP()`      |          `tram::Lehmann()` |
+| `LmICP()`           |               `tram::Lm()` |
+| `slmICP()`          |              `stats::lm()` |
+| `PolrICP()`         |             `tram::Polr()` |
+| `mpolrICP()`        |             `MASS::polr()` |
+| `SurvregICP()`      |          `tram::Survreg()` |
+| `ssurvregICP()`     |          `tram::Survreg()` |
+
+Other implementations, such as additive TRAMs in `tramME`, can still be used via
+the `dicp()` function, for instance, after loading `tramME`, `dicp(..., modFUN =
+"BoxCoxME")` can be used.
+
+# Replication materials
 
 This repository contains the code for reproducing the results in [1] in
 the `inst` directory. Please follow the instructions in 
