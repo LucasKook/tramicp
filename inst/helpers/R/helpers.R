@@ -81,7 +81,7 @@ AUCANA <- function(condition, dat, fixed_objects = NULL) {
     oicp <- attr(dat, "oracle_icp")
     pvals <- if (ttype == "kci") {
       tmp <- cdkci(fixed_objects$resp, fixed_objects$env, fixed_objects$preds,
-                   data = dat)
+                   data = dat, coin = fixed_objects$coin)
       inv <- attr(tmp, "intersection")
       tmp
     } else {

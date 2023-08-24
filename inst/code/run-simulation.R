@@ -19,6 +19,7 @@ devtools::load_all()
 devtools::load_all("inst/helpers")
 library("colorspace")
 library("RCIT")
+library("CondIndTests")
 theme_set(theme_bw() + theme(legend.position = "top"))
 
 save <- TRUE # Save simulation results in current R session
@@ -44,7 +45,7 @@ ltest <- c("Wald", "cor.test", "KCI", "gcm.test")
 names(ltest) <- tests
 
 # ROC-specific args
-pkgs <- c("magrittr", "tramicp")
+pkgs <- c("magrittr", "tramicp", "RCIT", "CondIndTests")
 tANA <- ANA
 if (spec == "roc") {
   mods <- mods[1]
@@ -52,6 +53,9 @@ if (spec == "roc") {
   tANA <- AUCANA
   pkgs <- c(pkgs, "pROC")
 }
+
+# KCI
+tcoin <- RCIT # CondIndTest
 
 # Params
 ndags <- ifelse(spec == "correct", 100, 50) # Number of DAGs
@@ -77,7 +81,7 @@ env <- "E" # Name of environment var
 cfb <- c(-22, 8) # baseline cf
 rmc <- FALSE # Whether to remove censoring
 stdz <- TRUE # Whether to standardize
-sde <- sqrt(30)
+sde <- sqrt(10)
 errDistAnY <- "normal"
 errDistDeY <- "normal"
 mixAnY <- 0.1
@@ -96,7 +100,8 @@ fobs <- list(types = types, fml = fml, resp = resp, env = env, preds = preds,
              blfix = blfix, cfb = cfb, K = tK, polrK = polrK, rmc = rmc,
              stdz = stdz, nsim = nsim, sde = sde, errDistAnY = errDistAnY,
              errDistDeY = errDistDeY, mixAnY = mixAnY, mixDeY = mixDeY,
-             dags = dags, mods = mods, tests = tests, spec = spec)
+             dags = dags, mods = mods, tests = tests, spec = spec,
+             coin = tcoin)
 
 if (save) {
   pvec <- c("nanc", nanc, "ndec", ndec, "panc", panc, "pdec", pdec, "penv", penv,

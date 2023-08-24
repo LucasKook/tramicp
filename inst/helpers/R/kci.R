@@ -19,9 +19,10 @@
 #' @examples
 #' \dontrun{
 #' set.seed(1)
-#' d <- dgp_random_dag(n = 1e3, mod = "colr", dag = random_dag(nanc = 2,
+#' d <- dgp_random_dag(n = 5e1, mod = "colr", dag = random_dag(nanc = 2,
 #'     ndec = 2, panc = 1, pdec = 1, penv = 1))
-#' cdkci("Y", "E", paste0("X", 1:4), data = d, seed = 1)
+#' cdkci("Y", "E", paste0("X", 1:4), data = d, coin = CondIndTests::CondIndTest)
+#' cdkci("Y", "E", paste0("X", 1:4), data = d)
 #' }
 #'
 #'
@@ -47,16 +48,21 @@ cdkci <- function(Y, E, X, data, coin = RCIT, verbose = FALSE, ...) {
 
     ret <- apply(ps[[npred]], 2, function(set) {
       tset <- X[set]
-      tst <- try(coin(as.matrix(as.numeric(data[, Y])), as.numeric(data[, E]),
-                      as.matrix(data[, tset]), ... = ...), silent = TRUE)
-      if (inherits(tst, "try-error"))
-        tst <- coin(as.matrix(as.numeric(data[, Y])), as.matrix(data[, E]),
-                    as.matrix(data[, tset]), ... = ...)
-      pval <- tst[["pvalue"]]
-      if (is.null(pval)) pval <- tst[["p.value"]]
-      if (is.null(pval)) pval <- tst[["p"]]
-      if (identical(tset, character(0)))
+      if (identical(tset, character(0))) {
         tset <- "Empty"
+        pval <- 0
+      } else {
+        tst <- try(coin(as.numeric(data[, Y]), data[, E],
+                        data[, tset], ... = ...), silent = TRUE)
+        if (inherits(tst, "try-error"))
+          tst <- coin(as.matrix(as.double(data[, Y])),
+                      as.matrix(as.double(data[, E])),
+                      as.matrix(data[, tset]), ... = ...)
+        pval <- tst[["pvalue"]]
+        if (is.null(pval)) pval <- tst[["p.value"]]
+        if (is.null(pval)) pval <- tst[["p"]]
+
+      }
       structure(pval, names = paste(tset, collapse = "+"))
     }, simplify = FALSE)
     tests <- c(tests, unlist(ret))
