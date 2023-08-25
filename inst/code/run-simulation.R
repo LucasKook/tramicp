@@ -99,7 +99,7 @@ dags <- if (fixed) {
 } else NULL
 
 if (TEST) {
-  ns <- ns[2]
+  ns <- ns[1]
   mods <- mods[1]
   lmods <- lmods[1]
 }
