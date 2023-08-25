@@ -2,13 +2,17 @@
 # Simulation setup for reproducing the results in Section 4 and Appendix B2
 # Lucas Kook, 2023
 
-specs <- c("correct", "link", "hidden", "roc")
-spec <- specs[as.numeric(commandArgs(TRUE))[1]]
-if (is.na(spec))
-  spec <- specs[1]
-
-set.seed(27)
+set.seed(27) # Seed
 parall <- TRUE # Parallel computing?
+
+### Command line args and defaults
+args <- as.numeric(commandArgs(TRUE))
+specs <- c("correct", "link", "hidden", "roc")
+spec <- if (noargs <- identical(numeric(0), args)) specs[1] else specs[args[1]]
+nsim <- if (noargs) 20 else args[2] # number of repetitions per DAG
+ncores <- if (noargs) 20 else min(args[3], nsim) # number of cores for parallel
+ndags <- if (noargs) 100 else args[4] # number of (random) DAGs
+TEST <- if (noargs) 0 else args[5] # for testing this script
 
 # Dependencies ------------------------------------------------------------
 
@@ -58,9 +62,6 @@ if (spec == "roc") {
 tcoin <- RCIT # CondIndTest
 
 # Params
-ndags <- ifelse(spec == "correct", 100, 50) # Number of DAGs
-nsim <- 20 # Number of repetitions
-ncores <- min(nsim, 20) # Number of cores
 ns <- c(1e2, 3e2, 1e3, 3e3) # , 1e4, 3e4) # Sample sizes
 blfix <- TRUE # fixed baseline transformation
 nanc <- 3 # ancestors of Y
@@ -95,6 +96,12 @@ dags <- if (fixed) {
                plot_graph = FALSE)
   })
 } else NULL
+
+if (TEST) {
+  ns <- ns[1]
+  mods <- mods[1]
+  lmods <- lmods[1]
+}
 
 fobs <- list(types = types, fml = fml, resp = resp, env = env, preds = preds,
              blfix = blfix, cfb = cfb, K = tK, polrK = polrK, rmc = rmc,
