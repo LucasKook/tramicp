@@ -13,6 +13,7 @@ nsim <- if (noargs) 20 else args[2] # number of repetitions per DAG
 ncores <- if (noargs) 20 else min(args[3], nsim) # number of cores for parallel
 ndags <- if (noargs) 100 else args[4] # number of (random) DAGs
 TEST <- if (noargs) 0 else args[5] # for testing this script
+cidx <- if (noargs) 1 else args[6] # which conditional independence test
 
 # Dependencies ------------------------------------------------------------
 
@@ -59,7 +60,7 @@ if (spec == "roc") {
 }
 
 # KCI
-tcoin <- RCIT # CondIndTest
+tcoin <- if (cidx == 1) RCIT else CondIndTest
 
 # Params
 ns <- c(1e2, 3e2, 1e3, 3e3) # , 1e4, 3e4) # Sample sizes
@@ -98,7 +99,7 @@ dags <- if (fixed) {
 } else NULL
 
 if (TEST) {
-  ns <- ns[1]
+  ns <- ns[2]
   mods <- mods[1]
   lmods <- lmods[1]
 }
