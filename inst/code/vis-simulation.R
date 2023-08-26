@@ -4,7 +4,7 @@
 
 settings <- c("main", "app", "hidden", "link", "wald-extended")
 
-setting <- settings[as.numeric(commandArgs(TRUE))]
+setting <- settings[as.numeric(commandArgs(TRUE))[1]]
 if (is.na(setting))
   setting <- settings[1]
 
@@ -161,6 +161,9 @@ prdat <- res %>%
     jaccard = unlist(map2(splpaY, splset, ~ length(.intersect(.x, .y)) / length(union(.x, .y)))),
     fwer = unlist(map2(splpaY, splset, ~ as.numeric(length(setdiff(.y[.y != "Empty"], .x)) > 0))),
   )
+
+prdat %>% group_by(n, mod, type, test) %>%
+  summarize(jaccard = mean(jaccard), fwer = mean(fwer > 0))
 
 if (setting == "hidden") {
   anY <- paste0("X1+X2+X3", unlist(lapply(fobs$dags, \(x) {

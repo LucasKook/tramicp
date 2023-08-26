@@ -135,3 +135,29 @@ vis <- function(mods = tmods, tests = ttests) {
     scale_color_manual(values = c(cols, "Oracle" = "gray60")) +
     scale_fill_manual(values = c(cols, "Oracle" = "gray60"))
 }
+
+RANGER <- function(formula, data, ...) {
+  response <- model.response(model.frame(formula, data))
+  binary <- is.factor(response)
+  tms <- .get_terms(formula)
+  if (identical(tms$me, character(0))) {
+    if (binary) return(glm(formula, data, family = "binomial")) else
+      return(lm(formula, data))
+  }
+  ret <- ranger(formula, data, probability = binary, ...)
+  ret$data <- data
+  ret$response <- if(!binary) response else as.numeric(response) - 1
+  ret$binary <- binary
+  ret
+}
+
+residuals.ranger <- function(object) {
+  if ("glm" %in% class(object))
+    return(residuals.binglm(object))
+  else if ("lm" %in% class(object))
+    return(residuals(object))
+  preds <- predict(object, data = object$data)$predictions
+  if (object$binary)
+    preds <- preds[, 2]
+  object$response - preds
+}

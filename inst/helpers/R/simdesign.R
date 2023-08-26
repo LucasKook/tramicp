@@ -41,10 +41,16 @@ ANA <- function(condition, dat, fixed_objects = NULL) {
     kbw <- if (condition$mod == "polr") 0.01 else 0
     oicp <- attr(dat, "oracle_icp")
     pvals <- if (ttype == "kci") {
-      tmp <- cdkci(fixed_objects$resp, fixed_objects$env, fixed_objects$preds,
-                   data = dat, coin = fixed_objects$coin)
-      inv <- attr(tmp, "intersection")
-      tmp
+      tmp <- dicp(as.formula(fixed_objects$fml), data = dat,
+                  env = reformulate(fixed_objects$env),
+                  modFUN = RANGER, type = "residual", test = "gcm.test",
+                  controls = dicp_controls(residuals = residuals.ranger))
+      inv <- tmp$candidate
+      pvalues(tmp, which = "set")
+      # tmp <- cdkci(fixed_objects$resp, fixed_objects$env, fixed_objects$preds,
+      #              data = dat, coin = fixed_objects$coin)
+      # inv <- attr(tmp, "intersection")
+      # tmp
     } else {
       if (condition$mod == "polr") {
         ctrls <- dicp_controls(type = ttype, test = ttest,
