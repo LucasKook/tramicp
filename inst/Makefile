@@ -36,7 +36,7 @@ sim-test:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 1)
 
 sim-gcm:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 1 2 50 1 2)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 4 100 1 2)
 
 sim-all: sim-correct sim-link sim-hidden sim-roc
 
