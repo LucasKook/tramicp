@@ -21,22 +21,22 @@ invariance-example:
 	(cd .. && R --vanilla < inst/code/invariance-example.R &)
 
 sim-correct:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 20 100 0 1)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 20 100 0 1 > correct.Rout)
 
 sim-link:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 2 20 20 50 0 1)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 2 20 20 50 0 1 > link.Rout)
 
 sim-hidden:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 3 20 20 50 0 1)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 3 20 20 50 0 1 > hidden.Rout)
 
 sim-roc:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 20 20 100 0 1)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 20 20 100 0 1 > roc.Rout)
 
 sim-test:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 1)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 1 > test.Rout)
 
 sim-gcm:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 4 100 1 2)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 4 100 1 2 > gcm.Rout)
 
 sim-all: sim-correct sim-link sim-hidden sim-roc
 
