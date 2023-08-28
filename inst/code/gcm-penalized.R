@@ -85,3 +85,9 @@ ggplot(pvals, aes(x = pvalue, linetype = test, group = test)) +
 
 ggsave(file.path("inst", "figures", "gcm-penalized-breaks-correlation-rest.pdf"),
        height = 3, width = 5)
+
+### P-value reported in the paper
+pvals %>%
+  nest_by(test) %>%
+  summarise(pval = binom.test(sum(data < 0.05), nrow(data), p = 0.05,
+                              alternative = "greater")$p.value)
