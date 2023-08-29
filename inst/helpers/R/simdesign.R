@@ -105,7 +105,7 @@ SUM <- function(condition, results, fixed_objects = NULL) {
 }
 
 read_sim_results <- function(path) {
-  res <- list.files(path, pattern = "results-row-[0-9]+.rds", full.names = TRUE) |>
+  res <- list.files(path, pattern = "results-row-[0-9]+.rds", full.names = TRUE, recursive = TRUE) |>
     map(readRDS)
   bind_rows(map(res, ~ bind_cols(.x$condition, bind_rows(.x$results))))
 }
