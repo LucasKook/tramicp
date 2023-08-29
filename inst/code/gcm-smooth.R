@@ -62,4 +62,6 @@ p1 <- ggplot(df, aes(x = X1, y = Y)) +
 ggsave("inst/figures/gcm-smooth-app.pdf", height = 3.5, width = 8)
 
 ### P-value reported in the paper
+binom.test(sum(res$GCM < 0.05), nrow(res), p = 0.05, alternative = "greater")
 binom.test(sum(res$WALD < 0.05), nrow(res), p = 0.05, alternative = "greater")
+binom.test(sum(res$COR < 0.05), nrow(res), p = 0.05, alternative = "greater")

@@ -3,7 +3,8 @@
 # Lucas Kook, 2023
 
 set.seed(27) # Seed
-parall <- TRUE # Parallel computing?
+parall <- FALSE # Parallel computing?
+.libPaths(c("~/tutu/lib", .libPaths()))
 
 ### Command line args and defaults
 args <- as.numeric(commandArgs(TRUE))
@@ -13,7 +14,7 @@ nsim <- if (noargs) 20 else args[2] # number of repetitions per DAG
 ncores <- if (noargs) 20 else min(args[3], nsim) # number of cores for parallel
 ndags <- if (noargs) 100 else args[4] # number of (random) DAGs
 TEST <- if (noargs) 0 else args[5] # for testing this script
-cidx <- if (noargs) 1 else args[6] # which conditional independence test
+ROW <- if (noargs) NA else args[6]
 
 # Dependencies ------------------------------------------------------------
 
@@ -58,9 +59,6 @@ if (spec == "roc") {
   tANA <- AUCANA
   pkgs <- c(pkgs, "pROC")
 }
-
-# KCI
-tcoin <- if (cidx == 1) RCIT else CondIndTest
 
 # Params
 ns <- c(1e2, 3e2, 1e3, 3e3) # , 1e4, 3e4) # Sample sizes
@@ -108,8 +106,7 @@ fobs <- list(types = types, fml = fml, resp = resp, env = env, preds = preds,
              blfix = blfix, cfb = cfb, K = tK, polrK = polrK, rmc = rmc,
              stdz = stdz, nsim = nsim, sde = sde, errDistAnY = errDistAnY,
              errDistDeY = errDistDeY, mixAnY = mixAnY, mixDeY = mixDeY,
-             dags = dags, mods = mods, tests = tests, spec = spec,
-             coin = tcoin)
+             dags = dags, mods = mods, tests = tests, spec = spec)
 
 if (save) {
   pvec <- c("nanc", nanc, "ndec", ndec, "panc", panc, "pdec", pdec, "penv", penv,
@@ -129,6 +126,9 @@ if (save) {
 Design <- tibble(expand_grid(n = ns, mod = mods, dag = 1:ndags, nanc = nanc,
                              panc = panc, ndec = ndec, pdec = pdec, nenv = nenv,
                              penv = penv))
+
+if (!is.na(ROW))
+  Design <- Design[ROW, ]
 
 # Run ---------------------------------------------------------------------
 

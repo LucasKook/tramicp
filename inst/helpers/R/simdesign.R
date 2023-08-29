@@ -47,10 +47,6 @@ ANA <- function(condition, dat, fixed_objects = NULL) {
                   controls = dicp_controls(residuals = residuals.ranger))
       inv <- tmp$candidate
       pvalues(tmp, which = "set")
-      # tmp <- cdkci(fixed_objects$resp, fixed_objects$env, fixed_objects$preds,
-      #              data = dat, coin = fixed_objects$coin)
-      # inv <- attr(tmp, "intersection")
-      # tmp
     } else {
       if (condition$mod == "polr") {
         ctrls <- dicp_controls(type = ttype, test = ttest,
