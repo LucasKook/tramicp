@@ -51,3 +51,18 @@ vis-simulation:
 all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example
 
 vis: vis-simulation
+
+count:
+	ls test.* | wc
+
+correct:
+	bash dispatch.sh 3200 sim-correct
+
+hidden:
+	bash dispatch.sh 1600 sim-hidden
+
+link:
+	bash dispatch.sh 1600 sim-link
+
+roc:
+	bash dispatch.sh 1600 sim-roc
