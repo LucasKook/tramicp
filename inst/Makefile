@@ -22,22 +22,22 @@ invariance-example:
 	(cd .. && R --vanilla < inst/code/invariance-example.R &)
 
 sim-correct:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 20 100 0 $(ROW) > correct-$(ROW).Rout)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 20 100 0 $(ROW))
 
 sim-link:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 2 20 20 50 0 $(ROW)> link-$(ROW).Rout)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 2 20 20 50 0 $(ROW))
 
 sim-hidden:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 3 20 20 50 0 $(ROW)> hidden-$(ROW).Rout)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 3 20 20 50 0 $(ROW))
 
 sim-roc:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 20 20 100 0 $(ROW) > roc-$(ROW).Rout)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 20 20 100 0 $(ROW))
 
 sim-test:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 $(ROW) > test-$(ROW).Rout)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 $(ROW))
 
 sim-gcm:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 4 100 1 $(ROW) > gcm-$(ROW).Rout)
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 4 100 1 $(ROW))
 
 sim-all: sim-correct sim-link sim-hidden sim-roc
 

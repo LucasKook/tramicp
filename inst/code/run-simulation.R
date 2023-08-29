@@ -14,7 +14,7 @@ nsim <- if (noargs) 20 else args[2] # number of repetitions per DAG
 ncores <- if (noargs) 20 else min(args[3], nsim) # number of cores for parallel
 ndags <- if (noargs) 100 else args[4] # number of (random) DAGs
 TEST <- if (noargs) 0 else args[5] # for testing this script
-ROW <- if (noargs) NA else args[6]
+ROW <- if (noargs) NULL else args[6]
 
 # Dependencies ------------------------------------------------------------
 
@@ -127,7 +127,7 @@ Design <- tibble(expand_grid(n = ns, mod = mods, dag = 1:ndags, nanc = nanc,
                              panc = panc, ndec = ndec, pdec = pdec, nenv = nenv,
                              penv = penv))
 
-if (!is.na(ROW)) {
+if (!is.null(ROW)) {
   stopifnot(ROW <= nrow(Design))
   Design <- Design[ROW, ]
 }
@@ -147,9 +147,9 @@ res <- runSimulation(
   ncores = ncores,
   fixed_objects = fobs,
   packages = pkgs,
-  filename = "sim-results.rds",
+  filename = file.path(outdir, paste0("sim-results", ROW, ".rds")),
   save_details = list(
-    safe = TRUE, save_results_dirname = file.path(outdir, "results"),
+    safe = TRUE, save_results_dirname = file.path(outdir, paste0("results", ROW)),
     save_seeds_dirname = file.path(outdir, "seeds")
   )
 )
