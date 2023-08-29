@@ -149,7 +149,7 @@ res <- runSimulation(
   packages = pkgs,
   filename = file.path(outdir, paste0("sim-results", ROW, ".rds")),
   save_details = list(
-    safe = TRUE, save_results_dirname = file.path(outdir, paste0("results", ROW)),
+    safe = TRUE, save_results_dirname = file.path(outdir, paste0("results-row-", ROW)),
     save_seeds_dirname = file.path(outdir, "seeds")
   )
 )
