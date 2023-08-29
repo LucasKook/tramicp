@@ -123,7 +123,7 @@ if (save) {
 
 # Sim ---------------------------------------------------------------------
 
-Design <- tibble(expand_grid(n = ns, mod = mods, dag = 1:ndags, nanc = nanc,
+Design <- tibble(expand_grid(mod = mods, n = ns, dag = 1:ndags, nanc = nanc,
                              panc = panc, ndec = ndec, pdec = pdec, nenv = nenv,
                              penv = penv))
 
