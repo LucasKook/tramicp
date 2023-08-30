@@ -75,13 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for cumulative ordinal regression using \code{MASS::polr()}
 }
 \examples{
+set.seed(123)
 d <- dgp_dicp(mod = "polr")
-mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-# Almost identical to `PolrICP()`
-pvalues(mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep"), which = "set")
-pvalues(PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep"), which = "set")
-pvalues(mpolrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald"), which = "set")
-# `"confint"` Not implemented yet (will throw exception):
-# mpolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+mpolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

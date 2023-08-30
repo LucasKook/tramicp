@@ -77,13 +77,6 @@ ICP for Box-Cox type regression models
 \examples{
 set.seed(123)
 d <- dgp_dicp(mod = "boxcox")
-BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
-BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald",
-    greedy = TRUE)
-BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep",
-          mandatory = ~ X1)
-BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+BoxCoxICP(Y ~ X2, data = d, env = ~ E)
 
 }

@@ -91,7 +91,7 @@ summary.dICP <- function(object, print_all = FALSE, digits = 3, ...) {
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(n = 1e3, mod = "polr")
-#' res <- dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
+#' res <- mpolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #' pvalues(res, which = "predictor")
 #' pvalues(res, which = "set")
 #' pvalues(res, which = "all")

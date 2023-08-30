@@ -11,14 +11,7 @@
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "boxcox")
-#' BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
-#' BoxCoxICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald",
-#'     greedy = TRUE)
-#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep",
-#'           mandatory = ~ X1)
-#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' BoxCoxICP(Y ~ X2, data = d, env = ~ E)
 #'
 BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -44,15 +37,7 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull")
-#' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' SurvregICP(Y ~ X2, data = d, env = ~ E, type = "confint")
-#'
-#' library("survival")
-#' d$surv <- Surv(d$Y)
-#' dicp(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
-#'     test = "indep")
+#' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -80,9 +65,10 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull")
-#' library("survival")
-#' d$surv <- Surv(d$Y)
-#' ssurvregICP(surv ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
+#' if (require("survival")) {
+#'   d$surv <- Surv(d$Y)
+#'   ssurvregICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
 #'
 ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                         test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -106,11 +92,9 @@ ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "colr")
-#' ColrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' ColrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' ColrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' ColrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
 #'
 ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -134,11 +118,9 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "coxph")
-#' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' CoxphICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' CoxphICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -162,11 +144,9 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "coxph")
-#' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' LehmannICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -190,12 +170,9 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "lm")
-#' LmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' LmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' LmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' LmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
-#' dicp(Y ~ X2, data = d, env = ~ E, type = "confint", modFUN = lm)
+#' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -221,11 +198,9 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @importFrom stats lm
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "lm")
-#' slmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' slmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' slmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -249,11 +224,9 @@ slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "polr")
-#' PolrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' PolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -279,14 +252,9 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @importFrom MASS polr
 #'
 #' @examples
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "polr")
-#' mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' # Almost identical to `PolrICP()`
-#' pvalues(mpolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep"), which = "set")
-#' pvalues(PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep"), which = "set")
-#' pvalues(mpolrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald"), which = "set")
-#' # `"confint"` Not implemented yet (will throw exception):
-#' # mpolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+#' mpolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -335,13 +303,9 @@ residuals.polr <- function(object, ...) {
 #' @export
 #'
 #' @examples
-#' set.seed(1334)
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "binary")
-#' glmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald", family = "binomial")
-#' glmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC", family = "binomial")
-#' glmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep", family = "binomial")
-#' glmICP(Y ~ X2, data = d, env = ~ E, type = "confint", family = "binomial")
-#' dicp(Y ~ X2, data = d, env = ~ E, modFUN = tramicp:::.mod_from_name("binary"))
+#' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
 #'
 glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -374,13 +338,9 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
-#' set.seed(13312)
+#' set.seed(123)
 #' d <- dgp_dicp(mod = "cotram")
-#' cotramICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-#' cotramICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-#' cotramICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-#' cotramICP(Y ~ X2, data = d, env = ~ E, type = "confint")
-#' glmICP(Y ~ X2, data = d, env = ~ E, family = "poisson", test = "indep")
+#' cotramICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,

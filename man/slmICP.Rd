@@ -75,10 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for normal linear regression (using stats::lm)
 }
 \examples{
+set.seed(123)
 d <- dgp_dicp(mod = "lm")
-slmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-slmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-slmICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+slmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

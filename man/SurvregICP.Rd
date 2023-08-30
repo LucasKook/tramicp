@@ -77,14 +77,6 @@ ICP for parametric survival models
 \examples{
 set.seed(123)
 d <- dgp_dicp(mod = "weibull")
-SurvregICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-SurvregICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-SurvregICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-SurvregICP(Y ~ X2, data = d, env = ~ E, type = "confint")
-
-library("survival")
-d$surv <- Surv(d$Y)
-dicp(surv ~ X2, data = d, env = ~ E, type = "residual", modFUN = survreg,
-    test = "indep")
+SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

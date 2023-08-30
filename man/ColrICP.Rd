@@ -75,10 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for Continuous outcome logistic regression
 }
 \examples{
+set.seed(123)
 d <- dgp_dicp(mod = "colr")
-ColrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-ColrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-ColrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-ColrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
 
 }

@@ -47,31 +47,10 @@
 #' @importFrom multcomp glht
 #'
 #' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(n = 1e3, mod = "polr")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
-#'     weights = abs(rnorm(nrow(d))))
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
-#'      test = "HSIC")
-#'
-#' dicp(Y ~ X1 + X2, data = d, env = ~ E, modFUN = Polr, type = "residual",
-#'      mandatory = ~ X3)
-#' dicp(Y ~ X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
-#'      mandatory = ~ X1)
-#'
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "confint",
-#'     greedy = TRUE)
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
-#'     greedy = TRUE)
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "wald",
-#'     weights = abs(rnorm(nrow(d))), greedy = TRUE)
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
-#'     greedy = TRUE)
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = Polr, type = "residual",
-#'      test = "HSIC", greedy = TRUE)
+#' set.seed(12)
+#' d <- dgp_dicp(n = 1e3, mod = "binary")
+#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = "glm",
+#'      family = "binomial", type = "wald")
 #'
 dicp <- function(
   formula, data, env, modFUN, verbose = TRUE,
@@ -208,7 +187,6 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
       )
 
       if (.get_pvalue(ret$test) > controls$alpha) {
-        # cat("\nAdding", lps[[set]], "to MI\n")
         MI <- c(MI, lps[[set]])
       }
 

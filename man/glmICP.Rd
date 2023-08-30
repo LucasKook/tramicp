@@ -75,12 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for generalized linear models
 }
 \examples{
-set.seed(1334)
+set.seed(123)
 d <- dgp_dicp(mod = "binary")
-glmICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald", family = "binomial")
-glmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC", family = "binomial")
-glmICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep", family = "binomial")
-glmICP(Y ~ X2, data = d, env = ~ E, type = "confint", family = "binomial")
-dicp(Y ~ X2, data = d, env = ~ E, modFUN = tramicp:::.mod_from_name("binary"))
+glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
 
 }

@@ -75,10 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for Cox proportional hazards regression
 }
 \examples{
+set.seed(123)
 d <- dgp_dicp(mod = "coxph")
-CoxphICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-CoxphICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-CoxphICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-CoxphICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+CoxphICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

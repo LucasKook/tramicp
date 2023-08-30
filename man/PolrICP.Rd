@@ -75,10 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for cumulative ordinal regression
 }
 \examples{
+set.seed(123)
 d <- dgp_dicp(mod = "polr")
-PolrICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-PolrICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-PolrICP(Y ~ X2, data = d, env = ~ E, type = "confint")
+PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

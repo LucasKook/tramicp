@@ -75,12 +75,8 @@ Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 ICP for count transformation models
 }
 \examples{
-set.seed(13312)
+set.seed(123)
 d <- dgp_dicp(mod = "cotram")
-cotramICP(Y ~ X2, data = d, env = ~ E, type = "wald", test = "wald")
-cotramICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "HSIC")
-cotramICP(Y ~ X2, data = d, env = ~ E, type = "residual", test = "indep")
-cotramICP(Y ~ X2, data = d, env = ~ E, type = "confint")
-glmICP(Y ~ X2, data = d, env = ~ E, family = "poisson", test = "indep")
+cotramICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

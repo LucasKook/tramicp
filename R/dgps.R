@@ -22,47 +22,6 @@
 #'
 #' @export
 #'
-#' @examples
-#' set.seed(1)
-#'
-#' # Weibull
-#' d <- dgp_dicp(mod = "weibull", nenv = 3)
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = Survreg, w = rep(1, nrow(d)))
-#'
-#' # Colr
-#' d <- dgp_dicp(mod = "colr")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = Colr, w = rep(1, nrow(d)))
-#'
-#' # Binary
-#' d <- dgp_dicp(mod = "binary", nenv = 7)
-#' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
-#'
-#' # Cotram
-#' d <- dgp_dicp(mod = "cotram")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = cotram::cotram, w = rep(1, nrow(d)))
-#'
-#' # Polr
-#' d <- dgp_dicp(mod = "polr")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = Polr, w = rep(1, nrow(d)))
-#'
-#' # Coxph
-#' d <- dgp_dicp(mod = "coxph")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = Coxph, w = rep(1, nrow(d)))
-#'
-#' # Normal linear model, either lm or Lm
-#' d <- dgp_dicp(mod = "lm")
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = Lm, w = rep(1, nrow(d)))
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = lm, w = rep(1, nrow(d)))
-#' dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E,
-#'      modFUN = Lm, w = rep(1, nrow(d)), type = "wald", test = "wald")
-#'
 dgp_dicp <- function(
   n = 1e3, K = 6, nenv = 2, bx3 = rnorm(1), ge = rnorm(nenv), ae = rnorm(nenv),
   mod = "polr", interacting = FALSE, rm_censoring = TRUE, cfb = c(-3, 1.35),

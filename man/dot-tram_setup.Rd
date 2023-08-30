@@ -83,11 +83,4 @@ plot(m, newdata = data.frame(X1 = -1, X2 = -1), type = "distribution", col = 1)
 m <- .tram_setup(type = "continuous", basis = "bernstein", distr = "Normal")
 plot(m, newdata = data.frame(X1 = -1, X2 = -1), type = "distribution", col = 1)
 
-# Small check
-m <- .tram_setup(cfx = c(0, 0.5), type = "count", basis = "bernstein")
-nd <- data.frame(X1 = runif(tn <- 1e4), X2 = runif(tn),
-                 E = factor(1 + rbinom(tn, 1, 0.5)))
-nd$Y <- as.integer(tramicp:::.R2vec(simulate(m, newdata = nd)))
-confint(cotram::cotram(Y ~ X1 + X2, data = nd, prob = 0.999))
-
 }
