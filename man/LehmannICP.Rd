@@ -77,6 +77,6 @@ ICP for Lehmann regression models
 \examples{
 set.seed(123)
 d <- dgp_dicp(mod = "coxph")
-LehmannICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+LehmannICP(Y ~ X2, data = d, env = ~ E)
 
 }

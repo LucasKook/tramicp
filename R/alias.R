@@ -120,7 +120,7 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "coxph")
-#' CoxphICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' CoxphICP(Y ~ X2, data = d, env = ~ E)
 #'
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -146,7 +146,7 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "coxph")
-#' LehmannICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' LehmannICP(Y ~ X2, data = d, env = ~ E)
 #'
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -340,7 +340,7 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "cotram")
-#' cotramICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' cotramICP(Y ~ X2, data = d, env = ~ E)
 #'
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,

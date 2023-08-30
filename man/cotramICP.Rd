@@ -77,6 +77,6 @@ ICP for count transformation models
 \examples{
 set.seed(123)
 d <- dgp_dicp(mod = "cotram")
-cotramICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+cotramICP(Y ~ X2, data = d, env = ~ E)
 
 }

@@ -32,8 +32,9 @@ Bootstrap stability for TRAMICP
 }
 \examples{
 set.seed(12)
-d <- dgp_dicp(n = 1e3, mod = "polr")
-res <- mpolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
-bootstrap_stability(res, B = 10)
+d <- dgp_dicp(n = 1e3, mod = "binary")
+res <- glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E,
+    family = "binomial", test = "cor.test")
+bootstrap_stability(res, B = 2)
 
 }
