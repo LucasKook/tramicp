@@ -20,12 +20,9 @@ ROW <- if (noargs) NULL else args[6]
 
 library("SimDesign")
 library("tidyverse")
-library("future.apply")
 devtools::load_all()
 devtools::load_all("inst/helpers")
 library("colorspace")
-library("RCIT")
-library("CondIndTests")
 theme_set(theme_bw() + theme(legend.position = "top"))
 
 save <- TRUE # Save simulation results in current R session
@@ -51,7 +48,7 @@ ltest <- c("Wald", "cor.test", "KCI", "gcm.test")
 names(ltest) <- tests
 
 # ROC-specific args
-pkgs <- c("magrittr", "tramicp", "RCIT", "CondIndTests")
+pkgs <- c("magrittr", "tramicp")
 tANA <- ANA
 if (spec == "roc") {
   mods <- mods[1]
