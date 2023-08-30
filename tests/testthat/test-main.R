@@ -55,20 +55,20 @@ test_that("All aliases work", {
                  test = ttest, verbose = FALSE)
       expect_length(pvalues(res, "set"), 2^2)
       if (dtype == "lm") {
-        res <- slmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+        res <- lmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
                     test = ttest, verbose = FALSE)
       } else if (dtype == "cotram") {
         res <- glmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
                       test = ttest, verbose = FALSE, family = "poisson")
       } else if (dtype == "polr" && tcomb > 1) {
-        res <- mpolrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+        res <- polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
                         test = ttest, verbose = FALSE)
       }
       expect_length(pvalues(res, "set"), 2^2)
     })
   })
 
-  expect_error(mpolrICP(Y ~ X1 + X2, data = d, env = ~ E, type = "confint",
+  expect_error(polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = "confint",
                         verbose = FALSE))
 
 })

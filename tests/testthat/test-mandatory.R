@@ -50,14 +50,14 @@ test_that("All aliases work with mandatory terms", {
                  test = ttest, verbose = FALSE, mandatory = ~ X2)
       expect_length(pvalues(res, "set"), 2)
       if (dtype == "lm") {
-        res <- slmICP(Y ~ X1, data = d, env = ~ E, type = ttype,
+        res <- lmICP(Y ~ X1, data = d, env = ~ E, type = ttype,
                       test = ttest, verbose = FALSE, mandatory = ~ X2)
       } else if (dtype == "cotram") {
         res <- glmICP(Y ~ X1, data = d, env = ~ E, type = ttype,
                       test = ttest, verbose = FALSE, family = "poisson",
                       mandatory = ~ X2)
       } else if (dtype == "polr" && tcomb > 1) {
-        res <- mpolrICP(Y ~ X1, data = d, env = ~ E, type = ttype,
+        res <- polrICP(Y ~ X1, data = d, env = ~ E, type = ttype,
                         test = ttest, verbose = FALSE,
                         mandatory = ~ X2)
       }

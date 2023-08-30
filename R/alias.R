@@ -53,7 +53,7 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for parametric survival models
-#'
+#' @rdname survival.survregICP
 #' @inheritParams dicp
 #' @inheritDotParams dicp
 #'
@@ -67,10 +67,10 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' d <- dgp_dicp(mod = "weibull")
 #' if (require("survival")) {
 #'   d$surv <- Surv(d$Y)
-#'   ssurvregICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
+#'   survregICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
 #' }
 #'
-ssurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                         test = "gcm.test", controls = NULL, alpha = 0.05,
                         baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                         mandatory = NULL, ...) {
@@ -188,7 +188,7 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for normal linear regression (using stats::lm)
-#'
+#' @rdname statslmICP
 #' @inheritParams dicp
 #' @inheritDotParams dicp
 #'
@@ -200,9 +200,9 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "lm")
-#' slmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
-slmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                    mandatory = NULL, ...) {
@@ -242,7 +242,7 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for cumulative ordinal regression using \code{MASS::polr()}
-#'
+#' @rdname masspolrICP
 #' @inheritParams dicp
 #' @inheritDotParams dicp
 #'
@@ -254,9 +254,9 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "polr")
-#' mpolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' polrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
-mpolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                      mandatory = NULL, ...) {
