@@ -54,7 +54,7 @@ okabe_ito <- function(n) {
 mods <- c("Binary" = "binary", "Cotram" = "cotram", "Weibull" = "weibull")
 amods <- c("BoxCox" = "boxcox", "Colr" = "colr", "Coxph" = "coxph", "Lm" = "lm",
            "Polr" = "polr")
-mtests <- c("TRAM-Wald" = "wald", "TRAM-GCM" = "gcm.test", "RCIT" = "KCI")
+mtests <- c("TRAM-Wald" = "wald", "TRAM-GCM" = "gcm.test", "GCM" = "KCI")
 tests <- c(mtests, "Correlation" = "cor.test", "ROC" = "roc.test", "TRAM-Wald extended" = "wald.test")
 cols <- okabe_ito(length(tests))
 names(cols) <- names(tests)
@@ -81,7 +81,7 @@ if (setting == "main") {
 
   res <- full_join(res, bres)
 } else if (setting == "app") {
-  bpath <- "inst/results/results_appendix"
+  bpath <- "inst/results/results_main"
   tmods <- amods
   ttests <- mtests
   out <- "sim-app.pdf"
@@ -136,15 +136,6 @@ if (setting == "main") {
   bres$test <- "wald.test"
 
   res <- full_join(res, bres)
-
-  bbpath <- "inst/results/results_appendix"
-  bbfobs <- readRDS(file.path(bbpath, "fobs.rds"))
-  bbres <- read_sim_results(file.path(bbpath, "results"))
-  bbres$oicp[bbres$oicp == "empty"] <- "Empty"
-  bbres <- dplyr::filter(bbres, test == "wald")
-  bbres$test <- "wald"
-
-  res <- full_join(res, bbres)
 
 }
 

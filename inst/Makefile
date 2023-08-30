@@ -41,16 +41,24 @@ sim-gcm:
 
 sim-all: sim-correct sim-link sim-hidden sim-roc
 
-vis-simulation:
+vis-main:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 1)
+
+vis-app:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 2)
+
+vis-hidden:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 3)
+
+vis-link:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 4)
+
+vis-wald:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 5)
 
 all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example
 
-vis: vis-simulation
+vis: vis-main vis-app vis-hidden vis-link vis-wald
 
 count:
 	ls test.* | wc
