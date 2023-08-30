@@ -7,6 +7,7 @@ Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
     email = "lucasheinrich.kook@uzh.ch"))
 Description: Extends invariant causal prediction (Peters et al., 2016, <doi:>)
     to generalized linear and transformation models (Hothorn et al., 2018, <doi:>).
+    The methodology is described in Kook et al. (2023, <doi:>).
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.2
