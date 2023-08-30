@@ -41,5 +41,7 @@ vignettes/*.pdf
 
 inst/ignore
 inst/results
+inst/results-doksum
 *.pdf
+*.sh
 
