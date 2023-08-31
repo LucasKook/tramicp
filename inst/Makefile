@@ -77,3 +77,6 @@ roc:
 
 test:
 	bash dispatch.sh 2 run-test.sh
+
+deps:
+	bash dispatch.sh 1 run-install.sh
