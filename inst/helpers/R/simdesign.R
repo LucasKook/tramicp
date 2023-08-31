@@ -177,7 +177,7 @@ vis_sim_results <- function(out, fobs = NULL, nrow = 1, ncol = NULL,
     switch(
       mod,
       "polr" = \(formula, data, ...) {
-        res <- try(polr(formula, data, Hess = TRUE, ...))
+        res <- try(polr(formula, data, Hess = TRUE, ...), silent = TRUE)
         if (inherits(res, "try-error"))
           res <- Polr(formula, data, ...)
         res

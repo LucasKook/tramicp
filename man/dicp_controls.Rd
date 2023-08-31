@@ -18,6 +18,7 @@ dicp_controls(
   xtrafo = trafo,
   ytrafo = trafo,
   residuals = "residuals",
+  crossfit = getOption("crossfit", default = FALSE),
   stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default =
     FALSE)
 )

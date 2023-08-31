@@ -37,6 +37,7 @@ dicp_controls <- function(
     alpha = 0.05, method = "gamma", kernel = c("gaussian", "discrete"),
     B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
     xtrafo = trafo, ytrafo = trafo, residuals = "residuals",
+    crossfit = getOption("crossfit", default = FALSE),
     stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default = FALSE)
 ) {
 
@@ -55,7 +56,7 @@ dicp_controls <- function(
     ctest = ctest, test_name = test_info[[3]], test_fun = test_info[[2]],
     baseline_fixed = baseline_fixed, teststat = teststat,
     distribution = distribution, xtrafo = xtrafo, ytrafo = ytrafo,
-    residuals = residuals,
+    residuals = residuals, crossfit = crossfit,
     stop_if_empty_set_invariant = stop_if_empty_set_invariant
   )
 }

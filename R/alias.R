@@ -286,6 +286,7 @@ polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 
 #' @method residuals polr
 #' @importFrom sandwich estfun
+#' @exportS3Method residuals polr
 #'
 residuals.polr <- function(object, ...) {
   K <- length(object$zeta)

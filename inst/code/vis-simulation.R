@@ -20,22 +20,6 @@ theme_set(theme_bw() + theme(
 
 # FUNs --------------------------------------------------------------------
 
-.setdiff <- function(x, y) {
-  x <- x[x != "empty"]
-  y <- y[y != "empty"]
-  ret <- try(setdiff(x, y))
-  if (inherits(ret, "try-error"))
-    return(character(0))
-  ret
-}
-
-.intersect <- function(x, y) {
-  ret <- try(intersect(x, y))
-  if (inherits(ret, "try-error"))
-    return(character(0))
-  ret
-}
-
 okabe_ito <- function(n) {
   unname(c(orange = "#E69F00",
            green = "#009E73",

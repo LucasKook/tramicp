@@ -87,15 +87,17 @@
   meff <- .pplus(tset)
   mfm <- reformulate(c(meff, mand), resp)
 
-  ### Fit model
-  m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
-
-  ### Test
-  r <- matrix(controls$residuals(m), ncol = 1)
-  e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
-  if (controls$ctest == "gcm.test" & set != "1") # Fit RF for GCM-type test
-    e <- .ranger_gcm(e, c(meff, mand), set, data, controls)
+  ### (Cross-) fit models
+  resids <- .compute_residuals(mfm, data, meff, mand, set, controls, modFUN,
+                               env, ...)
+  m <- resids$m
+  r <- resids$r
+  e <- resids$e
   tst <- controls$test_fun(r, e, controls)
+
+  # plot(r ~ e, main = paste0(tset, collapse = "+"), col = rgb(.1, .1, .1, .1))
+  # legend("top", ifelse(tst$p.value > 0.05, "accept", "reject"), bty = "n")
+  # abline(lm(r ~ e), lwd = 1.5)
 
   ### Return
   if (set == 1) tset <- "Empty"

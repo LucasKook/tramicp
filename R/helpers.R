@@ -48,14 +48,18 @@
   Reduce(intersect, sets[idx])
 }
 
+#' @importFrom MASS polr
 #' @import tram
 .mod_from_name <- function(mod, prob = c(0.001, 0.999), spec = "correct") {
   if (spec != "link") {
     switch(
       mod,
-      "polr" = \(formula, data, ...)
-      polr(formula, data, Hess = TRUE, ...),
-      # Polr(formula, data, ...),
+      "polr" = \(formula, data, ...) {
+        res <- try(polr(formula, data, Hess = TRUE, ...), silent = TRUE)
+        if (inherits(res, "try-error"))
+          res <- Polr(formula, data, ...)
+        res
+      },
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, ..., prob = prob),
       "lm" = \(formula, data, ...)
@@ -76,8 +80,12 @@
   } else {
     switch(
       mod,
-      "polr" = \(formula, data, ...)
-      polr(formula, data, method = "probit", Hess = TRUE, ...),
+      "polr" = \(formula, data, ...) {
+        res <- try(polr(formula, data, method = "probit", Hess = TRUE, ...))
+        if (inherits(res, "try-error"))
+          res <- Polr(formula, data, method = "probit", ...)
+        res
+      },
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, dist = "loglogistic", ..., prob = prob),
       "lm" = \(formula, data, ...)
@@ -288,7 +296,41 @@ residuals.binglm <- function(object, ...) {
             class = "dICPtest")
 }
 
-#' @importFrom ranger ranger
+.compute_residuals <- function(formula, data, meff, mand, set, controls, modFUN, env, ...) {
+  if (controls$crossfit) {
+    idx <- sample.int(nrow(data), floor(nrow(data) / 2))
+    rs <- numeric(nrow(data))
+    es <- numeric(nrow(data))
+    for (sgn in c(-1, 1)) {
+      train <- data[sgn * idx, ]
+      test <- data[- sgn * idx, ]
+      m <- do.call(modFUN, c(list(formula = formula, data = train), list(...)))
+
+      ### Test
+      r <- matrix(controls$residuals(m, newdata = test), ncol = 1)
+      e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
+      if (controls$ctest == "gcm.test" & set != "1") # Fit RF for GCM-type test
+        e <- .ranger_gcm_cf(e[sgn * idx, ], c(meff, mand), set, train, controls,
+                            e[-sgn * idx, ], test)
+      else e <- e[- sgn * idx]
+      rs[- sgn * idx] <- r
+      es[- sgn * idx] <- e
+    }
+    r <- rs
+    e <- es
+  } else {
+    m <- do.call(modFUN, c(list(formula = formula, data = data), list(...)))
+
+    ### Test
+    r <- matrix(controls$residuals(m), ncol = 1)
+    e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
+    if (controls$ctest == "gcm.test" & set != "1") # Fit RF for GCM-type test
+      e <- .ranger_gcm(e, c(meff, mand), set, data, controls)
+  }
+
+  list(r = r, e = e, m = m)
+}
+
 .ranger_gcm <- function(e, meff, set, data, controls) {
   if (NCOL(e) != 1L) {
     resids <- apply(e, 2, .ranger_gcm, meff = meff, set = set, data = data,
@@ -302,9 +344,71 @@ residuals.binglm <- function(object, ...) {
   }
   rf <- ranger(mfe, data = data, probability = dprob)
   if (dprob) e - predict(rf, data = data)$predictions[, 2] else
-    e - rf$predictions
+    e - predict(rf, data = data)
+}
+
+#' @importFrom ranger ranger
+.ranger_gcm_cf <- function(e, meff, set, data, controls, etest, test) {
+  if (NCOL(e) != 1L) {
+    resids <- apply(e, 2, .ranger_gcm_cf, meff = meff, set = set, data = data,
+                    controls = controls, etest = etest, test = test)
+    return(resids)
+  }
+  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
+  if (dprob <- (length(unique(e)) == 2)) {
+    fe <- as.factor(e)
+    mfe <- update(mfe, fe ~ .)
+  }
+  rf <- ranger(mfe, data = data, probability = dprob)
+  if (dprob) etest - predict(rf, data = test)$predictions[, 2] else
+    etest - predict(rf, data = test)
 }
 
 .pplus <- function(terms) {
   paste0(terms, collapse = "+")
+}
+
+RANGER <- function(formula, data, ...) {
+  response <- model.response(model.frame(formula, data))
+  is_ordered <- is.ordered(response)
+  is_binary <- is.factor(response) && !is_ordered
+  tms <- .get_terms(formula)
+  if (identical(tms$me, character(0))) {
+    if (is_ordered)
+      return(polr(formula, data))
+    else if (is_binary)
+      return(glm(formula, data, family = "binomial"))
+    else
+      return(lm(formula, data))
+  }
+  ret <- ranger(formula, data, probability = is_binary | is_ordered, ...)
+  ret$data <- data
+  ret$response <- if (is_binary) as.numeric(response) - 1 else if (is_ordered)
+    as.numeric(response) else response
+  ret$is_binary <- is_binary
+  ret$is_ordered <- is_ordered
+  ret
+}
+
+#' @exportS3Method residuals ranger
+residuals.ranger <- function(object, ...) {
+  if ("polr" %in% class(object))
+    return(residuals.polr(object))
+  else if ("glm" %in% class(object))
+    return(residuals.binglm(object))
+  else if ("lm" %in% class(object))
+    return(residuals(object))
+  preds <- predict(object, data = object$data)$predictions
+  if (object$is_ordered)
+    preds <- preds %*% seq_len(ncol(preds))
+  if (object$is_binary)
+    preds <- preds[, 2]
+  object$response - preds
+}
+
+.intersect <- function(x, y) {
+  ret <- try(intersect(x, y))
+  if (inherits(ret, "try-error"))
+    return(character(0))
+  ret
 }

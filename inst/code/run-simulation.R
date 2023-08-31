@@ -13,7 +13,7 @@ spec <- if (noargs <- identical(numeric(0), args)) specs[1] else specs[args[1]]
 nsim <- if (noargs) 20 else args[2] # number of repetitions per DAG
 ncores <- if (noargs) 20 else min(args[3], nsim) # number of cores for parallel
 ndags <- if (noargs) 300 else args[4] # number of (random) DAGs
-TEST <- if (noargs) 0 else args[5] # for testing this script
+TEST <- if (noargs) 1 else args[5] # for testing this script
 ROW <- if (noargs) NULL else args[6]
 
 # Dependencies ------------------------------------------------------------
@@ -93,12 +93,6 @@ dags <- if (fixed) {
   })
 } else NULL
 
-if (TEST) {
-  ns <- ns[2]
-  mods <- mods[1]
-  lmods <- lmods[1]
-}
-
 fobs <- list(types = types, fml = fml, resp = resp, env = env, preds = preds,
              blfix = blfix, cfb = cfb, K = tK, polrK = polrK, rmc = rmc,
              stdz = stdz, nsim = nsim, sde = sde, errDistAnY = errDistAnY,
@@ -128,6 +122,12 @@ if (!is.null(ROW)) {
   stopifnot(ROW <= nrow(Design))
   Design <- Design[ROW, ]
 }
+
+if (TEST) {
+  nsim <- 2
+  Design <- Design[1, ]
+}
+
 
 # Run ---------------------------------------------------------------------
 

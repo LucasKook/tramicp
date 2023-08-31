@@ -2,6 +2,8 @@
 
 S3method(print,dICP)
 S3method(print,dICPtest)
+S3method(residuals,polr)
+S3method(residuals,ranger)
 S3method(summary,dICP)
 export(.tram_setup)
 export(BoxCoxICP)
