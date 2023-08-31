@@ -55,6 +55,8 @@ is allowed to vary with the environments. Only takes effect when
 
 \item{residuals}{(Name of) function for computing model residuals.}
 
+\item{crossfit}{Toggle for cross fitting when \code{type = "residual"}.}
+
 \item{stop_if_empty_set_invariant}{Logical; \code{dicp} halts if the empty
 set is not rejected (the resulting intersection will always be empty).
 Default is \code{FALSE} and can be over-written by setting
