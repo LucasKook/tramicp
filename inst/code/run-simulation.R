@@ -48,7 +48,7 @@ ltest <- c("Wald", "cor.test", "KCI", "gcm.test")
 names(ltest) <- tests
 
 # ROC-specific args
-pkgs <- c("magrittr", "tramicp")
+pkgs <- "magrittr"
 tANA <- ANA
 if (spec == "roc") {
   mods <- mods[1]
