@@ -22,16 +22,16 @@ invariance-example:
 	(cd .. && R --vanilla < inst/code/invariance-example.R &)
 
 sim-correct:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 20 100 0 $(ROW))
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 20 20 300 0 $(ROW))
 
 sim-link:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 2 20 20 50 0 $(ROW))
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 2 20 20 300 0 $(ROW))
 
 sim-hidden:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 3 20 20 50 0 $(ROW))
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 3 20 20 300 0 $(ROW))
 
 sim-roc:
-	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 20 20 100 0 $(ROW))
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 20 20 300 0 $(ROW))
 
 sim-test:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 $(ROW))
@@ -64,16 +64,16 @@ count:
 	ls test.* | wc
 
 correct:
-	bash dispatch.sh 3200 run-correct.sh
+	bash dispatch.sh 12000 run-correct.sh
 
 hidden:
-	bash dispatch.sh 1600 run-hidden.sh
+	bash dispatch.sh 12000 run-hidden.sh
 
 link:
-	bash dispatch.sh 1600 run-link.sh
+	bash dispatch.sh 12000 run-link.sh
 
 roc:
-	bash dispatch.sh 1600 run-roc.sh
+	bash dispatch.sh 1500 run-roc.sh
 
 test:
 	bash dispatch.sh 2 run-test.sh
