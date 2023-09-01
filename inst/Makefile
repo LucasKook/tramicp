@@ -61,19 +61,19 @@ count:
 	ls test.* | wc
 
 correct:
-	bash dispatch.sh 3200 run-correct.sh
+	bash dispatch.sh 3200 run-correct.sh 7200
 
 hidden:
-	bash dispatch.sh 3200 run-hidden.sh
+	bash dispatch.sh 3200 run-hidden.sh 7200
 
 link:
-	bash dispatch.sh 3200 run-link.sh
+	bash dispatch.sh 3200 run-link.sh 7200
 
 roc:
-	bash dispatch.sh 400 run-roc.sh
+	bash dispatch.sh 400 run-roc.sh 7200
 
 test:
-	bash dispatch.sh 2 run-test.sh
+	bash dispatch.sh 2 run-test.sh 300
 
 deps:
-	bash dispatch.sh 1 run-install.sh
+	bash dispatch.sh 1 run-install.sh 1200
