@@ -1,25 +1,25 @@
 ROW = 1
 
 dependencies:
-	(cd .. && R --vanilla < inst/code/dependencies.R &)
+	(cd .. && Rscript --vanilla inst/code/dependencies.R > dependencies.out)
 
 intro:
-	(cd .. && R --vanilla < inst/code/intro-binary.R &)
+	(cd .. && Rscript --vanilla inst/code/intro-binary.R)
 
 faithfulness:
-	(cd .. && R --vanilla < inst/code/faithfulness.R &)
+	(cd .. && Rscript --vanilla inst/code/faithfulness.R)
 
 gcm-smooth:
-	(cd .. && R --vanilla < inst/code/gcm-smooth.R &)
+	(cd .. && Rscript --vanilla inst/code/gcm-smooth.R)
 
 gcm-penalized:
-	(cd .. && R --vanilla < inst/code/gcm-penalized.R &)
+	(cd .. && Rscript --vanilla inst/code/gcm-penalized.R)
 
 identifiability:
-	(cd .. && R --vanilla < inst/code/identifiability.R &)
+	(cd .. && Rscript --vanilla inst/code/identifiability.R)
 
 invariance-example:
-	(cd .. && R --vanilla < inst/code/invariance-example.R &)
+	(cd .. && Rscript --vanilla inst/code/invariance-example.R)
 
 sim-correct:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 10 10 300 0 $(ROW))
