@@ -95,9 +95,9 @@
   e <- resids$e
   tst <- controls$test_fun(r, e, controls)
 
-  plot(r ~ e, main = paste0(tset, collapse = "+"), col = rgb(.1, .1, .1, .1))
-  legend("top", ifelse(tst$p.value > 0.05, "accept", "reject"), bty = "n")
-  abline(lm(r ~ e), lwd = 1.5)
+  # plot(r ~ e, main = paste0(tset, collapse = "+"), col = rgb(.1, .1, .1, .1))
+  # legend("top", ifelse(tst$p.value > 0.05, "accept", "reject"), bty = "n")
+  # abline(lm(r ~ e), lwd = 1.5)
 
   ### Return
   if (set == 1) tset <- "Empty"
