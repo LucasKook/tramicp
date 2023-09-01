@@ -29,6 +29,8 @@ save <- TRUE # Save simulation results in current R session
 store <- FALSE # Store simulation results in folder
 fixed <- TRUE # Same DAGs for all models
 
+options(crossfit = TRUE)
+
 # Params ------------------------------------------------------------------
 
 # Models
@@ -137,6 +139,7 @@ res <- runSimulation(
   generate = if (fixed) GENFIX else GEN,
   analyse = tANA,
   summarise = NA,
+  save = FALSE,
   save_results = save,
   store_results = store,
   debug = "none",

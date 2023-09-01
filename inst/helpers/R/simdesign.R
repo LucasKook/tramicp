@@ -61,7 +61,7 @@ ANA <- function(condition, dat, fixed_objects = NULL) {
         ctrls <- NULL
       tmp <- dicp(as.formula(fixed_objects$fml), data = dat,
                   env = reformulate(fixed_objects$env), modFUN = mFUN,
-                  type = ttype, test = ttest, weights = rep(1, nrow(dat)),
+                  type = ttype, test = ttest,
                   baseline_fixed = fixed_objects$blfix, controls = ctrls,
                   verbose = FALSE)
       inv <- tmp$candidate
