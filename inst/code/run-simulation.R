@@ -12,7 +12,7 @@ specs <- c("correct", "link", "hidden", "roc")
 spec <- if (noargs <- identical(numeric(0), args)) specs[1] else specs[args[1]]
 nsim <- if (noargs) 20 else args[2] # number of repetitions per DAG
 ncores <- if (noargs) 20 else min(args[3], nsim) # number of cores for parallel
-ndags <- if (noargs) 300 else args[4] # number of (random) DAGs
+ndags <- if (noargs) 100 else args[4] # number of (random) DAGs
 TEST <- if (noargs) 1 else args[5] # for testing this script
 ROW <- if (noargs) NULL else args[6]
 
