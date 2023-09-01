@@ -337,14 +337,10 @@ residuals.binglm <- function(object, ...) {
                     controls = controls)
     return(resids)
   }
-  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
-  if (dprob <- (length(unique(e)) == 2)) {
-    fe <- as.factor(e)
-    mfe <- update(mfe, fe ~ .)
-  }
-  rf <- ranger(mfe, data = data, probability = dprob)
-  if (dprob) e - predict(rf, data = data)$predictions[, 2] else
-    e - predict(rf, data = data)
+  data[["ranger_e"]] <- e
+  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "ranger_e")
+  rf <- RANGER(mfe, data = data)
+  residuals(rf)
 }
 
 #' @importFrom ranger ranger
@@ -354,14 +350,10 @@ residuals.binglm <- function(object, ...) {
                     controls = controls, etest = etest, test = test)
     return(resids)
   }
-  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "e")
-  if (dprob <- (length(unique(e)) == 2)) {
-    fe <- as.factor(e)
-    mfe <- update(mfe, fe ~ .)
-  }
-  rf <- ranger(mfe, data = data, probability = dprob)
-  if (dprob) etest - predict(rf, data = test)$predictions[, 2] else
-    etest - predict(rf, data = test)
+  data[["ranger_e"]] <- e
+  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "ranger_e")
+  rf <- RANGER(mfe, data = data)
+  residuals(rf, newdata = test, newy = etest)
 }
 
 .pplus <- function(terms) {
@@ -373,37 +365,39 @@ RANGER <- function(formula, data, ...) {
   is_ordered <- is.ordered(response)
   is_binary <- is.factor(response) && !is_ordered
   tms <- .get_terms(formula)
+  resp <- if (is_binary) as.numeric(response) - 1 else if (is_ordered)
+    as.numeric(response) else response
+  tmp <- list(data = data, response = resp, is_binary = is_binary,
+              is_ordered = is_ordered)
   if (identical(tms$me, character(0))) {
-    if (is_ordered)
-      return(polr(formula, data))
-    else if (is_binary)
-      return(glm(formula, data, family = "binomial"))
+    if (is_binary)
+      return(structure(c(list(mean = mean(as.numeric(response) - 1)), tmp),
+                       class = "ranger"))
     else
-      return(lm(formula, data))
+      return(structure(c(list(mean = mean(as.numeric(response))), tmp),
+                       class = "ranger"))
   }
   ret <- ranger(formula, data, probability = is_binary | is_ordered, ...)
-  ret$data <- data
-  ret$response <- if (is_binary) as.numeric(response) - 1 else if (is_ordered)
-    as.numeric(response) else response
-  ret$is_binary <- is_binary
-  ret$is_ordered <- is_ordered
-  ret
+  structure(c(ret, tmp), class = "ranger")
 }
 
 #' @exportS3Method residuals ranger
-residuals.ranger <- function(object, ...) {
-  if ("polr" %in% class(object))
-    return(residuals.polr(object))
-  else if ("glm" %in% class(object))
-    return(residuals.binglm(object))
-  else if ("lm" %in% class(object))
-    return(residuals(object))
-  preds <- predict(object, data = object$data)$predictions
+residuals.ranger <- function(object, newdata = NULL, newy = NULL, ...) {
+  if (is.null(newdata))
+    newdata <- object$data
+  if (!is.null(newy))
+    newy <- if (object$is_binary) as.numeric(newy) - 1 else if (object$is_ordered)
+      as.numeric(newy) else newy
+  if (is.null(newy))
+    newy <- object$response
+  if (!is.null(object$mean))
+    return(newy - object$mean)
+  preds <- predict(object, data = newdata)$predictions
   if (object$is_ordered)
     preds <- preds %*% seq_len(ncol(preds))
   if (object$is_binary)
     preds <- preds[, 2]
-  object$response - preds
+  unname(newy - preds)
 }
 
 .intersect <- function(x, y) {

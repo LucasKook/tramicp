@@ -1,6 +1,8 @@
 # Install all dependencies for reproducing the results in the paper
 # LK 2023
 
+.libPaths(c("~/tutu/lib", .libPaths()))
+
 ### Install remotes for installing all other packages
 install.packages("remotes", repos = "https://cloud.r-project.org")
 

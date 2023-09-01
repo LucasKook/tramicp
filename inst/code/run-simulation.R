@@ -29,8 +29,6 @@ save <- TRUE # Save simulation results in current R session
 store <- FALSE # Store simulation results in folder
 fixed <- TRUE # Same DAGs for all models
 
-options(crossfit = TRUE)
-
 # Params ------------------------------------------------------------------
 
 # Models
