@@ -17,6 +17,16 @@ if (!dir.exists(oup))
 
 # FUNs --------------------------------------------------------------------
 
+# CDF
+# theta1 / (1 + theta1)         | theta1 / (1 + theta2)                 | theta1 * beta3 / (1 + theta1 * beta3) |
+# theta2 / (1 + theta1 * beta2) | theta2 * beta2 / (1 + theta2 * beta2) | theta2 * beta3 / (1 + theta2 * beta3) |
+# 1                             | 1                                     | 1                                     |
+
+# PDF
+# theta1 / (1 + theta1)         | theta1 / (1 + theta2)                 | theta1 * beta3 / (1 + theta1 * beta3) |
+# R2 - R1
+# R3 - R2 - R1
+
 mk_distr <- function(gamma, xi, type = c("pdf", "cdf")) {
   type <- match.arg(type)
   ret <- rbind(outer(seq_along(gamma), seq_along(xi), \(x, y) {
@@ -88,6 +98,8 @@ gen_dat <- function(
 
   # 3. Generate density Y | X2
   dYX2 <- mk_distr(g2, b2)
+  # print(dYX2)
+  # print(Matrix::rankMatrix(dYX2))
 
   # 4. Compute marginal density of X2
   dX2 <- solve(dYX2) %*% dY
