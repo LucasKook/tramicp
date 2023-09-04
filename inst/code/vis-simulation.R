@@ -43,9 +43,11 @@ tests <- c(mtests, "Correlation" = "cor.test", "ROC" = "roc.test", "TRAM-Wald ex
 cols <- okabe_ito(length(tests))
 names(cols) <- names(tests)
 
+rpath <- file.path("inst", "results")
+
 if (setting == "main") {
   ### Paths
-  bpath <- "inst/results/results_main"
+  bpath <- file.path(rpath, "results_main")
   tmods <- mods
   ttests <- tests[-4]
   out <- "sim-main.pdf"
@@ -56,7 +58,7 @@ if (setting == "main") {
   res <- read_sim_results(file.path(bpath, "results"))
   res$oicp[res$oicp == "empty"] <- "Empty"
 
-  bpath <- "inst/results/results_binary-roc"
+  bpath <- file.path(rpath, "results_binary-roc")
   bfobs <- readRDS(file.path(bpath, "fobs.rds"))
   bres <- read_sim_results(file.path(bpath, "results"))
   bres$oicp[bres$oicp == "empty"] <- "Empty"
@@ -65,7 +67,7 @@ if (setting == "main") {
 
   res <- full_join(res, bres)
 } else if (setting == "app") {
-  bpath <- "inst/results/results_main"
+  bpath <- file.path(rpath, "results_main")
   tmods <- amods
   ttests <- mtests
   out <- "sim-app.pdf"
@@ -76,7 +78,7 @@ if (setting == "main") {
   res <- read_sim_results(file.path(bpath, "results"))
   res$oicp[res$oicp == "empty"] <- "Empty"
 } else if (setting == "hidden") {
-  bpath <- "inst/results/results_hidden"
+  bpath <- file.path(rpath, "results_hidden")
   tmods <- c(mods, amods)
   ttests <- mtests
   out <- "sim-hidden.pdf"
@@ -88,7 +90,7 @@ if (setting == "main") {
   res$oicp[res$oicp == "empty"] <- "Empty"
   res$oicp <- "Empty"
 } else if (setting == "link") {
-  bpath <- "inst/results/results_link"
+  bpath <- file.path(rpath, "results_link")
   tmods <- c(mods, amods)
   ttests <- mtests
   out <- "sim-link.pdf"
@@ -100,7 +102,7 @@ if (setting == "main") {
   res$oicp[res$oicp == "empty"] <- "Empty"
 } else if (setting == "wald-extended") {
   ### paths
-  bpath <- "inst/results/results_main"
+  bpath <- file.path(rpath, "results_main")
   tmods <- c(mods[-1], amods)
   ttests <- tests
   out <- "sim-wald-extended.pdf"
@@ -112,7 +114,7 @@ if (setting == "main") {
   res$oicp[res$oicp == "empty"] <- "Empty"
   res <- dplyr::filter(res, test == "wald")
 
-  bpath <- "inst/results/results_wald-extended"
+  bpath <- file.path(rpath, "results_wald-extended")
   bfobs <- readRDS(file.path(bpath, "fobs.rds"))
   bres <- read_sim_results(file.path(bpath, "results"))
   bres$oicp[bres$oicp == "empty"] <- "Empty"

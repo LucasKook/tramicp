@@ -55,7 +55,7 @@ vis-wald:
 
 all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example
 
-vis: vis-main vis-app vis-hidden vis-link vis-wald
+vis: vis-main vis-app vis-hidden vis-link
 
 count:
 	ls test.* | wc
