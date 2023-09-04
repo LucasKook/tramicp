@@ -40,8 +40,7 @@ vignettes/*.pdf
 *.Rproj
 
 inst/ignore
-inst/results
-inst/results-doksum
+inst/results*
 *.pdf
 *.sh
 

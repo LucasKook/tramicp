@@ -121,7 +121,7 @@ vis <- function(mods = tmods, tests = ttests) {
   pd <- full_join(tmp %>% dplyr::filter(method == "inv"),
                   tmp %>% dplyr::filter(method == "oicp", test == "wald") %>% mutate(test = "oicp")) %>%
     mutate(output = factor(output, levels = c("jaccard", "fwer"),
-                           labels = c("Jaccard", "FWER")),
+                           labels = c("Jaccard" = "Jaccard(S[n],S['*'])", "FWER" = "hat(P)(S[n]%in%S['*'])")),
            mod = factor(mod, levels = mods, labels = names(mods)),
            test = factor(test, levels = c(tests, "oicp"), labels = c(names(tests), "Oracle")))
 
@@ -131,7 +131,7 @@ vis <- function(mods = tmods, tests = ttests) {
     stat_summary(geom = "ribbon", linewidth = NA, alpha = 0.1, show.legend = FALSE) +
     stat_summary(geom = "line", show.legend = FALSE) +
     scale_x_log10() +
-    facet_grid(output ~ mod, scale = "free_y") +
+    facet_grid(output ~ mod, scale = "free_y", labeller = label_parsed) +
     geom_hline(yintercept = 0.05, color = "transparent") +
     labs(color = "Invariance test", linetype = element_blank(), y = "Fraction") +
     scale_color_manual(values = c(cols, "Oracle" = "gray60")) +
