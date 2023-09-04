@@ -102,6 +102,12 @@ test_that("Output of cotramICP and glmICP", {
   })
 })
 
+test_that("Multi-environment GCM works", {
+  set.seed(1234)
+  d <- dgp_dicp(mod = "binary")
+  expect_no_error(glmICP(Y ~ X1 + X2, data = d, env = ~ E + X3, family = "binomial"))
+})
+
 test_that("argument checks work", {
   d <- dgp_dicp(mod = "boxcox")
   expect_error(BoxCoxICP("Y ~ X1", d, ~ E))
