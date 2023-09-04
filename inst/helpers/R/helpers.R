@@ -135,5 +135,7 @@ vis <- function(mods = tmods, tests = ttests) {
     geom_hline(yintercept = 0.05, color = "transparent") +
     labs(color = "Invariance test", linetype = element_blank(), y = "Fraction") +
     scale_color_manual(values = c(cols, "Oracle" = "gray60")) +
-    scale_fill_manual(values = c(cols, "Oracle" = "gray60"))
+    scale_fill_manual(values = c(cols, "Oracle" = "gray60")) +
+    theme(text = element_text(size = 13.5), axis.text.x = element_text(
+      angle = 30, hjust = 1, vjust = 1))
 }
