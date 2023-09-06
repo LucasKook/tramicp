@@ -155,10 +155,10 @@ tg1 <- c(0.5, 1.5)
 tb1 <- c(1, 1.4, 1.8)
 
 # find_sol(mk_distr(tg1, tb1) %*% rep(1/3, 3), try = 3e3)
-tg2 <- c(0.8, 2.4)
-tb2 <- c(1, 0.76, 0.22)
+tg2 <- tg1 # c(0.8, 2.4)
+tb2 <- tb1 # c(1, 0.76, 0.22)
 
-talp <- c(1.1, 1.2, 1.3)
+talp <- rep(1, 3) # c(1.1, 1.2, 1.3)
 
 t1 <- c(log(tg1), log(1 / tb1[-1]))
 t2 <- c(log(tg2), log(1 / tb2[-1]))
@@ -229,10 +229,11 @@ ggsave(file.path("inst", "figures", "bias.pdf"), height = 3.5, width = 4.5)
 # GOF ---------------------------------------------------------------------
 
 nsim <- 1e2
+tn <- 1e4
 pb <- txtProgressBar(min = 0, max = nsim, style = 3)
-pvals <- lapply(1:1e2, \(iter) {
+pvals <- lapply(1:nsim, \(iter) {
   setTxtProgressBar(pb, iter)
-  d <- gen_dat(n = 1e4, g1 = tg1, b1 = tb1, g2 = tg2, b2 = tb2, alphas = talp)
+  d <- gen_dat(n = tn, g1 = tg1, b1 = tb1, g2 = tg2, b2 = tb2, alphas = talp)
   m1 <- polr(Y ~ X1, data = d)
   m2 <- polr(Y ~ X2, data = d)
   c(m1 = pulkrob.chisq(m1, "X1")$p.value, m2 = pulkrob.chisq(m2, "X2")$p.value)
