@@ -121,7 +121,8 @@ vis <- function(mods = tmods, tests = ttests) {
   pd <- full_join(tmp %>% dplyr::filter(method == "inv"),
                   tmp %>% dplyr::filter(method == "oicp", test == "wald") %>% mutate(test = "oicp")) %>%
     mutate(output = factor(output, levels = c("jaccard", "fwer"),
-                           labels = c("Jaccard" = "Jaccard(S[n],S['*'])", "FWER" = "hat(P)(S[n]%in%S['*'])")),
+                           labels = c("Jaccard" = "Jaccard(S[n],S['*'])",
+                                      "FWER" = "hat(P)(S[n]%notsubseteq%S['*'])")),
            mod = factor(mod, levels = mods, labels = names(mods)),
            test = factor(test, levels = c(tests, "oicp"), labels = c(names(tests), "Oracle")))
 
