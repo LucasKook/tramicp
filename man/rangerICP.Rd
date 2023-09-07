@@ -69,7 +69,7 @@ alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}}.}
   }}
 }
 \value{
-Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
+Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}.
 }
 \description{
 nonparametric ICP with ranger GCM
