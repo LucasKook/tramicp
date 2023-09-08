@@ -77,11 +77,11 @@ with an alias, as shown in the table below.
 | `glmICP()`          | `stats::glm()`             |
 | `LehmannICP()`      | `tram::Lehmann()`          |
 | `LmICP()`           | `tram::Lm()`               |
-| `slmICP()`          | `stats::lm()`              |
+| `lmICP()`           | `stats::lm()`              |
 | `PolrICP()`         | `tram::Polr()`             |
-| `mpolrICP()`        | `MASS::polr()`             |
+| `polrICP()`         | `MASS::polr()`             |
 | `SurvregICP()`      | `tram::Survreg()`          |
-| `ssurvregICP()`     | `tram::Survreg()`          |
+| `survregICP()`      | `survival::survreg()`      |
 
 Other implementations, such as additive TRAMs in `tramME`, can still be used via
 the `dicp()` function, for instance, after loading `tramME`, `dicp(..., modFUN =
