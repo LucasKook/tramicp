@@ -87,6 +87,9 @@ Other implementations, such as additive TRAMs in `tramME`, can still be used via
 the `dicp()` function, for instance, after loading `tramME`, `dicp(..., modFUN =
 "BoxCoxME")` can be used.
 
+Nonparametric ICP via the GCM test [4] and random forests for the two
+regressions is implemented in the alias `rangerICP()`.
+
 # Replication materials
 
 This repository contains the code for reproducing the results in [1] in
@@ -105,3 +108,7 @@ the Royal Statistical Society Series B: Statistical Methodology, 78(5), 947-1012
 
 [3] Hothorn, T., Möst, L., & Bühlmann, P. (2018). Most likely transformations.
 Scandinavian Journal of Statistics, 45(1), 110-134.
+
+[4] Shah, R. D., & Peters, J. (2020). The hardness of conditional independence
+testing and the generalised covariance measure.
+
