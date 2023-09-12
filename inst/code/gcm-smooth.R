@@ -33,11 +33,11 @@ res <- lapply(seq_len(3e2), \(iter) {
   m2 <- lm(Y ~ E * (X1 + X2), data = df)
   wald <- summary(glht(m2, c("E = 0", "E:X1 = 0", "E:X2 = 0"), vcov = vcov),
                   test = Chisqtest())
-  c(COR = cor.test(residuals(m), df$E)$p.value, GCM = .gcm_test(
+  c("TRAM-COR" = cor.test(residuals(m), df$E)$p.value, "TRAM-GCM" = .gcm_test(
     residuals(m), df$E - predict(ranger(
       factor(E) ~ X1 + X2, data = df, probability = TRUE),
       data = df)$predictions[, 2], controls = list(alpha = 0.05))$p.value,
-    WALD = c(wald$test$pvalue))
+    "TRAM-WALD" = c(wald$test$pvalue))
 }) %>% bind_rows()
 
 ### Vis
@@ -47,7 +47,7 @@ p0 <- res %>%
   stat_ecdf() +
   geom_abline(slope = 1, intercept = 0) +
   theme_bw() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "right") +
   labs(x = "p-value", linetype = "Invariance test", y = "ECDF")
 p0
 
@@ -59,9 +59,9 @@ p1 <- ggplot(df, aes(x = X1, y = Y)) +
   theme_bw()
 
 (p1 + labs(tag = "A")) + (p0 + labs(tag = "B"))
-ggsave("inst/figures/gcm-smooth-app.pdf", height = 3.5, width = 8)
+ggsave("inst/figures/gcm-smooth-app.pdf", height = 3.5, width = 9)
 
 ### P-value reported in the paper
-binom.test(sum(res$GCM < 0.05), nrow(res), p = 0.05, alternative = "greater")
-binom.test(sum(res$WALD < 0.05), nrow(res), p = 0.05, alternative = "greater")
-binom.test(sum(res$COR < 0.05), nrow(res), p = 0.05, alternative = "greater")
+binom.test(sum(res[["TRAM-GCM"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")
+binom.test(sum(res[["TRAM-Wald"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")
+binom.test(sum(res[["TRAM-COR"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")

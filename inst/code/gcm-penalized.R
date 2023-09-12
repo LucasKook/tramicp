@@ -71,9 +71,9 @@ pvals <- lapply(1:3e2, \(iter) {
   wald <- summary(glht(m2, c("E = 0", "E:X1 = 0", "E:X2 = 0", paste0(
     "E:XZ.", 1:tp0, " = 0")), vcov = vcov), test = Chisqtest())
   tribble(~ "test",                                                ~ "pvalue",
-          "COR",   cor.test(residuals(m), df$E)$p.value,
-          "GCM",   .gcm_test(residuals(m), df$rE, list(alpha = 0.05))$p.value,
-          "WALD", c(wald$test$pvalue)
+          "TRAM-COR",   cor.test(residuals(m), df$E)$p.value,
+          "TRAM-GCM",   .gcm_test(residuals(m), df$rE, list(alpha = 0.05))$p.value,
+          "TRAM-WALD", c(wald$test$pvalue)
   )
 }) %>% bind_rows()
 
