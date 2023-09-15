@@ -139,8 +139,13 @@ prdat <- res %>%
     fwer = unlist(map2(splpaY, splset, ~ as.numeric(length(setdiff(.y[.y != "Empty"], .x)) > 0))),
   )
 
-prdat %>% group_by(n, mod, type, test) %>%
-  summarize(jaccard = mean(jaccard), fwer = mean(fwer > 0))
+sumdat <- prdat %>% group_by(n, mod, type, test, dag) %>%
+  summarize(mjaccard = mean(jaccard), mfwer = mean(fwer > 0),
+            sdj = sd(jaccard), sdf = sd(fwer)) %>%
+  summarize_if(is.numeric, mean)
+sumdat
+
+saveRDS(sumdat, file = file.path(bpath, "summarized-results.rds"))
 
 if (setting == "hidden") {
   anY <- paste0("X1+X2+X3", unlist(lapply(fobs$dags, \(x) {
