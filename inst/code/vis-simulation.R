@@ -51,7 +51,7 @@ if (setting == "main") {
   tmods <- mods
   ttests <- tests[-4]
   out <- "sim-main.pdf"
-  th <- 4
+  th <- 4.5
   tw <- 7
 
   fobs <- readRDS(file.path(bpath, "fobs.rds"))
@@ -71,7 +71,7 @@ if (setting == "main") {
   tmods <- amods
   ttests <- mtests
   out <- "sim-app.pdf"
-  th <- 4
+  th <- 4.5
   tw <- 7
   ### path
   fobs <- readRDS(file.path(bpath, "fobs.rds"))
@@ -82,8 +82,8 @@ if (setting == "main") {
   tmods <- c(mods, amods)
   ttests <- mtests
   out <- "sim-hidden.pdf"
-  th <- 4
-  tw <- 10
+  th <- 4.5
+  tw <- 11
   ### path
   fobs <- readRDS(file.path(bpath, "fobs.rds"))
   res <- read_sim_results(file.path(bpath, "results"))
@@ -95,7 +95,7 @@ if (setting == "main") {
   ttests <- mtests
   out <- "sim-link.pdf"
   th <- 4
-  tw <- 10
+  tw <- 11
   ### path
   fobs <- readRDS(file.path(bpath, "fobs.rds"))
   res <- read_sim_results(file.path(bpath, "results"))
@@ -106,8 +106,8 @@ if (setting == "main") {
   tmods <- c(mods[-1], amods)
   ttests <- tests
   out <- "sim-wald-extended.pdf"
-  th <- 4
-  tw <- 10
+  th <- 4.5
+  tw <- 11
 
   fobs <- readRDS(file.path(bpath, "fobs.rds"))
   res <- read_sim_results(file.path(bpath, "results"))
