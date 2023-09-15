@@ -131,12 +131,13 @@ if (!is.null(ROW)) {
 
 if (TEST) {
   nsim <- 2
-  Design <- Design[1, ]
+  Design <- Design[ROW <- 1, ]
 }
 
 
 # Run ---------------------------------------------------------------------
 
+suppressWarnings(file.remove(list.files(pattern = "SIMDESIGN-TEMPFILE")))
 res <- runSimulation(
   design = Design,
   replications = nsim,
