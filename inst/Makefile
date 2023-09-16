@@ -64,7 +64,7 @@ correct:
 	bash dispatch.sh 4000 run-correct.sh 10800
 
 hidden:
-	bash dispatch.sh 4800 run-hidden.sh 18000
+	bash dispatch.sh 5600 run-hidden.sh 43200
 
 link:
 	bash dispatch.sh 4000 run-link.sh 10800

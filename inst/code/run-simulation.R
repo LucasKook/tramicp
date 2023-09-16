@@ -60,7 +60,7 @@ if (spec == "roc") {
 # Params
 ns <- c(1e2, 3e2, 1e3, 3e3, 1e4) # Sample sizes
 if (spec == "hidden")
-  ns <- c(ns, 3e4)
+  ns <- c(ns, 3e4, 1e5)
 blfix <- TRUE # fixed baseline transformation
 nanc <- 3 # ancestors of Y
 panc <- 0.8 # edge probability
