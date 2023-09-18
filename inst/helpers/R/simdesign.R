@@ -44,7 +44,8 @@ ANA <- function(condition, dat, fixed_objects = NULL) {
       tmp <- dicp(as.formula(fixed_objects$fml), data = dat,
                   env = reformulate(fixed_objects$env),
                   modFUN = RANGER, type = "residual", test = "gcm.test",
-                  controls = dicp_controls(residuals = residuals.ranger))
+                  controls = dicp_controls(residuals = residuals.ranger),
+                  verbose = FALSE)
       inv <- tmp$candidate
       pvalues(tmp, which = "set")
     } else {

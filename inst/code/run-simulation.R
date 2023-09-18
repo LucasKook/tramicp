@@ -60,7 +60,7 @@ if (spec == "roc") {
 # Params
 ns <- c(1e2, 3e2, 1e3, 3e3, 1e4) # Sample sizes
 if (spec == "hidden")
-  ns <- c(ns, 3e4, 1e5)
+  ns <- c(ns, 3e4)
 blfix <- TRUE # fixed baseline transformation
 nanc <- 3 # ancestors of Y
 panc <- 0.8 # edge probability
@@ -88,14 +88,15 @@ mixDeY <- 0.1
 
 dags <- if (fixed) {
   lapply(1:ndags, \(iter) {
-    tcfx <- .rcfx(nanc, panc, FALSE, sd = sqrt(0.9))
+    tcfx <- .rcfx(nanc, panc, FALSE, sd = sqrt(2))
+    tcfc <- .rcfx(ndec, pdec, FALSE, sd = sqrt(0.3))
+    tcfe <- .rcfx(nanc + ndec, penv, FALSE, sd = sde)
     if (spec == "hidden") {
       tcfx[1] <- tcfx[1] * 2
     }
     random_dag(nenv = nenv, nanc = nanc, ndec = ndec, penv = penv,
-               panc = panc, pdec = pdec, cfb = cfb,
-               cfx = tcfx, cfe = .rcfx(nanc + ndec, penv, FALSE, sde),
-               plot_graph = FALSE)
+               panc = panc, pdec = pdec, cfb = cfb, cfx = tcfx,
+               cfe = tcfe, cfc = tcfc, plot_graph = FALSE)
   })
 } else NULL
 

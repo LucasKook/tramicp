@@ -27,11 +27,8 @@
 #' attr(d, "paY")
 #' attr(d, "oracle_icp")
 #' fml <- Y ~ X1 + X2 + X3 + X4
-#' ColrICP(fml, data = d, env = "E", type = "wald")
-#' ColrICP(fml, data = d, env = "E", type = "confint")
-#' ColrICP(fml, data = d, env = "E", type = "residual")
-#' ColrICP(fml, data = d, env = "E", type = "mcheck")
-#' # cdkci("Y", "E", paste0("X", 1:(nanc + ndec)), data = d, GP = FALSE)
+#' ColrICP(fml, data = d, env = ~ E, type = "wald")
+#' ColrICP(fml, data = d, env = ~ E, type = "residual")
 #'
 #' mods <- c("polr", "boxcox", "cotram", "colr", "weibull", "lm")
 #' sapply(mods, \(m) dgp_random_dag(mod = m))
@@ -65,7 +62,7 @@ dgp_random_dag <- function(
   ddat <- rmvDAG(n, pa_dag, errDist = errDistAnY, mix = mixAnY)
   ddat <- ddat + E[, 1:nanc] * matrix(dag$cfe[1:nanc], nrow = n,
                                       ncol = nanc, byrow = TRUE)
-  if (standardize) ddat <- scale(ddat)
+  if (standardize) ddat <- scale(ddat) / 5
   dat <- data.frame(ddat)
 
   ## Response
