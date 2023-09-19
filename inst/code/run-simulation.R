@@ -93,7 +93,7 @@ dags <- if (fixed) {
     if (spec == "larger") {
       tcfx[1] <- tcfx[1] * 2.5
       tcfx[-1] <- tcfx[-1] / 5
-      tcfc <- tcfc / 5
+      tcfc <- tcfc
     }
     random_dag(nenv = nenv, nanc = nanc, ndec = ndec, penv = penv,
                panc = panc, pdec = pdec, cfb = cfb, cfx = tcfx,
