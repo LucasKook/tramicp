@@ -77,32 +77,18 @@ ANA <- function(condition, dat, fixed_objects = NULL) {
 }
 
 SUM <- function(condition, results, fixed_objects = NULL) {
-  bind_rows(results) |>
+  bind_rows(results) %>%
+    mutate(inv = case_when(inv == "1" ~ "Empty", TRUE ~ inv)) %>%
+    gather("method", "set", inv, oicp) %>%
     mutate(
-      paY_all = str_split(paY, "\\+"),
-      oicp_all = str_split(oicp, "\\+"),
-      inv_all = str_split(inv, "\\+"),
-      oicp_numpa = map2(paY_all, oicp_all, ~ length(tramicp:::.intersect(.x, .y))),
-      inv_numpa = map2(paY_all, inv_all, ~ length(tramicp:::.intersect(.x, .y))),
-      oicp_nonpa = map2(oicp_all, paY_all, ~ length(tramicp:::.setdiff(.x, .y))),
-      inv_nonpa = map2(inv_all, paY_all, ~ length(tramicp:::.setdiff(.x, .y)))
-    ) |> unnest(c(oicp_numpa, inv_numpa, oicp_nonpa, inv_nonpa)) |>
-    group_by(npaY, type, test) |>
-    reframe(
-      mean_oicp_empty = mean(oicp == "empty"),
-      mean_inv_empty = mean(inv == "empty"),
-      mean_oicp_numpa = mean(oicp_numpa) / npaY,
-      mean_inv_numpa = mean(inv_numpa) / npaY,
-      mean_oicp_nonpa = (mean(oicp_nonpa) / (length(fixed_objects$preds) - npaY)),
-      mean_inv_nonpa = (mean(inv_nonpa) / (length(fixed_objects$preds) - npaY))
-    ) |>
-    group_by(npaY, type, test) |>
-    summarize_if(is.numeric, mean) |>
-    group_by(npaY, type, test) |>
-    gather(key = "key", value = "val", mean_oicp_empty, mean_inv_empty,
-           mean_oicp_numpa, mean_inv_numpa, mean_oicp_nonpa, mean_inv_nonpa) |>
-    unite(desc, type, test, npaY, key) |>
-    spread(desc, val) |> ungroup()
+      splpaY = str_split(paY, "\\+"),
+      splset = str_split(set, "\\+"),
+      numpa = unlist(map2(splpaY, splset, ~ as.numeric(length(.intersect(.x, .y)) > 0))),
+      nonpa = unlist(map2(splset, splpaY, ~ as.numeric(length(.setdiff(.x[.x != "Empty"], .y)) > 0))),
+      empty = as.numeric(set == "Empty"),
+      jaccard = unlist(map2(splpaY, splset, ~ length(.intersect(.x, .y)) / length(union(.x, .y)))),
+      fwer = unlist(map2(splpaY, splset, ~ as.numeric(length(setdiff(.y[.y != "Empty"], .x)) > 0))),
+    )
 }
 
 read_sim_results <- function(path) {
