@@ -62,7 +62,7 @@ dgp_random_dag <- function(
   ddat <- rmvDAG(n, pa_dag, errDist = errDistAnY, mix = mixAnY)
   ddat <- ddat + E[, 1:nanc] * matrix(dag$cfe[1:nanc], nrow = n,
                                       ncol = nanc, byrow = TRUE)
-  if (standardize) ddat <- scale(ddat) / 5
+  if (standardize) scale(ddat)
   dat <- data.frame(ddat)
 
   ## Response

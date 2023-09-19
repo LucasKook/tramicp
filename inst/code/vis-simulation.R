@@ -2,7 +2,7 @@
 # Visualize simulation results
 # LK 2023
 
-settings <- c("main", "app", "hidden", "link", "wald-extended")
+settings <- c("main", "app", "hidden", "link", "wald-extended", "larger")
 
 setting <- settings[as.numeric(commandArgs(TRUE))[1]]
 if (is.na(setting))
@@ -43,7 +43,7 @@ tests <- c(mtests, "Correlation" = "cor.test", "ROC" = "roc.test", "TRAM-Wald ex
 cols <- okabe_ito(length(tests))
 names(cols) <- names(tests)
 
-rpath <- file.path("inst", "results")
+rpath <- file.path("inst", "results", "results-divide-by-5-stronger-effects")
 
 if (setting == "main") {
   ### Paths
@@ -82,6 +82,18 @@ if (setting == "main") {
   tmods <- c(mods, amods)
   ttests <- mtests
   out <- "sim-hidden.pdf"
+  th <- 4.5
+  tw <- 11
+  ### path
+  fobs <- readRDS(file.path(bpath, "fobs.rds"))
+  res <- read_sim_results(file.path(bpath, "results"))
+  res$oicp[res$oicp == "empty"] <- "Empty"
+  res$oicp <- "Empty"
+} else if (setting == "larger") {
+  bpath <- file.path(rpath, "results_larger")
+  tmods <- c(mods, amods)
+  ttests <- mtests
+  out <- "sim-larger.pdf"
   th <- 4.5
   tw <- 11
   ### path
@@ -151,4 +163,5 @@ if (setting == "hidden") {
 # Vis ---------------------------------------------------------------------
 
 p1 <- vis(tmods, ttests)
-ggsave(file.path("inst", "figures", out), p1, height = th, width = tw, scale = 1)
+ggsave(file.path(rpath, out), p1, height = th, width = tw, scale = 1)
+# ggsave(file.path("inst", "figures", out), p1, height = th, width = tw, scale = 1)

@@ -33,6 +33,9 @@ sim-hidden:
 sim-roc:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 4 10 10 100 0 $(ROW))
 
+sim-larger:
+	(cd .. && Rscript --vanilla inst/code/run-simulation.R 5 10 10 100 0 $(ROW))
+
 sim-test:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 2 2 2 1 $(ROW))
 
@@ -53,9 +56,12 @@ vis-link:
 vis-wald:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 5)
 
+vis-larger:
+	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 6)
+
 all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example
 
-vis: vis-main vis-app vis-hidden vis-link
+vis: vis-main vis-app vis-hidden vis-link vis-larger
 
 count:
 	ls test.* | wc
@@ -71,6 +77,9 @@ link:
 
 roc:
 	bash dispatch.sh 500 run-roc.sh 7200
+
+larger:
+	bash dispatch.sh 5600 run-larger.sh 43200
 
 test:
 	bash dispatch.sh 2 run-test.sh 300
