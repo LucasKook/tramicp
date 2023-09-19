@@ -62,7 +62,7 @@ dgp_random_dag <- function(
   ddat <- rmvDAG(n, pa_dag, errDist = errDistAnY, mix = mixAnY)
   ddat <- ddat + E[, 1:nanc] * matrix(dag$cfe[1:nanc], nrow = n,
                                       ncol = nanc, byrow = TRUE)
-  if (standardize) scale(ddat)
+  if (standardize) ddat <- scale(ddat)
   dat <- data.frame(ddat)
 
   ## Response
@@ -76,7 +76,7 @@ dgp_random_dag <- function(
     tm <- tramicp:::.tram_from_name(
       model = mod, cfx = cfx, nvars = colnames(dat), K = K, ia = ia, cfb = cfb
     )
-    if (plot_model) plot(tm, newdata = dat, K = 1e2)
+    if (plot_model) plot(tm, newdata = dat, K = 3e2)
     Y <- simulate(tm, newdata = dat)
     ncY <- .R2vec(Y)
     if (mod == "cotram") Y <- ncY <- as.integer(ncY)

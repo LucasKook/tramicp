@@ -5,31 +5,24 @@ GEN <- function(condition, fixed_objects = NULL) {
     cfb = fixed_objects$cfb,
     cfe = .rcfx(nanc + ndec, penv, FALSE, fixed_objects$sde)
   )
-  d <- structure(NA, class = "try-error")
-  while (inherits(d, "try-error")) {
-    d <- dgp_random_dag(n = condition$n, mod = condition$mod,
-      K = ifelse(condition$mod == "polr", fixed_objects$polrK, fixed_objects$K),
-      rm_censoring = fixed_objects$rmc, standardize = fixed_objects$stdz,
-      errDistAnY = fixed_objects$errDistAnY, mixAnY = fixed_objects$mixAnY,
-      errDistDeY = fixed_objects$errDistDeY, mixDeY = fixed_objects$mixDeY,
-      dag = dag
-    )
-  }
-  d
+  dgp_random_dag(
+    n = condition$n, mod = condition$mod,
+    K = ifelse(condition$mod == "polr", fixed_objects$polrK, fixed_objects$K),
+    rm_censoring = fixed_objects$rmc, standardize = fixed_objects$stdz,
+    errDistAnY = fixed_objects$errDistAnY, mixAnY = fixed_objects$mixAnY,
+    errDistDeY = fixed_objects$errDistDeY, mixDeY = fixed_objects$mixDeY,
+    dag = dag)
 }
 
 GENFIX <- function(condition, fixed_objects = NULL) {
-  d <- structure(NA, class = "try-error")
-  while (inherits(d, "try-error")) {
-    d <- dgp_random_dag(n = condition$n, mod = condition$mod,
-      K = ifelse(condition$mod == "polr", fixed_objects$polrK, fixed_objects$K),
-      rm_censoring = fixed_objects$rmc, standardize = fixed_objects$stdz,
-      errDistAnY = fixed_objects$errDistAnY, mixAnY = fixed_objects$mixAnY,
-      errDistDeY = fixed_objects$errDistDeY, mixDeY = fixed_objects$mixDeY,
-      dag = fixed_objects$dags[[condition$dag]]
-    )
-  }
-  d
+  d <- dgp_random_dag(
+    n = condition$n, mod = condition$mod,
+    K = ifelse(condition$mod == "polr", fixed_objects$polrK, fixed_objects$K),
+    rm_censoring = fixed_objects$rmc, standardize = fixed_objects$stdz,
+    errDistAnY = fixed_objects$errDistAnY, mixAnY = fixed_objects$mixAnY,
+    errDistDeY = fixed_objects$errDistDeY, mixDeY = fixed_objects$mixDeY,
+    dag = fixed_objects$dags[[condition$dag]]
+  )
 }
 
 ANA <- function(condition, dat, fixed_objects = NULL) {

@@ -43,7 +43,7 @@ tests <- c(mtests, "Correlation" = "cor.test", "ROC" = "roc.test", "TRAM-Wald ex
 cols <- okabe_ito(length(tests))
 names(cols) <- names(tests)
 
-rpath <- file.path("inst", "results", "results-divide-by-5-stronger-effects")
+rpath <- file.path("inst", "results")
 
 if (setting == "main") {
   ### Paths
@@ -164,4 +164,4 @@ if (setting == "hidden") {
 
 p1 <- vis(tmods, ttests)
 ggsave(file.path(rpath, out), p1, height = th, width = tw, scale = 1)
-# ggsave(file.path("inst", "figures", out), p1, height = th, width = tw, scale = 1)
+ggsave(file.path("inst", "figures", out), p1, height = th, width = tw, scale = 1)
