@@ -11,7 +11,7 @@ GEN <- function(condition, fixed_objects = NULL) {
     rm_censoring = fixed_objects$rmc, standardize = fixed_objects$stdz,
     errDistAnY = fixed_objects$errDistAnY, mixAnY = fixed_objects$mixAnY,
     errDistDeY = fixed_objects$errDistDeY, mixDeY = fixed_objects$mixDeY,
-    dag = dag)
+    dag = dag, affect_variance = fixed_objects$affect_variance)
 }
 
 GENFIX <- function(condition, fixed_objects = NULL) {
@@ -21,7 +21,8 @@ GENFIX <- function(condition, fixed_objects = NULL) {
     rm_censoring = fixed_objects$rmc, standardize = fixed_objects$stdz,
     errDistAnY = fixed_objects$errDistAnY, mixAnY = fixed_objects$mixAnY,
     errDistDeY = fixed_objects$errDistDeY, mixDeY = fixed_objects$mixDeY,
-    dag = fixed_objects$dags[[condition$dag]]
+    dag = fixed_objects$dags[[condition$dag]],
+    affect_variance = fixed_objects$affect_variance
   )
 }
 

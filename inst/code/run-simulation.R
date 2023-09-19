@@ -84,6 +84,7 @@ errDistAnY <- "normal"
 errDistDeY <- "normal"
 mixAnY <- 0.1
 mixDeY <- 0.1
+affect_variance <- FALSE
 
 dags <- if (fixed) {
   lapply(1:ndags, \(iter) {
@@ -105,7 +106,8 @@ fobs <- list(types = types, fml = fml, resp = resp, env = env, preds = preds,
              blfix = blfix, cfb = cfb, K = tK, polrK = polrK, rmc = rmc,
              stdz = stdz, nsim = nsim, sde = sde, errDistAnY = errDistAnY,
              errDistDeY = errDistDeY, mixAnY = mixAnY, mixDeY = mixDeY,
-             dags = dags, mods = mods, tests = tests, spec = spec)
+             dags = dags, mods = mods, tests = tests, spec = spec,
+             affect_variance = affect_variance)
 
 if (save) {
   pvec <- c("nanc", nanc, "ndec", ndec, "panc", panc, "pdec", pdec, "penv", penv,
