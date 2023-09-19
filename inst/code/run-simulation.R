@@ -88,11 +88,11 @@ mixDeY <- 0.1
 
 dags <- if (fixed) {
   lapply(1:ndags, \(iter) {
-    tcfx <- .rcfx(nanc, panc, FALSE, sd = sqrt(0.9))
-    tcfc <- .rcfx(ndec, pdec, FALSE, sd = sqrt(0.3))
+    tcfx <- .rcfx(nanc, panc, FALSE, sd = 2)
+    tcfc <- .rcfx(ndec, pdec, FALSE, sd = 1)
     tcfe <- .rcfx(nanc + ndec, penv, FALSE, sd = sde)
     if (spec == "hidden") {
-      tcfx[1] <- tcfx[1] * 5
+      tcfx[1] <- tcfx[1] * 3
     }
     random_dag(nenv = nenv, nanc = nanc, ndec = ndec, penv = penv,
                panc = panc, pdec = pdec, cfb = cfb, cfx = tcfx,
