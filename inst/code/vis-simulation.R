@@ -125,20 +125,8 @@ if (setting == "main") {
 
 }
 
-### read
-prdat <- res %>%
-  mutate(inv = case_when(inv == "1" ~ "Empty", TRUE ~ inv)) %>%
-  gather("method", "set", inv, oicp) %>%
-  mutate(
-    splpaY = str_split(paY, "\\+"),
-    splset = str_split(set, "\\+"),
-    numpa = unlist(map2(splpaY, splset, ~ as.numeric(length(.intersect(.x, .y)) > 0))),
-    nonpa = unlist(map2(splset, splpaY, ~ as.numeric(length(.setdiff(.x[.x != "Empty"], .y)) > 0))),
-    empty = as.numeric(set == "Empty"),
-    jaccard = unlist(map2(splpaY, splset, ~ length(.intersect(.x, .y)) / length(union(.x, .y)))),
-    fwer = unlist(map2(splpaY, splset, ~ as.numeric(length(setdiff(.y[.y != "Empty"], .x)) > 0))),
-  )
-
+### Summarize for plotting
+prdat <- SUM(NULL, res)
 sumdat <- prdat %>% group_by(n, mod, type, test, dag) %>%
   summarize(mjaccard = mean(jaccard), mfwer = mean(fwer > 0),
             sdj = sd(jaccard), sdf = sd(fwer)) %>%
@@ -156,8 +144,8 @@ if (setting == "hidden") {
       ret <- paste0("+", paste0(ret, collapse = "+"))
     ret
   })))
-  prdat <- prdat %>% dplyr::select(-paY) %>% group_by(dag) %>% nest() %>% arrange(dag) %>%
-    ungroup() %>% mutate(paY = anY) %>% unnest(data)
+  prdat <- prdat %>% dplyr::select(-paY) %>% group_by(dag) %>% nest() %>%
+    arrange(dag) %>% ungroup() %>% mutate(paY = anY) %>% unnest(data)
 }
 
 # Vis ---------------------------------------------------------------------
