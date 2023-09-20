@@ -54,12 +54,8 @@
   if (spec != "link") {
     switch(
       mod,
-      "polr" = \(formula, data, ...) {
-        res <- try(polr(formula, data, Hess = TRUE, ...), silent = TRUE)
-        if (inherits(res, "try-error"))
-          res <- Polr(formula, data, ...)
-        res
-      },
+      "polr" = \(formula, data, ...)
+      Polr(formula, data, ...),
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, ..., prob = prob),
       "lm" = \(formula, data, ...)
@@ -80,12 +76,8 @@
   } else {
     switch(
       mod,
-      "polr" = \(formula, data, ...) {
-        res <- try(polr(formula, data, method = "probit", Hess = TRUE, ...))
-        if (inherits(res, "try-error"))
-          res <- Polr(formula, data, method = "probit", ...)
-        res
-      },
+      "polr" = \(formula, data, ...)
+      Polr(formula, data, method = "probit", ...),
       "weibull" = \(formula, data, ...)
       Survreg(formula, data, dist = "loglogistic", ..., prob = prob),
       "lm" = \(formula, data, ...)

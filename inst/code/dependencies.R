@@ -13,5 +13,5 @@ pkgs <- c("MASS", "SimDesign", "coin", "colorspace", "cotram", "generalhoslem",
 remotes::install_cran(pkgs)
 
 ### Install tramicp and helpers locally
-remotes::install_local()
-remotes::install_local("inst/helpers")
+remotes::install_local(force = TRUE)
+remotes::install_local("inst/helpers", force = TRUE)

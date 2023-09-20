@@ -88,8 +88,8 @@ affect_variance <- FALSE
 
 dags <- if (fixed) {
   lapply(1:ndags, \(iter) {
-    tcfx <- .rcfx(nanc, panc, FALSE, sd = sqrt(0.6))
-    tcfc <- .rcfx(ndec, pdec, FALSE, sd = sqrt(0.6))
+    tcfx <- .rcfx(nanc, panc, FALSE, sd = sqrt(0.9))
+    tcfc <- .rcfx(ndec, pdec, FALSE, sd = sqrt(0.9))
     tcfe <- .rcfx(nanc + ndec, penv, FALSE, sd = sde)
     if (spec == "larger") {
       tcfx[1] <- tcfx[1] * 2.5

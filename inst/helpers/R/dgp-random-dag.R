@@ -63,7 +63,7 @@ dgp_random_dag <- function(
   ddat <- rmvDAG(n, pa_dag, errDist = errDistAnY, mix = mixAnY)
   dE <- E[, 1:nanc] * matrix(dag$cfe[1:nanc], nrow = n, ncol = nanc, byrow = TRUE)
   if (affect_variance)
-    ddat <- (1 + log(1 + exp(dE))) * ddat
+    ddat <- (1 + log(1 + abs(dE))) * ddat
   ddat <- ddat + dE
   if (standardize) ddat <- scale(ddat)
   dat <- data.frame(ddat)
@@ -93,7 +93,7 @@ dgp_random_dag <- function(
   ch_dat <- ch_dat + matrix(as.numeric(ncY), nrow = n, ncol = ndec) *
     matrix(cfc, nrow = n, ncol = ndec, byrow = TRUE) + ddat %*% cfr
   if (affect_variance)
-    ch_dat <- (1 + log(1 + exp(cE))) * ch_dat
+    ch_dat <- (1 + log(1 + abs(cE))) * ch_dat
   ch_dat <- ch_dat + cE
   if (standardize) ch_dat <- scale(ch_dat)
   ch_dat <- data.frame(ch_dat)
