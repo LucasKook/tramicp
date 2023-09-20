@@ -1,5 +1,4 @@
-combs <- c("confint" = "independence", "wald" = "wald",
-           "residual" = "independence", "residual" = "HSIC")
+combs <- c("wald" = "wald", "residual" = "independence", "residual" = "HSIC")
 
 dtypes <- list(
   "boxcox" = BoxCoxICP,
@@ -65,7 +64,7 @@ test_that("All aliases work", {
   })
 
   expect_error(polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = "confint",
-                        verbose = FALSE, greedy = TRUE))
+                       verbose = FALSE, greedy = TRUE))
 
 })
 
