@@ -19,6 +19,10 @@
 #'     set is not rejected (the resulting intersection will always be empty).
 #'     Default is \code{FALSE} and can be over-written by setting
 #'     \code{options(stop_if_empty_set_invariant = TRUE)}.
+#' @param wald_test_interactions Logical; whether to test for interactions between
+#'     residuals and environments when using \code{type = "wald"}
+#'     (\code{wald_test_interactions = TRUE}, the default) or main effects only
+#'     (\code{wald_test_interactions = FALSE}).
 #'
 #' @return List of dicp controls
 #'
@@ -39,7 +43,8 @@ dicp_controls <- function(
     B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
     xtrafo = trafo, ytrafo = trafo, residuals = "residuals",
     crossfit = getOption("crossfit", default = FALSE),
-    stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default = FALSE)
+    stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default = FALSE),
+    wald_test_interactions = getOption("wald_test_interactions", default = TRUE)
 ) {
 
   # Type of ICP
@@ -58,7 +63,8 @@ dicp_controls <- function(
     baseline_fixed = baseline_fixed, teststat = teststat,
     distribution = distribution, xtrafo = xtrafo, ytrafo = ytrafo,
     residuals = residuals, crossfit = crossfit,
-    stop_if_empty_set_invariant = stop_if_empty_set_invariant
+    stop_if_empty_set_invariant = stop_if_empty_set_invariant,
+    wald_test_interactions = wald_test_interactions
   )
 }
 

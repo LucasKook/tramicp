@@ -126,6 +126,9 @@
     mint <- .pplus(c(paste0(c(me[tx], mand), ":", env)))
   }
 
+  if (!controls$wald_test_interactions)
+    mint <- ""
+
   ### Prepare formula
   mfm <- as.formula(
     paste0(resp, ifelse(

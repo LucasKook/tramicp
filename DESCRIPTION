@@ -2,7 +2,7 @@ Package: tramicp
 Type: Package
 Title: Invariant causal prediction for generalized linear and transformation
     models
-Version: 0.1.0
+Version: 0.0-1
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
     email = "lucasheinrich.kook@uzh.ch"))
 Description: Extends invariant causal prediction (Peters et al., 2016, <doi:>)

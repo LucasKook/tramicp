@@ -20,7 +20,8 @@ dicp_controls(
   residuals = "residuals",
   crossfit = getOption("crossfit", default = FALSE),
   stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default =
-    FALSE)
+    FALSE),
+  wald_test_interactions = getOption("wald_test_interactions", default = TRUE)
 )
 }
 \arguments{
@@ -61,6 +62,11 @@ is allowed to vary with the environments. Only takes effect when
 set is not rejected (the resulting intersection will always be empty).
 Default is \code{FALSE} and can be over-written by setting
 \code{options(stop_if_empty_set_invariant = TRUE)}.}
+
+\item{wald_test_interactions}{Logical; whether to test for interactions between
+residuals and environments when using \code{type = "wald"}
+(\code{wald_test_interactions = TRUE}, the default) or main effects only
+(\code{wald_test_interactions = FALSE}).}
 }
 \value{
 List of dicp controls
