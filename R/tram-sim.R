@@ -148,7 +148,7 @@
 
   fam <- .distr(distr)
 
-  coefs <- fam$q(exp(seq(log(prmin), log(prmax), length.out = K)))
+  coefs <- fam$q(seq(prmin, prmax, length.out = K))
   if (type == "ordered")
     coefs <- fam$q(seq(prmin, prmax, length.out = K + 1))[-1] - 1
   if (basis %in% c("linear", "log"))
