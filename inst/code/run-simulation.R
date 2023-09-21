@@ -92,8 +92,8 @@ dags <- if (fixed) {
     tcfc <- .rcfx(ndec, pdec, FALSE, sd = sqrt(0.9))
     tcfe <- .rcfx(nanc + ndec, penv, FALSE, sd = sde)
     if (spec == "larger") {
+      tcfx <- tcfx / 5
       tcfx[1] <- tcfx[1] * 2.5
-      tcfx[-1] <- tcfx[-1] / 5
       tcfc <- tcfc
     }
     random_dag(nenv = nenv, nanc = nanc, ndec = ndec, penv = penv,
