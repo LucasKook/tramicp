@@ -4,10 +4,11 @@ Title: Invariant Causal Prediction for Generalized Linear and Transformation
     Models
 Version: 0.0-1
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
-    email = "lucasheinrich.kook@uzh.ch"))
-Description: Extends invariant causal prediction (Peters et al., 2016, <doi:>)
-    to generalized linear and transformation models (Hothorn et al., 2018, <doi:>).
-    The methodology is described in Kook et al. (2023, <doi:>).
+    email = "lucasheinrich.kook@gmail.com"))
+Description: Extends invariant causal prediction (Peters et al., 2016, 
+    <doi:10.1111/rssb.12167>) to generalized linear and transformation models 
+    (Hothorn et al., 2018, <doi:10.1111/sjos.12291>).
+    The methodology is described in Kook et al. (2023, <doi:TODO>).
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.2
