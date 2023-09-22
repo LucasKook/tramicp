@@ -4,19 +4,20 @@
 
 # Invariant causal prediction for transformation models
 
-Package `tramicp` [1] implements invariant causal prediction (ICP) [2] for 
-transformation models (TRAMICP) [3], including binary logistic regression,
-Weibull regression, the Cox model, linear regression and many others. The aim of
-ICP is to discover the direct causes of a response given data from heterogeneous
-experimental settings and a potentially large pool of candidate predictors.
+Package `tramicp` [1] implements invariant causal prediction (ICP) [2] for
+transformation models [3], including binary logistic regression, Weibull
+regression, the Cox model, linear regression and many others. Methods for
+generalized linear models are also provided. The aim of ICP is to discover the
+direct causes of a response given data from heterogeneous experimental settings
+and a potentially large pool of candidate predictors.
 
 # Installation
 
-The `tramicp` package can be installed via
+The `tramicp` package can be installed via:
 ```r
+# install.packages("remotes")
 remotes::install_github("LucasKook/tramicp")
 ```
-or locally via `R CMD build`/`R CMD INSTALL`.
 
 # Using package `tramicp`
 
