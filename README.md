@@ -2,7 +2,7 @@
 [![R-CMD-check](https://github.com/LucasKook/tramicp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LucasKook/tramicp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# Invariant causal prediction for transformation models
+# Model-based causal feature selection for general response types
 
 Package `tramicp` [1] implements invariant causal prediction (ICP) [2] for
 transformation models [3], including binary logistic regression, Weibull
