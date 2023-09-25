@@ -107,10 +107,13 @@ Model-based causal feature selection for general response types. arXiv preprint.
 [2] Peters, J., Bühlmann, P., & Meinshausen, N. (2016). Causal inference by 
 using invariant prediction: identification and confidence intervals. Journal of 
 the Royal Statistical Society Series B: Statistical Methodology, 78(5), 947-1012.
+[doi:10.1111/rssb.12167](http://dx.doi.org/10.1111/rssb.12167)
 
 [3] Hothorn, T., Möst, L., & Bühlmann, P. (2018). Most likely transformations.
 Scandinavian Journal of Statistics, 45(1), 110-134.
+[doi:10.1111/rssb.12017](http://dx.doi.org/10.1111/rssb.12017)
 
 [4] Shah, R. D., & Peters, J. (2020). The hardness of conditional independence
 testing and the generalised covariance measure.
+[doi:10.1214/19-aos1857](http://dx.doi.org/10.1214/19-aos1857)
 
