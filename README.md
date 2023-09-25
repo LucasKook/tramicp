@@ -112,7 +112,7 @@ the Royal Statistical Society Series B: Statistical Methodology, 78(5), 947-1012
 
 [3] Hothorn, T., Möst, L., & Bühlmann, P. (2018). Most likely transformations.
 Scandinavian Journal of Statistics, 45(1), 110-134.
-[doi:10.1111/rssb.12017](http://dx.doi.org/10.1111/rssb.12017)
+[doi:10.1111/sjos.12291](http://dx.doi.org/10.1111/sjos.12291)
 
 [4] Shah, R. D., & Peters, J. (2020). The hardness of conditional independence
 testing and the generalised covariance measure.
