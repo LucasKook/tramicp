@@ -155,7 +155,7 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
                    controls = controls, mandatory = mandatory, ... = ...)
 
       if (set == 1 && controls$stop_if_empty_set_invariant &&
-          ret[[1]]$test$p.value > controls$alpha) {
+          .get_pvalue(ret[[1]]$test) > controls$alpha) {
       if (verbose && interactive())
         message("\nEmpty set is not rejected. Stopping.")
         tests <- ret
