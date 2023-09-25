@@ -316,7 +316,7 @@ residuals.binglm <- function(object, ...) {
     ### Test
     r <- matrix(controls$residuals(m), ncol = 1)
     e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
-    if (controls$ctest == "gcm.test" & set != "1") # Fit RF for GCM-type test
+    if (controls$ctest == "gcm.test") # Fit RF for GCM-type test
       e <- .ranger_gcm(e, c(meff, mand), set, data, controls)
   }
 
