@@ -83,6 +83,37 @@ survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   ret
 }
 
+#' ICP for the classical (semi-parametric) Cox model
+#' @rdname survival.coxphICP
+#' @inheritParams dicp
+#' @inheritDotParams dicp
+#'
+#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
+#' @export
+#'
+#' @importFrom survival coxph
+#'
+#' @examples
+#' set.seed(123)
+#' d <- dgp_dicp(mod = "coxph")
+#' if (require("survival")) {
+#'   d$surv <- Surv(d$Y)
+#'   coxphICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
+#'
+coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                     test = "gcm.test", controls = NULL, alpha = 0.05,
+                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
+                     mandatory = NULL, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = coxph,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              max_size = max_size, mandatory = mandatory, ... = ...)
+  ret$call <- call
+  ret
+}
+
 #' ICP for Continuous outcome logistic regression
 #'
 #' @inheritParams dicp

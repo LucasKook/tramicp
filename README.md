@@ -76,6 +76,7 @@ with an alias, as shown in the table below.
 | `ColrICP()`         | `tram::Colr()`             |
 | `cotramICP()`       | `cotram::cotram()`         |
 | `CoxphICP()`        | `tram::Coxph()`            |
+| `coxphICP()`        | `survival::Coxph()`        |
 | `glmICP()`          | `stats::glm()`             |
 | `LehmannICP()`      | `tram::Lehmann()`          |
 | `LmICP()`           | `tram::Lm()`               |

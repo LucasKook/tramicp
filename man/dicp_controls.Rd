@@ -19,8 +19,7 @@ dicp_controls(
   ytrafo = trafo,
   residuals = "residuals",
   crossfit = getOption("crossfit", default = FALSE),
-  stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default =
-    FALSE),
+  stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default = FALSE),
   wald_test_interactions = getOption("wald_test_interactions", default = TRUE)
 )
 }
