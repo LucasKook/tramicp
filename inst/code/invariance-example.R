@@ -7,6 +7,7 @@ set.seed(24101968)
 
 devtools::load_all()
 devtools::load_all("inst/helpers")
+library("ranger")
 library("cotram")
 library("tidyverse")
 

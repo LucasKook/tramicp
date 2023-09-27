@@ -76,7 +76,7 @@ ICP for parametric survival models
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "weibull")
+d <- dgp_dicp(mod = "weibull", n = 300)
 SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

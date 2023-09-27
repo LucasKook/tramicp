@@ -76,7 +76,7 @@ nonparametric ICP with ranger GCM
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "binary")
+d <- dgp_dicp(mod = "binary", n = 300)
 rangerICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

@@ -76,7 +76,7 @@ ICP for normal linear regression (using stats::lm)
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "lm")
+d <- dgp_dicp(mod = "lm", n = 300)
 lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

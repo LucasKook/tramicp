@@ -6,6 +6,8 @@ set.seed(1234)
 # DEPs --------------------------------------------------------------------
 
 devtools::load_all()
+library("ranger")
+library("multcomp")
 library("tidyverse")
 library("tramnet")
 library("glmnet")

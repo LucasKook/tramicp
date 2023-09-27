@@ -32,15 +32,15 @@ bootstrap_stability <- function(
 
   ### Progress bar
   if (verbose && interactive())
-    pb <- txtProgressBar(min = 0, max = B, style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = B, style = 3)
 
   ### Repeat updated call B times with boostrap sample of the data
   res <- list()
   for (b in seq_len(B)) {
     if (verbose && interactive())
-      setTxtProgressBar(pb, b)
+      utils::setTxtProgressBar(pb, b)
     idx <- sample.int(nrow(d), size, replace = TRUE)
-    tmp <- update(object, data = d[idx, ], verbose = FALSE)
+    tmp <- stats::update(object, data = d[idx, ], verbose = FALSE)
     res[[b]] <- if (return_all) tmp else
       tmp[["candidate_causal_predictors", exact = TRUE]]
   }

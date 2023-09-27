@@ -3,6 +3,7 @@
 
 # DEPs --------------------------------------------------------------------
 
+library("ranger")
 devtools::load_all()
 
 # DGP ---------------------------------------------------------------------
@@ -17,7 +18,7 @@ dgp <- function(n, cf) {
   ### For cf = 0.5, we have cancellation and the empty set becomes invariant
   Y <- qchisq(pnorm(rnorm(n) - 0.5 * X1 + cf * X2), df = 3)
   ### Return
-  data.frame(Y = Y, X1 = X1, X2 = X2, E = E)
+  data.frame(Y = Y, X1 = X1, X2 = X2, E = factor(E))
 }
 
 # RUN ---------------------------------------------------------------------

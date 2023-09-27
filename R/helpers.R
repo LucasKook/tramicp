@@ -16,13 +16,13 @@
 
 .build_iform <- function(formula) {
   tms <- .get_terms(formula)
-  as.formula(paste0("~", paste0(tms$ie, collapse = "+")))
+  stats::as.formula(paste0("~", paste0(tms$ie, collapse = "+")))
 }
 
 .get_terms <- function(formula) {
   if (is.null(formula))
     return(NULL)
-  atms <- terms(formula)
+  atms <- stats::terms(formula)
   tms <- attr(atms, "term.labels")
   resp <- all.vars(formula)[1]
   ridx <- grep("|", tms, fixed = TRUE)
@@ -48,28 +48,26 @@
   Reduce(intersect, sets[idx])
 }
 
-#' @importFrom MASS polr
-#' @import tram
 .mod_from_name <- function(mod, prob = c(0.001, 0.999), spec = "correct") {
   if (spec != "link") {
     switch(
       mod,
       "polr" = \(formula, data, ...)
-      Polr(formula, data, ...),
+      tram::Polr(formula, data, ...),
       "weibull" = \(formula, data, ...)
-      Survreg(formula, data, ..., prob = prob),
+      tram::Survreg(formula, data, ..., prob = prob),
       "lm" = \(formula, data, ...)
-      Lm(formula, data, ..., prob = prob),
+      tram::Lm(formula, data, ..., prob = prob),
       "coxph" = \(formula, data, ...)
-      Coxph(formula, data, prob = prob, ...),
+      tram::Coxph(formula, data, prob = prob, ...),
       "colr" = \(formula, data, ...)
-      Colr(formula, data, ..., prob = prob),
+      tram::Colr(formula, data, ..., prob = prob),
       "boxcox" = \(formula, data, ...)
-      BoxCox(formula, data, ..., prob = prob),
+      tram::BoxCox(formula, data, ..., prob = prob),
       "cotram" = \(formula, data, ...)
       cotram::cotram(formula, data, ..., log_first = FALSE, prob = prob[2]),
       "binary" = \(formula, data, ...) {
-        m <- stats::glm(formula, data, ..., family = binomial(link = "logit"))
+        m <- stats::glm(formula, data, ..., family = stats::binomial(link = "logit"))
         structure(m, class = c("binglm", class(m)))
       }
     )
@@ -77,22 +75,22 @@
     switch(
       mod,
       "polr" = \(formula, data, ...)
-      Polr(formula, data, method = "probit", ...),
+      tram::Polr(formula, data, method = "probit", ...),
       "weibull" = \(formula, data, ...)
-      Survreg(formula, data, dist = "loglogistic", ..., prob = prob),
+      tram::Survreg(formula, data, dist = "loglogistic", ..., prob = prob),
       "lm" = \(formula, data, ...)
-      Survreg(formula, data, dist = "logistic", ..., prob = prob),
+      tram::Survreg(formula, data, dist = "logistic", ..., prob = prob),
       "coxph" = \(formula, data, ...)
-      Colr(formula, data, prob = prob, ...),
+      tram::Colr(formula, data, prob = prob, ...),
       "colr" = \(formula, data, ...)
-      Coxph(formula, data, ..., prob = prob),
+      tram::Coxph(formula, data, ..., prob = prob),
       "boxcox" = \(formula, data, ...)
-      Colr(formula, data, ..., prob = prob),
+      tram::Colr(formula, data, ..., prob = prob),
       "cotram" = \(formula, data, ...)
       cotram::cotram(formula, data, ..., method = "probit", log_first = FALSE,
                      prob = prob[2]),
       "binary" = \(formula, data, ...) {
-        m <- stats::glm(formula, data, ..., family = binomial(link = "probit"))
+        m <- stats::glm(formula, data, ..., family = stats::binomial(link = "probit"))
         structure(m, class = c("binglm", class(m)))
       }
     )
@@ -136,13 +134,13 @@ intersect_intervals <- function(...) {
 .ci <- function(alpha, ms, nenv) {
   # TODO: Extend to more than two environments
   talpha <- alpha / nenv
-  ells <- lapply(ms, \(m) list(c = coef(m), C = vcov(m)))
+  ells <- lapply(ms, \(m) list(c = stats::coef(m), C = stats::vcov(m)))
   nempty <- intersect.ellipses(ells[[1]]$c, ells[[2]]$c, ells[[1]]$C,
                                ells[[2]]$C, talpha)
   if (!nempty) return(-talpha) else talpha
 }
 
-# Taken from https://github.com/runesen/icph.git
+# Adapted from https://github.com/runesen/icph.git
 intersect.ellipses <- function(c1, c2, C1, C2, alpha){
 
   if (alpha == 1)
@@ -152,7 +150,7 @@ intersect.ellipses <- function(c1, c2, C1, C2, alpha){
     return(TRUE)
 
   m <- length(c1)
-  q <- sqrt(qchisq(1 - alpha, df = m))
+  q <- sqrt(stats::qchisq(1 - alpha, df = m))
 
   if (m == 1) {
     intersect <- c(abs(c1 - c2) < (sqrt(C1) + sqrt(C2)) * q)
@@ -201,7 +199,7 @@ intersect.ellipses <- function(c1, c2, C1, C2, alpha){
   intersect
 }
 
-# Taken from https://github.com/runesen/icph.git
+# Adapted from https://github.com/runesen/icph.git
 makePositive <- function(v, silent = TRUE) {
   w <- which(v < 10 ^ (-14))
   if (length(w) > 0 &
@@ -219,10 +217,10 @@ makePositive <- function(v, silent = TRUE) {
 
 #' @method residuals binglm
 residuals.binglm <- function(object, ...) {
-  resp <- model.response(model.frame(object))
+  resp <- stats::model.response(stats::model.frame(object))
   success <- if (is.factor(resp)) levels(resp)[2] else sort(unique(resp))[2]
     y <- c(0, 1)[1 + as.numeric(resp == success)]
-  y - predict(object, type = "response")
+  y - stats::predict(object, type = "response")
 }
 
 .check_depth <- function(x) {
@@ -284,11 +282,12 @@ residuals.binglm <- function(object, ...) {
 }
 
 .empty_output <- function(set, pv = 0) {
-  structure(list(set = set, test = list("p.value" = pv, test = NA), coef = NA, tram = NA),
-            class = "dICPtest")
+  structure(list(set = set, test = list("p.value" = pv, test = NA), coef = NA,
+                 tram = NA), class = "dICPtest")
 }
 
-.compute_residuals <- function(formula, data, meff, mand, set, controls, modFUN, env, ...) {
+.compute_residuals <- function(formula, data, meff, mand, set, controls, modFUN,
+                               env, ...) {
   if (controls$crossfit) {
     idx <- sample.int(nrow(data), floor(nrow(data) / 2))
     rs <- numeric(nrow(data))
@@ -300,7 +299,7 @@ residuals.binglm <- function(object, ...) {
 
       ### Test
       r <- matrix(controls$residuals(m, newdata = test), ncol = 1)
-      e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
+      e <- .rm_int(stats::model.matrix(stats::as.formula(env$fml), data = data))
       if (controls$ctest == "gcm.test" & set != "1") # Fit RF for GCM-type test
         e <- .ranger_gcm_cf(e[sgn * idx, ], c(meff, mand), set, train, controls,
                             e[-sgn * idx, ], test)
@@ -315,7 +314,7 @@ residuals.binglm <- function(object, ...) {
 
     ### Test
     r <- matrix(controls$residuals(m), ncol = 1)
-    e <- .rm_int(model.matrix(as.formula(env$fml), data = data))
+    e <- .rm_int(stats::model.matrix(stats::as.formula(env$fml), data = data))
     if (controls$ctest == "gcm.test") # Fit RF for GCM-type test
       e <- .ranger_gcm(e, c(meff, mand), set, data, controls)
   }
@@ -330,12 +329,11 @@ residuals.binglm <- function(object, ...) {
     return(resids)
   }
   data[["ranger_e"]] <- e
-  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "ranger_e")
+  mfe <- stats::reformulate(sapply(meff, .sub_smooth_terms), "ranger_e")
   rf <- RANGER(mfe, data = data)
-  residuals(rf)
+  stats::residuals(rf)
 }
 
-#' @importFrom ranger ranger
 .ranger_gcm_cf <- function(e, meff, set, data, controls, etest, test) {
   if (NCOL(e) != 1L) {
     resids <- apply(e, 2, .ranger_gcm_cf, meff = meff, set = set, data = data,
@@ -343,9 +341,9 @@ residuals.binglm <- function(object, ...) {
     return(resids)
   }
   data[["ranger_e"]] <- e
-  mfe <- reformulate(sapply(meff, .sub_smooth_terms), "ranger_e")
+  mfe <- stats::reformulate(sapply(meff, .sub_smooth_terms), "ranger_e")
   rf <- RANGER(mfe, data = data)
-  residuals(rf, newdata = test, newy = etest)
+  stats::residuals(rf, newdata = test, newy = etest)
 }
 
 .pplus <- function(terms) {
@@ -353,7 +351,7 @@ residuals.binglm <- function(object, ...) {
 }
 
 RANGER <- function(formula, data, ...) {
-  response <- model.response(model.frame(formula, data))
+  response <- stats::model.response(stats::model.frame(formula, data))
   is_ordered <- is.ordered(response)
   is_binary <- is.factor(response) && !is_ordered
   tms <- .get_terms(formula)
@@ -369,7 +367,8 @@ RANGER <- function(formula, data, ...) {
       return(structure(c(list(mean = mean(as.numeric(response))), tmp),
                        class = "ranger"))
   }
-  ret <- ranger(formula, data, probability = is_binary | is_ordered, ...)
+  ret <- ranger::ranger(formula, data, probability = is_binary | is_ordered,
+                        ...)
   structure(c(ret, tmp), class = "ranger")
 }
 
@@ -384,7 +383,7 @@ residuals.ranger <- function(object, newdata = NULL, newy = NULL, ...) {
     newy <- object$response
   if (!is.null(object$mean))
     return(newy - object$mean)
-  preds <- predict(object, data = newdata)$predictions
+  preds <- stats::predict(object, data = newdata)$predictions
   if (object$is_ordered)
     preds <- preds %*% seq_len(ncol(preds))
   if (object$is_binary)

@@ -1,7 +1,6 @@
 Package: tramicp
 Type: Package
-Title: Invariant Causal Prediction for Generalized Linear and Transformation
-    Models
+Title: Model-Based Feature Selection for General Response Types
 Version: 0.0-1
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
     email = "lucasheinrich.kook@gmail.com"))
@@ -13,8 +12,8 @@ Description: Extends invariant causal prediction (Peters et al., 2016,
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Depends: tram, mlt, R (>= 4.0.0)
-Imports: coin, multcomp, sandwich, survival, variables, basefun, methods, MASS, 
-    cotram, dHSIC, ranger
+Depends: R (>= 4.0.0)
+Imports: tram, mlt, coin, multcomp, survival, variables, basefun, MASS, 
+    cotram, dHSIC, ranger, sandwich
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3

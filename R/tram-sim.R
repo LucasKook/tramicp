@@ -20,31 +20,7 @@
 #' @param add See \code{\link[tram]{tram}}
 #'
 #' @return Object of class \code{"mlt"}
-#' @export
 #'
-#' @examples
-#' # Polr model
-#' m <- .tram_setup()
-#' plot(m, newdata = data.frame(X1 = 0, X2 = 0), type = "trafo", col = 1)
-#'
-#' # Weibull model
-#' m <- .tram_setup(type = "survival", cfb = c(-1,1), basis = "log")
-#' plot(m, newdata = data.frame(X1 = 0, X2 = 0), type = "trafo", col = 1)
-#'
-#' # Cox model
-#' m <- .tram_setup(type = "survival", basis = "bernstein")
-#' plot(m, newdata = data.frame(X1 = -3, X2 = -3), type = "distribution", col = 1)
-#'
-#' # Cotram
-#' m <- .tram_setup(type = "count", basis = "bernstein")
-#' plot(m, newdata = data.frame(X1 = -1, X2 = -1), type = "distribution", col = 1)
-#'
-#' # BoxCox
-#' m <- .tram_setup(type = "continuous", basis = "bernstein", distr = "Normal")
-#' plot(m, newdata = data.frame(X1 = -1, X2 = -1), type = "distribution", col = 1)
-#'
-#' @import variables
-#' @import mlt
 #'
 .tram_setup <- function(
   type = c("ordered", "continuous", "survival", "count"),
@@ -72,41 +48,41 @@
 
   # Response basis
   if (type == "ordered")
-    y <- ordered_var(name = "Y", levels = 1:K)
+    y <- variables::ordered_var(name = "Y", levels = 1:K)
   else
-    y <- numeric_var(name = "Y", bounds = bounds, support = supp, add = add)
+    y <- variables::numeric_var(name = "Y", bounds = bounds, support = supp,
+                                add = add)
   ybasis <- .rbasis(y = y, type = type, basis = basis, distr = distr, K = K,
                     interacting = interacting, extrapolate = extrapolate,
                     log_first = log_first, cfb = cfb)
   coefs <- ybasis$coefs
 
   # Covariate basis
-  Xs <- do.call("c", lapply(numeric_vars, numeric_var))
+  Xs <- do.call("c", lapply(numeric_vars, variables::numeric_var))
 
   # non-prop
   if (interacting) {
-    ia <- factor_var(factor_vars, levels = factor_levels)
-    iab <- as.basis(~ 0 + E, data = ia, remove_intercept = TRUE)
+    ia <- variables::factor_var(factor_vars, levels = factor_levels)
+    iab <- basefun::as.basis(~ 0 + E, data = ia, remove_intercept = TRUE)
     coefs <- c(coefs, ia_fac * coefs)
   } else {
     iab <- NULL
   }
 
-  m <- ctm(
+  m <- mlt::ctm(
     response = ybasis[["basis"]],
     interacting = iab,
-    shifting = as.basis(
-      as.formula(paste0("~", paste0(numeric_vars, collapse = "+"))), data = Xs,
-      remove_intercept = TRUE
+    shifting = basefun::as.basis(
+      stats::as.formula(paste0("~", paste0(numeric_vars, collapse = "+"))),
+      data = Xs, remove_intercept = TRUE
     ),
-    todistr = distr, data = df
+    todistr = distr
   )
 
-  ncfs <- names(coef(m))
+  ncfs <- names(stats::coef(m))
   cfa <- c(coefs, cfx)
   names(cfa) <- ncfs
-  coef(m) <- cfa
-
+  m$coef <- cfa
   m
 
 }
@@ -129,21 +105,20 @@
   )
 }
 
-#' @import basefun
 .rbasis <- function(y, type, basis, distr, K, interacting, extrapolate,
                     log_first, cfb,
                     prmin = 0.0002, # ifelse(type == "ordered", 0.05, 0.0002),
                     prmax = 1 - prmin) {
   if (type == "ordered")
-    ybasis <- as.basis(~ 0 + Y, data = y)
+    ybasis <- basefun::as.basis(~ 0 + Y, data = y)
   else
     ybasis <- switch(
       basis,
-      "linear" = as.basis(~ Y, data = y),
-      "log" = log_basis(y),
-      "bernstein" = Bernstein_basis(y, order = K - 1, ui = "increasing",
-                                    extrapolate = extrapolate,
-                                    log_first = log_first)
+      "linear" = basefun::as.basis(~ Y, data = y),
+      "log" = basefun::log_basis(y),
+      "bernstein" = basefun::Bernstein_basis(y, order = K - 1, ui = "increasing",
+                                             extrapolate = extrapolate,
+                                             log_first = log_first)
     )
 
   fam <- .distr(distr)
@@ -195,26 +170,26 @@
 # from {mlt} {
 .Normal <- function()
   list(parm = function(x) NULL,
-       p = pnorm, d = dnorm, q = qnorm,
+       p = stats::pnorm, d = stats::dnorm, q = stats::qnorm,
        ### see also MiscTools::ddnorm
-       dd = function(x) -dnorm(x = x) * x,
-       ddd = function(x) dnorm(x = x) * (x^2 - 1),
+       dd = function(x) -stats::dnorm(x = x) * x,
+       ddd = function(x) stats::dnorm(x = x) * (x^2 - 1),
        dd2d = function(x) -x,
        call = ".Normal",
        name = "normal")
 
 .Exponential <- function()
   list(parm = function(x) NULL,
-       p = pexp, d = dexp, q = qexp,
-       dd = function(x) -dexp(x = x),
-       ddd = function(x) dexp(x = x),
+       p = stats::pexp, d = stats::dexp, q = stats::qexp,
+       dd = function(x) -stats::dexp(x = x),
+       ddd = function(x) stats::dexp(x = x),
        dd2d = function(x) -1,
        call = ".Exponential",
        name = "exponential")
 
 .Logistic <- function()
   list(parm = function(x) NULL,
-       p = plogis, d = dlogis, q = qlogis,
+       p = stats::plogis, d = stats::dlogis, q = stats::qlogis,
        dd = function(x) {
          ex <- exp(x)
          (ex - ex^2) / (1 + ex)^3

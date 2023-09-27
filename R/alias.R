@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "boxcox")
+#' d <- dgp_dicp(mod = "boxcox", n = 300)
 #' BoxCoxICP(Y ~ X2, data = d, env = ~ E)
 #'
 BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -18,7 +18,7 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                       mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = BoxCox,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::BoxCox,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -36,7 +36,7 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "weibull")
+#' d <- dgp_dicp(mod = "weibull", n = 300)
 #' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -44,7 +44,7 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                        mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = Survreg,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::Survreg,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -60,11 +60,9 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
-#' @importFrom survival survreg
-#'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "weibull")
+#' d <- dgp_dicp(mod = "weibull", n = 300)
 #' if (require("survival")) {
 #'   d$surv <- Surv(d$Y)
 #'   survregICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
@@ -75,7 +73,7 @@ survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                         baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                         mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = survreg,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = survival::survreg,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -91,11 +89,9 @@ survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
-#' @importFrom survival coxph
-#'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph")
+#' d <- dgp_dicp(mod = "coxph", n = 300)
 #' if (require("survival")) {
 #'   d$surv <- Surv(d$Y)
 #'   coxphICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
@@ -106,7 +102,7 @@ coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                      mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = coxph,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = survival::coxph,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -124,7 +120,7 @@ coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "colr")
+#' d <- dgp_dicp(mod = "colr", n = 300)
 #' ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
 #'
 ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -132,7 +128,7 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                     mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = Colr,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::Colr,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -150,7 +146,7 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph")
+#' d <- dgp_dicp(mod = "coxph", n = 300)
 #' CoxphICP(Y ~ X2, data = d, env = ~ E)
 #'
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -158,7 +154,7 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                      mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = Coxph,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::Coxph,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -176,7 +172,7 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph")
+#' d <- dgp_dicp(mod = "coxph", n = 300)
 #' LehmannICP(Y ~ X2, data = d, env = ~ E)
 #'
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -184,7 +180,7 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                        mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = Lehmann,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::Lehmann,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -202,7 +198,7 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "lm")
+#' d <- dgp_dicp(mod = "lm", n = 300)
 #' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -210,7 +206,7 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                   mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = Lm,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::Lm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -226,11 +222,9 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
-#' @importFrom stats lm
-#'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "lm")
+#' d <- dgp_dicp(mod = "lm", n = 300)
 #' lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -238,7 +232,7 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                    mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = lm,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = stats::lm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -256,7 +250,7 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "polr")
+#' d <- dgp_dicp(mod = "polr", n = 300)
 #' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -264,7 +258,7 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                     mandatory = NULL, ...) {
   call <- match.call()
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = Polr,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = tram::Polr,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -280,11 +274,9 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
-#' @importFrom MASS polr
-#'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "polr")
+#' d <- dgp_dicp(mod = "polr", n = 300)
 #' polrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -294,17 +286,17 @@ polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   call <- match.call()
   if (type == "confint")
     stop("`type = \"confint\"` not implemented for ICP with `MASS::polr()`.")
-  modF <- polr
+  modF <- MASS::polr
   if (type != "residual")
-    modF <- function(formula, data, ...) polr(formula, data, Hess = TRUE, ...)
+    modF <- function(formula, data, ...) MASS::polr(formula, data, Hess = TRUE, ...)
   if (is.character(test))
     test <- match.arg(test, .implemented_tests())
   if (is.null(controls))
     controls <- dicp_controls(match.arg(
       type, c("residual", "wald", "mcheck", "confint")), test, alpha = alpha)
   controls$vcov <- function(object) {
-    cf <- coef(object)
-    vcov <- vcov(object)
+    cf <- stats::coef(object)
+    vcov <- stats::vcov(object)
     vcov[names(cf), names(cf)]
   }
   ret <- dicp(formula = formula, data = data, env = env, modFUN = modF,
@@ -316,12 +308,11 @@ polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' @method residuals polr
-#' @importFrom sandwich estfun
 #' @exportS3Method residuals polr
 #'
 residuals.polr <- function(object, ...) {
   K <- length(object$zeta)
-  sc <- estfun(object)
+  sc <- sandwich::estfun(object)
   sc <- sc[, rev(seq_len(ncol(sc)))]
   -unname(rowSums(sc[, seq_len(K)]))
 }
@@ -336,7 +327,7 @@ residuals.polr <- function(object, ...) {
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "binary")
+#' d <- dgp_dicp(mod = "binary", n = 300)
 #' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
 #'
 glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -346,14 +337,15 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   call <- match.call()
   if (is.character(test))
     test <- match.arg(test, .implemented_tests())
-  if (!is.null(fam <- list(...)$family) && (identical(fam, binomial) || fam == "binomial")) {
+  if (!is.null(fam <- list(...)$family) && (identical(fam, stats::binomial) ||
+                                            fam == "binomial")) {
     resid <- "residuals.binglm"
   }
   if (is.null(controls))
     controls <- dicp_controls(type, test, alpha = alpha,
                               baseline_fixed = baseline_fixed,
                               residuals = resid)
-  ret <- dicp(formula = formula, data = data, env = env, modFUN = glm,
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = stats::glm,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)
@@ -371,7 +363,7 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "cotram")
+#' d <- dgp_dicp(mod = "cotram", n = 300)
 #' cotramICP(Y ~ X2, data = d, env = ~ E)
 #'
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
@@ -397,7 +389,7 @@ cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @examples
 #' set.seed(123)
-#' d <- dgp_dicp(mod = "binary")
+#' d <- dgp_dicp(mod = "binary", n = 300)
 #' rangerICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 rangerICP <- function(formula, data, env, verbose = TRUE, type = "residual",
