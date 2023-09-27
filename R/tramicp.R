@@ -59,12 +59,13 @@ dicp <- function(
 ) {
 
   call <- match.call()
+  type <- match.arg(type)
 
   ### Preliminary checks
   if (is.character(test))
     test <- match.arg(test, .implemented_tests())
   if (is.null(controls))
-    controls <- dicp_controls(match.arg(type), test, alpha = alpha,
+    controls <- dicp_controls(type, test, alpha = alpha,
                               baseline_fixed = baseline_fixed)
   .check_args(formula, data, env, modFUN, type, test)
 
@@ -109,7 +110,7 @@ dicp <- function(
   ### Return
   structure(list(candidate_causal_predictors = inv, set_pvals = pvals,
                  predictor_pvals = ipv, tests = tests, controls = controls,
-                 call = call), class = "dICP", type = match.arg(type),
+                 call = call), class = "dICP", type = type,
             test = controls$test_name, env = env, greedy = greedy)
 
 }
