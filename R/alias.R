@@ -1,9 +1,9 @@
 # Model aliases
 
-#' ICP for Box-Cox type regression models
+#' Aliases for implemented model classes
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
@@ -27,11 +27,10 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for parametric survival models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -53,11 +52,9 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for parametric survival models
-#' @rdname survival.survregICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -82,11 +79,9 @@ survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for the classical (semi-parametric) Cox model
-#' @rdname survival.coxphICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -111,11 +106,10 @@ coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for Continuous outcome logistic regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -137,11 +131,10 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for Cox proportional hazards regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -163,11 +156,10 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for Lehmann regression models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -189,11 +181,10 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for normal linear regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -215,11 +206,9 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for normal linear regression (using stats::lm)
-#' @rdname statslmICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -241,11 +230,10 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for cumulative ordinal regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -267,11 +255,9 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for cumulative ordinal regression using \code{MASS::polr()}
-#' @rdname masspolrICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -318,11 +304,10 @@ residuals.polr <- function(object, ...) {
 }
 
 #' ICP for generalized linear models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -354,11 +339,10 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for count transformation models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -380,11 +364,10 @@ cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' nonparametric ICP with ranger GCM
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}.
 #' @export
 #'
 #' @examples
