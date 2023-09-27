@@ -7,6 +7,7 @@ set.seed(-42)
 
 devtools::load_all()
 devtools::load_all("inst/helpers")
+library("ranger")
 library("pROC")
 library("tidyverse")
 theme_set(theme_bw())

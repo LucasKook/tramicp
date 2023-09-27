@@ -76,7 +76,7 @@ ICP for cumulative ordinal regression
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "polr")
+d <- dgp_dicp(mod = "polr", n = 300)
 PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 
 }

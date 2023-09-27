@@ -8,15 +8,15 @@ dgp_dicp(
   n = 1000,
   K = 6,
   nenv = 2,
-  bx3 = rnorm(1),
-  ge = rnorm(nenv),
-  ae = rnorm(nenv),
+  bx3 = stats::rnorm(1),
+  ge = stats::rnorm(nenv),
+  ae = stats::rnorm(nenv),
   mod = "polr",
   interacting = FALSE,
   rm_censoring = TRUE,
   cfb = c(-3, 1.35),
-  cfx = rnorm(2),
-  bx2x1 = rnorm(1)
+  cfx = stats::rnorm(2),
+  bx2x1 = stats::rnorm(1)
 )
 }
 \arguments{

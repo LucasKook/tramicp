@@ -43,8 +43,6 @@
 #'     }
 #'
 #' @export
-#' @importFrom dHSIC dhsic.test
-#' @importFrom multcomp glht
 #'
 #' @examples
 #' set.seed(12)
@@ -78,11 +76,11 @@ dicp <- function(
   if (is.null(max_size))
     max_size <- length(me)
   max_size <- min(max_size, length(me))
-  ps <- lapply(0:max_size, combn, x = length(me))
+  ps <- lapply(0:max_size, utils::combn, x = length(me))
 
   ### Options
   if (verbose && interactive())
-    pb <- txtProgressBar(min = 0, max = length(ps), style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = length(ps), style = 3)
 
   ### Run invariant subset search
   out <- .invariant_subset_search(
@@ -148,7 +146,7 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
     for (set in seq_along(ps)) {
 
       if (verbose && interactive())
-        setTxtProgressBar(pb, set)
+        utils::setTxtProgressBar(pb, set)
 
       ret <- apply(ps[[set]], 2, controls$type_fun, me = me, resp = resp,
                    set = set, env = etms, modFUN = modFUN, data = data,
@@ -173,7 +171,7 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
     for (set in seq_along(lps)) {
 
       if (verbose && interactive())
-        setTxtProgressBar(pb, set)
+        utils::setTxtProgressBar(pb, set)
 
       if (length(MI > 0) && any(unlist(MI) %in% lps[[set]])) {
         tests[[set]] <- .empty_output(me[lps[[set]]], 0)

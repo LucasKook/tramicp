@@ -76,7 +76,7 @@ ICP for the classical (semi-parametric) Cox model
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "coxph")
+d <- dgp_dicp(mod = "coxph", n = 300)
 if (require("survival")) {
   d$surv <- Surv(d$Y)
   coxphICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)

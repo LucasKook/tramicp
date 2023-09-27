@@ -76,7 +76,7 @@ ICP for Cox proportional hazards regression
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "coxph")
+d <- dgp_dicp(mod = "coxph", n = 300)
 CoxphICP(Y ~ X2, data = d, env = ~ E)
 
 }

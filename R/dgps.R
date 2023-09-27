@@ -23,20 +23,21 @@
 #' @export
 #'
 dgp_dicp <- function(
-  n = 1e3, K = 6, nenv = 2, bx3 = rnorm(1), ge = rnorm(nenv), ae = rnorm(nenv),
-  mod = "polr", interacting = FALSE, rm_censoring = TRUE, cfb = c(-3, 1.35),
-  cfx = rnorm(2), bx2x1 = rnorm(1)
+  n = 1e3, K = 6, nenv = 2, bx3 = stats::rnorm(1), ge = stats::rnorm(nenv),
+  ae = stats::rnorm(nenv), mod = "polr", interacting = FALSE,
+  rm_censoring = TRUE, cfb = c(-3, 1.35), cfx = stats::rnorm(2),
+  bx2x1 = stats::rnorm(1)
 ) {
 
   # Environments
-  E <- t(sapply(rep(1, n), rmultinom, size = 1, prob = rep(1, nenv)))
+  E <- t(sapply(rep(1, n), stats::rmultinom, size = 1, prob = rep(1, nenv)))
   tge <- E %*% ge
   tae <- E %*% ae
 
   # Exogenous
-  ex1 <- rnorm(n, sd = 0.5^2)
-  ex2 <- rnorm(n, sd = 0.5^2)
-  ex3 <- rnorm(n, sd = 0.5^2)
+  ex1 <- stats::rnorm(n, sd = 0.5^2)
+  ex2 <- stats::rnorm(n, sd = 0.5^2)
+  ex3 <- stats::rnorm(n, sd = 0.5^2)
 
   # Endogenous
   x2 <- tae + ex2
@@ -49,23 +50,23 @@ dgp_dicp <- function(
 
   # Response
   if (mod == "binary") {
-    ncY <- as.numeric(cbind(x1, x2) %*% cfx >= rlogis(n))
+    ncY <- as.numeric(cbind(x1, x2) %*% cfx >= stats::rlogis(n))
     Y <- factor(ncY)
     x3 <- tge + c(-0.5, 0.5)[1 + ncY] + ex3
   } else if (mod == "slm") {
-    Y <- ncY <- - cfb[1] / cfb[2] + cbind(x1, x2) %*% cfx / cfb[2] + rnorm(n)
-    x3 <- tge + Y / sd(Y) + ex3
+    Y <- ncY <- - cfb[1] / cfb[2] + cbind(x1, x2) %*% cfx / cfb[2] + stats::rnorm(n)
+    x3 <- tge + Y / stats::sd(Y) + ex3
   } else {
     m <- .tram_from_name(mod, ia = interacting, cfb = cfb, cfx = cfx)
-    Y <- simulate(m, newdata = df)
+    Y <- stats::simulate(m, newdata = df)
     if (!is.ordered(Y)) {
       if (rm_censoring)
         Y <- .R2vec(Y)
       if (mod == "cotram")
         Y <- as.integer(Y)
-      x3 <- .R2vec(Y) * bx3 / (2 * sd(Y)) + tge + ex3
+      x3 <- .R2vec(Y) * bx3 / (2 * stats::sd(Y)) + tge + ex3
     } else {
-      x3 <- as.numeric(Y) / (2 * sd(as.numeric(Y))) * bx3 + tge + ex3
+      x3 <- as.numeric(Y) / (2 * stats::sd(as.numeric(Y))) * bx3 + tge + ex3
     }
   }
 

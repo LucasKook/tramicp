@@ -26,22 +26,15 @@
 #'
 #' @return List of dicp controls
 #'
-#' @export
+#' @import tram
 #'
-#' @importFrom methods as
-#' @importFrom stats as.formula binom.test binomial coef df filter glm logLik
-#'     model.frame model.response optimize plogis predict qchisq qlogis rbinom
-#'     residuals rlogis rmultinom rnorm sd simulate t.test terms update var.test
-#'     vcov model.matrix dexp dlogis dnorm pexp pnorm qexp qnorm
-#' @importFrom utils capture.output combn data setTxtProgressBar stack
-#'     txtProgressBar write.csv
-#' @importFrom coin trafo
+#' @export
 #'
 dicp_controls <- function(
     type = "residual", test = "gcm.test", baseline_fixed = TRUE,
     alpha = 0.05, method = "gamma", kernel = c("gaussian", "discrete"),
     B = 499, vcov = "vcov", teststat = "maximum", distribution = "asymptotic",
-    xtrafo = trafo, ytrafo = trafo, residuals = "residuals",
+    xtrafo = coin::trafo, ytrafo = coin::trafo, residuals = "residuals",
     crossfit = getOption("crossfit", default = FALSE),
     stop_if_empty_set_invariant = getOption("stop_if_empty_set_invariant", default = FALSE),
     wald_test_interactions = getOption("wald_test_interactions", default = TRUE)
@@ -79,14 +72,13 @@ dicp_controls <- function(
   )
 }
 
-#' @importFrom multcomp Chisqtest
 .test_fun <- function(type, test, ctest) {
   if (is.function(test))
     return(list(test = "custom", test_fun = test_fun, test_name = ctest))
 
   if (type %in% c("wald", "partial")) {
     ctest <- "wald"
-    test_fun <- Chisqtest
+    test_fun <- multcomp::Chisqtest
   } else {
     test_fun <- switch(
       ctest,

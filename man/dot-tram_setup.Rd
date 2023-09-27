@@ -62,25 +62,3 @@ Object of class \code{"mlt"}
 \description{
 Setting up a general transformation model
 }
-\examples{
-# Polr model
-m <- .tram_setup()
-plot(m, newdata = data.frame(X1 = 0, X2 = 0), type = "trafo", col = 1)
-
-# Weibull model
-m <- .tram_setup(type = "survival", cfb = c(-1,1), basis = "log")
-plot(m, newdata = data.frame(X1 = 0, X2 = 0), type = "trafo", col = 1)
-
-# Cox model
-m <- .tram_setup(type = "survival", basis = "bernstein")
-plot(m, newdata = data.frame(X1 = -3, X2 = -3), type = "distribution", col = 1)
-
-# Cotram
-m <- .tram_setup(type = "count", basis = "bernstein")
-plot(m, newdata = data.frame(X1 = -1, X2 = -1), type = "distribution", col = 1)
-
-# BoxCox
-m <- .tram_setup(type = "continuous", basis = "bernstein", distr = "Normal")
-plot(m, newdata = data.frame(X1 = -1, X2 = -1), type = "distribution", col = 1)
-
-}

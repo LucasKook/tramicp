@@ -76,7 +76,7 @@ ICP for Continuous outcome logistic regression
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "colr")
+d <- dgp_dicp(mod = "colr", n = 300)
 ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
 
 }

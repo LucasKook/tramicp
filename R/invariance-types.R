@@ -16,26 +16,24 @@
   ### Set up formula
   tset <- me[tx]
   meff <- .pplus(tset)
-  mfm <- reformulate(c(meff, mand), resp)
+  mfm <- stats::reformulate(c(meff, mand), resp)
 
   ### Fit model
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
 
   ### Test
   r <- matrix(controls$residuals(m), ncol = 1)
-  x <- model.matrix(update(mfm, NULL ~ .), data = data)
+  x <- stats::model.matrix(stats::update(mfm, NULL ~ .), data = data)
   x <- if (all(x[, 1] == 1)) x[, -1, drop = FALSE]
   tst <- controls$test_fun(r, x, controls)
 
   ### Return
-  structure(list(set = tset, test = tst, coef = coef(m), tram = m$tram),
+  structure(list(set = tset, test = tst, coef = stats::coef(m), tram = m$tram),
             class = "dICPtest")
 
 }
 
 # Overlapping confidence regions
-#' @importFrom mlt as.mlt
-#' @importFrom stats reformulate
 .confint_invariance <- function(
     tx, me, resp, set, env, modFUN, data, controls, mandatory, ...
 ) {
@@ -48,7 +46,7 @@
   ### Prepare formula
   tset <- if (set == 1) "1" else me[tx]
   meff <- .pplus(tset)
-  mfm <- reformulate(c(meff, mand), resp)
+  mfm <- stats::reformulate(c(meff, mand), resp)
 
   ### Fit model
   uevs <- unique(data[, env])
@@ -60,17 +58,17 @@
       edat <- data[data[[env]] == e,]
       m <- do.call(modFUN, c(list(formula = mfm, data = edat), dots))
       if (inherits(m, "tram"))
-        m <- as.mlt(m)
+        m <- mlt::as.mlt(m)
       m
     }
   )
 
   ### Test
-  tst <- list(p.value = optimize(.ci, interval = c(0, 1), maximum = TRUE,
-                                 ms = ms, nenv = length(uevs))$maximum)
+  tst <- list(p.value = stats::optimize(.ci, interval = c(0, 1), maximum = TRUE,
+                                        ms = ms, nenv = length(uevs))$maximum)
   ## Return
   if (set == 1) tset <- "Empty"
-  structure(list(set = tset, test = tst, coef = lapply(ms, coef),
+  structure(list(set = tset, test = tst, coef = lapply(ms, stats::coef),
                  tram = ms[[1]]$tram), class = "dICPtest")
 
 }
@@ -85,7 +83,7 @@
   ### Prepare formula
   tset <- if (set == "1") 1 else me[tx]
   meff <- .pplus(tset)
-  mfm <- reformulate(c(meff, mand), resp)
+  mfm <- stats::reformulate(c(meff, mand), resp)
 
   ### (Cross-) fit models
   resids <- .compute_residuals(mfm, data, meff, mand, set, controls, modFUN,
@@ -101,7 +99,7 @@
 
   ### Return
   if (set == 1) tset <- "Empty"
-  structure(list(set = tset, test = tst, coef = coef(m), tram = m$tram),
+  structure(list(set = tset, test = tst, coef = stats::coef(m), tram = m$tram),
             class = "dICPtest")
 
 }
@@ -130,7 +128,7 @@
     mint <- ""
 
   ### Prepare formula
-  mfm <- as.formula(
+  mfm <- stats::as.formula(
     paste0(resp, ifelse(
       controls$baseline_fixed, "", paste0("|", .pplus(env))),
       "~", meff, if (mint != "") "+", mint)
@@ -139,14 +137,14 @@
   ### Fit
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
   if (inherits(m, "tram"))
-    m <- as.mlt(m)
-  cfs <- names(coef(m))
+    m <- mlt::as.mlt(m)
+  cfs <- names(stats::coef(m))
   tcfs <- union(unlist(sapply(paste0(":", env), \(pat) grep(pat, cfs, value = TRUE))),
                 unlist(sapply(env, \(pat) grep(pat, cfs, value = TRUE))))
 
   ### Test
   tst <- try(summary(
-    glht(m, linfct = paste(tcfs, "== 0"), vcov = controls$vcov),
+    multcomp::glht(m, linfct = paste(tcfs, "== 0"), vcov = controls$vcov),
     test = controls$test_fun()), silent = FALSE
   )
 
@@ -182,13 +180,13 @@
     mint1 <- .pplus(c(paste0(mand, ":", tset), paste0(env, ":", tset)))
     mint2 <- .pplus(paste0(mand, ":", env, ":", tset))
   }
-  mfm <- reformulate(c(meff, mint1, mint2), resp)
+  mfm <- stats::reformulate(c(meff, mint1, mint2), resp)
   m <- do.call(modFUN, c(list(formula = mfm, data = data), list(...)))
-  cfs <- names(coef(m))
+  cfs <- names(stats::coef(m))
   tcfs <- grep(paste0(":", env), grep(paste0(if (set != 1) ":", mand),
                                       cfs, value = TRUE), value = TRUE)
-  tst <- try(summary(glht(m, linfct = paste(tcfs, "== 0"),
-                          vcov = controls$vcov),
+  tst <- try(summary(multcomp::glht(m, linfct = paste(tcfs, "== 0"),
+                                    vcov = controls$vcov),
                      test = controls$test_fun()), silent = FALSE)
   if (inherits(tst, "try-error")) {
     empty_res <- list(test = list(p.value = NA), set = me[tx])

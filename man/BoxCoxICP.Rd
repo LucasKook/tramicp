@@ -76,7 +76,7 @@ ICP for Box-Cox type regression models
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "boxcox")
+d <- dgp_dicp(mod = "boxcox", n = 300)
 BoxCoxICP(Y ~ X2, data = d, env = ~ E)
 
 }

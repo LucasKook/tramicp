@@ -76,7 +76,7 @@ ICP for generalized linear models
 }
 \examples{
 set.seed(123)
-d <- dgp_dicp(mod = "binary")
+d <- dgp_dicp(mod = "binary", n = 300)
 glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
 
 }
