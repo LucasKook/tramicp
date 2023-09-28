@@ -253,8 +253,6 @@ polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                      mandatory = NULL, ...) {
   call <- match.call()
-  if (type == "confint")
-    stop("`type = \"confint\"` not implemented for ICP with `MASS::polr()`.")
   modF <- MASS::polr
   if (type != "residual")
     modF <- function(formula, data, ...) MASS::polr(formula, data, Hess = TRUE, ...)
@@ -262,7 +260,7 @@ polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
     test <- match.arg(test, .implemented_tests())
   if (is.null(controls))
     controls <- dicp_controls(match.arg(
-      type, c("residual", "wald", "mcheck", "confint")), test, alpha = alpha)
+      type, c("residual", "wald")), test, alpha = alpha)
   controls$vcov <- function(object) {
     cf <- stats::coef(object)
     vcov <- stats::vcov(object)
