@@ -275,9 +275,10 @@ see \code{\link{dicp_controls}}.}
 \item{max_size}{Numeric; maximum support size.}
 
 \item{mandatory}{A \code{formula} containing mandatory covariates, i.e.,
-covariates which by a priori knowledge are believed to be parents
-of the response or are in another way required for the model to be
-valid (for instance, random effects in a mixed model).}
+covariates which by domain knowledge are believed to be parents
+of the response or are in another way required for the environment or
+model to be valid (for instance, conditionally valid environments or
+random effects in a mixed model).}
 
 \item{...}{Further arguments passed to \code{modFUN}.}
 }

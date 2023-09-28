@@ -28,7 +28,7 @@ dicp(
 
 \item{env}{A \code{formula} specifying the environment variables (see details).}
 
-\item{modFUN}{Model function from package 'tram', i.e.,
+\item{modFUN}{Model function from 'tram' (or other packages), e.g.,
 \code{\link[tram]{BoxCox}}, \code{\link[tram]{Colr}},
 \code{\link[tram]{Polr}}, \code{\link[tram]{Lm}},
 \code{\link[tram]{Coxph}}, \code{\link[tram]{Survreg}},
@@ -37,7 +37,8 @@ dicp(
 \code{\link[survival]{survreg}}, \code{\link[survival]{coxph}},
 and \code{\link[MASS]{polr}} are also supported. See the corresponding
 alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}} or
-\code{?implemented_model_classes}.}
+\code{?implemented_model_classes}. Models from 'lme4', 'tramME',
+'glmnet' and 'mgcv' are also supported.}
 
 \item{verbose}{Logical, whether output should be verbose (default \code{TRUE}).}
 
@@ -65,9 +66,10 @@ see \code{\link{dicp_controls}}.}
 \item{max_size}{Numeric; maximum support size.}
 
 \item{mandatory}{A \code{formula} containing mandatory covariates, i.e.,
-covariates which by a priori knowledge are believed to be parents
-of the response or are in another way required for the model to be
-valid (for instance, random effects in a mixed model).}
+covariates which by domain knowledge are believed to be parents
+of the response or are in another way required for the environment or
+model to be valid (for instance, conditionally valid environments or
+random effects in a mixed model).}
 
 \item{...}{Further arguments passed to \code{modFUN}.}
 }

@@ -2,19 +2,26 @@
 #' TRAMICP Controls
 #'
 #' @inheritParams dicp
-#' @param baseline_fixed logical; whether or not the baseline transformation
+#' @param baseline_fixed Logical; whether or not the baseline transformation
 #'     is allowed to vary with the environments. Only takes effect when
-#'     \code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.
-#' @param method See \code{\link[dHSIC]{dhsic.test}}.
-#' @param B See \code{\link[dHSIC]{dhsic.test}}.
-#' @param kernel See \code{\link[dHSIC]{dhsic.test}}.
+#'     \code{type} is \code{"wald"}.
+#' @param method Only applies if \code{test = "HSIC"}. See
+#'     \code{\link[dHSIC]{dhsic.test}}.
+#' @param B For \code{test = "HSIC"}, see \code{\link[dHSIC]{dhsic.test}}.
+#' @param kernel Only applies if \code{test = "HSIC"}. See \code{\link[dHSIC]{dhsic.test}}.
 #' @param vcov (Name of) function for computing the variance-covariance matrix of a model.
-#' @param teststat See \code{\link[coin]{independence_test}}.
-#' @param distribution See \code{\link[coin]{independence_test}}.
-#' @param xtrafo See \code{\link[coin]{independence_test}}.
-#' @param ytrafo See \code{\link[coin]{independence_test}}.
-#' @param residuals (Name of) function for computing model residuals.
-#' @param crossfit Toggle for cross fitting when \code{type = "residual"}.
+#' @param teststat Only applies if \code{test = "independence"}.
+#'     See \code{\link[coin]{independence_test}}.
+#' @param distribution Only applies if \code{test = "independence"}.
+#'     See \code{\link[coin]{independence_test}}.
+#' @param xtrafo Only applies if \code{test = "independence"}.
+#'     See \code{\link[coin]{independence_test}}.
+#' @param ytrafo Only applies if \code{test = "independence"}.
+#'     See \code{\link[coin]{independence_test}}.
+#' @param residuals Character or function; (Name of) function for computing
+#'     model residuals. The default is \code{stats::residuals} with methods
+#'     dispatch.
+#' @param crossfit Logical; toggle for cross fitting when \code{type = "residual"}.
 #' @param stop_if_empty_set_invariant Logical; \code{dicp} halts if the empty
 #'     set is not rejected (the resulting intersection will always be empty).
 #'     Default is \code{FALSE} and can be over-written by setting
@@ -24,7 +31,7 @@
 #'     (\code{wald_test_interactions = TRUE}, the default) or main effects only
 #'     (\code{wald_test_interactions = FALSE}).
 #'
-#' @return List of dicp controls
+#' @return List of dicp controls containing the evaluated arguments from above.
 #'
 #' @import tram
 #'

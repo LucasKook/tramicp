@@ -34,31 +34,38 @@ and \code{"combined"}. Alternatively, a custom function for testing
 invariance of the form \code{\(r, e, controls) {...}} can be supplied,
 which outputs a list with entry \code{"p.value"}.}
 
-\item{baseline_fixed}{logical; whether or not the baseline transformation
+\item{baseline_fixed}{Logical; whether or not the baseline transformation
 is allowed to vary with the environments. Only takes effect when
-\code{type} is one of \code{"wald"}, \code{"confint"}, or \code{"mcheck"}.}
+\code{type} is \code{"wald"}.}
 
 \item{alpha}{Level of invariance test, default \code{0.05}.}
 
-\item{method}{See \code{\link[dHSIC]{dhsic.test}}.}
+\item{method}{Only applies if \code{test = "HSIC"}. See
+\code{\link[dHSIC]{dhsic.test}}.}
 
-\item{kernel}{See \code{\link[dHSIC]{dhsic.test}}.}
+\item{kernel}{Only applies if \code{test = "HSIC"}. See \code{\link[dHSIC]{dhsic.test}}.}
 
-\item{B}{See \code{\link[dHSIC]{dhsic.test}}.}
+\item{B}{For \code{test = "HSIC"}, see \code{\link[dHSIC]{dhsic.test}}.}
 
 \item{vcov}{(Name of) function for computing the variance-covariance matrix of a model.}
 
-\item{teststat}{See \code{\link[coin]{independence_test}}.}
+\item{teststat}{Only applies if \code{test = "independence"}.
+See \code{\link[coin]{independence_test}}.}
 
-\item{distribution}{See \code{\link[coin]{independence_test}}.}
+\item{distribution}{Only applies if \code{test = "independence"}.
+See \code{\link[coin]{independence_test}}.}
 
-\item{xtrafo}{See \code{\link[coin]{independence_test}}.}
+\item{xtrafo}{Only applies if \code{test = "independence"}.
+See \code{\link[coin]{independence_test}}.}
 
-\item{ytrafo}{See \code{\link[coin]{independence_test}}.}
+\item{ytrafo}{Only applies if \code{test = "independence"}.
+See \code{\link[coin]{independence_test}}.}
 
-\item{residuals}{(Name of) function for computing model residuals.}
+\item{residuals}{Character or function; (Name of) function for computing
+model residuals. The default is \code{stats::residuals} with methods
+dispatch.}
 
-\item{crossfit}{Toggle for cross fitting when \code{type = "residual"}.}
+\item{crossfit}{Logical; toggle for cross fitting when \code{type = "residual"}.}
 
 \item{stop_if_empty_set_invariant}{Logical; \code{dicp} halts if the empty
 set is not rejected (the resulting intersection will always be empty).
@@ -71,7 +78,7 @@ residuals and environments when using \code{type = "wald"}
 (\code{wald_test_interactions = FALSE}).}
 }
 \value{
-List of dicp controls
+List of dicp controls containing the evaluated arguments from above.
 }
 \description{
 TRAMICP Controls
