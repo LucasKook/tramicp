@@ -16,7 +16,7 @@
     eig <- eigen(sigma)
     siginvhalf <- eig$vectors %*% diag(eig$values^(-1/2)) %*% t(eig$vectors)
     tstat <- siginvhalf %*% colSums(R_mat) / sqrt(nn)
-    p.value <- pchisq(sum(tstat^2), df = dE, lower.tail = FALSE)
+    p.value <- stats::pchisq(sum(tstat^2), df = dE, lower.tail = FALSE)
   }
   else {
     R <- r * e
