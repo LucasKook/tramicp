@@ -33,33 +33,34 @@ test_that("main function works", {
 })
 
 test_that("All aliases work", {
-
   set.seed(123)
   library("survival")
-
   ### All aliases
-  lapply(seq_along(dtypes), \(didx) {
-    dtype <- names(dtypes[didx])
-    FUN <- dtypes[[didx]]
-    d <- dgp_dicp(mod = dtype)
-    dotest <- seq_along(combs)
-    if (dtype == "weibull")
-      dotest <- seq_along(combs)[-1:-2]
-    lapply(dotest, \(tcomb) {
-      ttype <- names(combs)[tcomb]
-      ttest <- unname(combs[tcomb])
-      res <- FUN(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                 test = ttest, verbose = FALSE, greedy = TRUE)
-      if (dtype == "lm") {
-        res <- lmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                    test = ttest, verbose = FALSE, greedy = TRUE)
-      } else if (dtype == "cotram") {
-        res <- glmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                      test = ttest, verbose = FALSE, family = "poisson", greedy = TRUE)
-      } else if (dtype == "polr" && tcomb > 1) {
-        res <- polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
-                        test = ttest, verbose = FALSE, greedy = TRUE)
-      }
+  expect_no_error({
+    lapply(seq_along(dtypes), \(didx) {
+      dtype <- names(dtypes[didx])
+      FUN <- dtypes[[didx]]
+      d <- dgp_dicp(mod = dtype)
+      dotest <- seq_along(combs)
+      if (dtype == "weibull")
+        dotest <- seq_along(combs)[-1:-2]
+      lapply(dotest, \(tcomb) {
+        ttype <- names(combs)[tcomb]
+        ttest <- unname(combs[tcomb])
+        res <- FUN(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                   test = ttest, verbose = FALSE, greedy = TRUE)
+        if (dtype == "lm") {
+          res <- lmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                       test = ttest, verbose = FALSE, greedy = TRUE)
+        } else if (dtype == "cotram") {
+          res <- glmICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                        test = ttest, verbose = FALSE, family = "poisson",
+                        greedy = TRUE)
+        } else if (dtype == "polr" && tcomb > 1) {
+          res <- polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = ttype,
+                         test = ttest, verbose = FALSE, greedy = TRUE)
+        }
+      })
     })
   })
 })
