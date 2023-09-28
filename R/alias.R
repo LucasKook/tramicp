@@ -40,13 +40,15 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull", n = 300)
-#' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #' ### or
-#' # survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
-#' # CoxphICP(Y ~ X2, data = d, env = ~ E, type = "wald")
-#' # coxphICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+#' # survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' # CoxphICP(Y ~ X2, data = d, env = ~ E)
+#' # coxphICP(Y ~ X2, data = d, env = ~ E)
+#' }
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -107,9 +109,11 @@ coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "colr", n = 300)
-#' ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
 #'
 ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -152,9 +156,11 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "coxph", n = 300)
-#' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+#' LehmannICP(Y ~ X2, data = d, env = ~ E)
+#' }
 #'
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -177,11 +183,13 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "lm", n = 300)
-#' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #' ### or
-#' # lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' # lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -223,11 +231,13 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "polr", n = 300)
-#' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #' ### or
-#' # PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' # PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -292,9 +302,11 @@ residuals.polr <- function(object, ...) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "binary", n = 300)
-#' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial", type = "wald")
+#' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
+#' }
 #'
 glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -327,9 +339,11 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "cotram", n = 300)
-#' cotramICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+#' cotramICP(Y ~ X2, data = d, env = ~ E)
+#' }
 #'
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -352,9 +366,11 @@ cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "binary", n = 300)
 #' rangerICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
 #'
 rangerICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,

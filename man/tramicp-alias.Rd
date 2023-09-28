@@ -296,44 +296,60 @@ set.seed(123)
 d <- dgp_dicp(mod = "boxcox", n = 300)
 BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "wald")
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "weibull", n = 300)
-SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 ### or
-# survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
-# CoxphICP(Y ~ X2, data = d, env = ~ E, type = "wald")
-# coxphICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+# survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+# CoxphICP(Y ~ X2, data = d, env = ~ E)
+# coxphICP(Y ~ X2, data = d, env = ~ E)
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "colr", n = 300)
-ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "coxph", n = 300)
-LehmannICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+LehmannICP(Y ~ X2, data = d, env = ~ E)
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "lm", n = 300)
-LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 ### or
-# lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+# lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "polr", n = 300)
-PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 ### or
-# PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+# PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "binary", n = 300)
-glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial", type = "wald")
+glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "cotram", n = 300)
-cotramICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+cotramICP(Y ~ X2, data = d, env = ~ E)
+}
 
+\dontrun{
 set.seed(123)
 d <- dgp_dicp(mod = "binary", n = 300)
 rangerICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+}
 
 }
