@@ -10,7 +10,7 @@ dicp(
   env,
   modFUN,
   verbose = TRUE,
-  type = c("residual", "wald", "mcheck", "confint", "partial"),
+  type = c("residual", "wald", "partial"),
   test = "gcm.test",
   controls = NULL,
   alpha = 0.05,

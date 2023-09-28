@@ -73,9 +73,7 @@ dicp_controls <- function(
     type,
     "residual" = .residual_invariance,
     "wald" = .wald_invariance,
-    "partial" = .partial_invariance,
-    "mcheck" = .gof_invariance,
-    "confint" = .confint_invariance
+    "partial" = .partial_invariance
   )
 }
 
@@ -100,9 +98,6 @@ dicp_controls <- function(
       "custom" = identity
     )
   }
-
-  if (type == "confint")
-    ctest <- "confint"
 
   list(test = test, test_fun = test_fun, test_name = ctest)
 }

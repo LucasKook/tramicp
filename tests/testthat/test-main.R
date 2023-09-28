@@ -1,5 +1,4 @@
-combs <- c("confint" = "independence", "wald" = "wald",
-           "residual" = "independence", "residual" = "HSIC")
+combs <- c("wald" = "wald", "residual" = "independence", "residual" = "HSIC")
 
 dtypes <- list(
   "boxcox" = BoxCoxICP,
@@ -67,10 +66,6 @@ test_that("All aliases work", {
       expect_length(pvalues(res, "set"), 2^2)
     })
   })
-
-  expect_error(polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = "confint",
-                        verbose = FALSE))
-
 })
 
 test_that("Output of cotramICP and glmICP", {
@@ -113,8 +108,6 @@ test_that("argument checks work", {
   expect_error(BoxCoxICP("Y ~ X1", d, ~ E))
   expect_error(BoxCoxICP(Y ~ X1, d, "E"))
   expect_error(dicp(Y ~ X1, d, ~ E, modFUN = NA))
-  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "confint"))
-  expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", type = "mcheck"))
   expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "cor.test"))
   expect_error(dicp(Y ~ X1, d, ~ E + X2, modFUN = "BoxCox", test = "t.test"))
 })

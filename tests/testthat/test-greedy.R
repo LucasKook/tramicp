@@ -62,10 +62,6 @@ test_that("All aliases work", {
       }
     })
   })
-
-  expect_error(polrICP(Y ~ X1 + X2, data = d, env = ~ E, type = "confint",
-                       verbose = FALSE, greedy = TRUE))
-
 })
 
 test_that("Output of cotramICP and glmICP", {
