@@ -1,9 +1,15 @@
 # Model aliases
 
-#' ICP for Box-Cox type regression models
+#' @title Aliases for implemented model classes
+#' @name implemented_model_classes
+#'
+#' @description ICP for Box-Cox-type transformed normal regression, parametric
+#'     and semiparametric survival models, continuous outcome logistic
+#'     regression, linear regression, cumulative ordered regression, generalized
+#'     linear models; and nonparametric ICP via ranger.
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
 #' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
@@ -27,17 +33,20 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for parametric survival models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull", n = 300)
 #' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' ### or
+#' # survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' # CoxphICP(Y ~ X2, data = d, env = ~ E)
+#' # coxphICP(Y ~ X2, data = d, env = ~ E)
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -53,20 +62,10 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for parametric survival models
-#' @rdname survival.survregICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "weibull", n = 300)
-#' if (require("survival")) {
-#'   d$surv <- Surv(d$Y)
-#'   survregICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
-#' }
 #'
 survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                         test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -82,20 +81,10 @@ survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for the classical (semi-parametric) Cox model
-#' @rdname survival.coxphICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph", n = 300)
-#' if (require("survival")) {
-#'   d$surv <- Surv(d$Y)
-#'   coxphICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
-#' }
 #'
 coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -111,11 +100,10 @@ coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for Continuous outcome logistic regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -137,17 +125,11 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for Cox proportional hazards regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph", n = 300)
-#' CoxphICP(Y ~ X2, data = d, env = ~ E)
 #'
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -163,11 +145,10 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for Lehmann regression models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -189,17 +170,18 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for normal linear regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "lm", n = 300)
 #' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' ### or
+#' # lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -215,17 +197,10 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for normal linear regression (using stats::lm)
-#' @rdname statslmICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "lm", n = 300)
-#' lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -241,17 +216,18 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for cumulative ordinal regression
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "polr", n = 300)
 #' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' ### or
+#' # PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -267,17 +243,10 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for cumulative ordinal regression using \code{MASS::polr()}
-#' @rdname masspolrICP
+#' @rdname tramicp-alias
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "polr", n = 300)
-#' polrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -318,11 +287,10 @@ residuals.polr <- function(object, ...) {
 }
 
 #' ICP for generalized linear models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -354,11 +322,10 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' ICP for count transformation models
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}
 #' @export
 #'
 #' @examples
@@ -380,11 +347,10 @@ cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 }
 
 #' nonparametric ICP with ranger GCM
+#' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
-#' @inheritDotParams dicp
 #'
-#' @return Object of type \code{"dICP"}. See \code{\link[tramicp]{dicp}}.
 #' @export
 #'
 #' @examples

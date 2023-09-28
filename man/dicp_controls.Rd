@@ -24,12 +24,15 @@ dicp_controls(
 )
 }
 \arguments{
-\item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
-or \code{"partial"}).}
+\item{type}{Character, type of invariance (\code{"residual"} or \code{"wald"});
+see \code{Details}.}
 
-\item{test}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
-\code{"var.test"}, \code{"wald"}) or custom function for testing
-invariance.}
+\item{test}{Character, specifies the invariance test to be used when
+\code{type = "residual"}. The default is \code{"gcm.test"}. Other
+implemented tests are \code{"HSIC"}, \code{"t.test"}, \code{"var.test"},
+and \code{"combined"}. Alternatively, a custom function for testing
+invariance of the form \code{\(r, e, controls) {...}} can be supplied,
+which outputs a list with entry \code{"p.value"}.}
 
 \item{baseline_fixed}{logical; whether or not the baseline transformation
 is allowed to vary with the environments. Only takes effect when

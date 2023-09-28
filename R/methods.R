@@ -1,6 +1,7 @@
 # S3 methods
 
-#' Distributional ICP test
+#' ICP test
+#' @noRd
 #'
 #' @param x Object of class \code{"dICPtest"}
 #' @param ... Currently ignored
@@ -17,6 +18,7 @@ print.dICPtest <- function(x, ...) {
 }
 
 #' Distributional ICP
+#' @noRd
 #'
 #' @param x Object of class \code{"dICP"}
 #' @param ... Currently ignored
@@ -33,6 +35,7 @@ print.dICP <- function(x, ...) {
 }
 
 #' Summary method dICP
+#' @noRd
 #'
 #' @param object Object of class \code{"dICP"}
 #' @param digits Numeric, number of digits to print, default is 3

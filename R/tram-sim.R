@@ -1,27 +1,5 @@
 # Generic transformation models for simulation
 
-#' Setting up a general transformation model
-#'
-#' @param type Response type
-#' @param distr Inverse link
-#' @param basis Basis type
-#' @param K Number of outcome classes or basis functions
-#' @param supp Support of response
-#' @param bounds Bounds of response
-#' @param extrapolate See \code{\link[basefun]{Bernstein_basis}}
-#' @param log_first See \code{\link[basefun]{Bernstein_basis}}
-#' @param numeric_vars Names of numeric variables
-#' @param cfx Shift coefs
-#' @param factor_vars Names of factor variables
-#' @param factor_levels Levels of factors
-#' @param interacting Toggle varying baseline
-#' @param ia_fac Scale coef
-#' @param cfb Baseline coef
-#' @param add See \code{\link[tram]{tram}}
-#'
-#' @return Object of class \code{"mlt"}
-#'
-#'
 .tram_setup <- function(
   type = c("ordered", "continuous", "survival", "count"),
   distr = c("Logistic", "MinExtrVal", "MaxExtrVal", "Normal"),

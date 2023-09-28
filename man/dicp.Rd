@@ -2,7 +2,7 @@
 % Please edit documentation in R/tramicp.R
 \name{dicp}
 \alias{dicp}
-\title{Invariant causal prediction for transformation models}
+\title{Model-based causal feature selection for general response types}
 \usage{
 dicp(
   formula,
@@ -36,19 +36,23 @@ dicp(
 \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
 \code{\link[survival]{survreg}}, \code{\link[survival]{coxph}},
 and \code{\link[MASS]{polr}} are also supported. See the corresponding
-alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}}.}
+alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}} or
+\code{?implemented_model_classes}.}
 
 \item{verbose}{Logical, whether output should be verbose (default \code{TRUE}).}
 
-\item{type}{Character, type of invariance (\code{"residual"}, \code{"wald"},
-or \code{"partial"}).}
+\item{type}{Character, type of invariance (\code{"residual"} or \code{"wald"});
+see \code{Details}.}
 
-\item{test}{Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
-\code{"var.test"}, \code{"wald"}) or custom function for testing
-invariance.}
+\item{test}{Character, specifies the invariance test to be used when
+\code{type = "residual"}. The default is \code{"gcm.test"}. Other
+implemented tests are \code{"HSIC"}, \code{"t.test"}, \code{"var.test"},
+and \code{"combined"}. Alternatively, a custom function for testing
+invariance of the form \code{\(r, e, controls) {...}} can be supplied,
+which outputs a list with entry \code{"p.value"}.}
 
 \item{controls}{Controls for the used tests and the overall procedure,
-see \code{dicp_controls}.}
+see \code{\link{dicp_controls}}.}
 
 \item{alpha}{Level of invariance test, default \code{0.05}.}
 
@@ -79,7 +83,20 @@ Object of class \code{"dICP"}, containing
     }
 }
 \description{
-Invariant causal prediction for transformation models
+Function `dicp()` implements invariant causal prediction (ICP) for
+transformation and generalized linear models, including binary logistic
+regression, Weibull regression, the Cox model, linear regression and many
+others. The aim of ICP is to discover the direct causes of a response given
+data from heterogeneous experimental settings and a potentially large pool of
+candidate predictors.
+}
+\details{
+TRAMICP iterates over all subsets of covariates provided in \code{formula}
+and performs an invariance test based on the conditional covariance between
+score residuals and environments in \code{env} (\code{type = "residual"}) or
+the Wald statistic testing for the presence of main and interaction effects
+of the environments (\code{type = "wald"}). The algorithm outputs the
+intersection over all non-rejected sets as an estimate of the causal parents.
 }
 \examples{
 set.seed(12)
@@ -87,4 +104,9 @@ d <- dgp_dicp(n = 1e3, mod = "binary")
 dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = "glm",
      family = "binomial", type = "wald")
 
+}
+\references{
+Kook, L., Saengkyongam, S., Lundborg, A. R., Hothorn, T., & Peters, J. (2023).
+Model-based causal feature selection for general response types. arXiv
+preprint. \doi{10.48550/arXiv.2309.12833}
 }
