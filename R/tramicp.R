@@ -1,4 +1,12 @@
-#' Invariant causal prediction for transformation models
+#' Model-based causal feature selection for general response types
+#'
+#' @description
+#' Function `dicp()` implements invariant causal prediction (ICP) for
+#' transformation and generalized linear models, including binary logistic
+#' regression, Weibull regression, the Cox model, linear regression and many
+#' others. The aim of ICP is to discover the direct causes of a response given
+#' data from heterogeneous experimental settings and a potentially large pool of
+#' candidate predictors.
 #'
 #' @param formula A \code{formula} including response and covariate terms.
 #' @param data A \code{data.frame} containing response and explanatory variables.
@@ -11,15 +19,19 @@
 #'     \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
 #'     \code{\link[survival]{survreg}}, \code{\link[survival]{coxph}},
 #'     and \code{\link[MASS]{polr}} are also supported. See the corresponding
-#'     alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}}.
+#'     alias \code{<model_name>ICP}, e.g., \code{\link{PolrICP}} or
+#'     \code{?implemented_model_classes}.
 #' @param verbose Logical, whether output should be verbose (default \code{TRUE}).
-#' @param type Character, type of invariance (\code{"residual"}, \code{"wald"},
-#'     or \code{"partial"}).
-#' @param test Character, type of test to be used (\code{"HSIC"}, \code{"t.test"},
-#'     \code{"var.test"}, \code{"wald"}) or custom function for testing
-#'     invariance.
+#' @param type Character, type of invariance (\code{"residual"} or \code{"wald"});
+#'     see \code{Details}.
+#' @param test Character, specifies the invariance test to be used when
+#'     \code{type = "residual"}. The default is \code{"gcm.test"}. Other
+#'     implemented tests are \code{"HSIC"}, \code{"t.test"}, \code{"var.test"},
+#'     and \code{"combined"}. Alternatively, a custom function for testing
+#'     invariance of the form \code{\(r, e, controls) {...}} can be supplied,
+#'     which outputs a list with entry \code{"p.value"}.
 #' @param controls Controls for the used tests and the overall procedure,
-#'     see \code{dicp_controls}.
+#'     see \code{\link{dicp_controls}}.
 #' @param alpha Level of invariance test, default \code{0.05}.
 #' @param ... Further arguments passed to \code{modFUN}.
 #' @param baseline_fixed Fixed baseline transformation, see
@@ -32,6 +44,14 @@
 #'     of the response or are in another way required for the model to be
 #'     valid (for instance, random effects in a mixed model).
 #'
+#' @details
+#' TRAMICP iterates over all subsets of covariates provided in \code{formula}
+#' and performs an invariance test based on the conditional covariance between
+#' score residuals and environments in \code{env} (\code{type = "residual"}) or
+#' the Wald statistic testing for the presence of main and interaction effects
+#' of the environments (\code{type = "wald"}). The algorithm outputs the
+#' intersection over all non-rejected sets as an estimate of the causal parents.
+#'
 #' @return Object of class \code{"dICP"}, containing
 #'     \itemize{
 #'     \item{\code{candidate_causal_predictors}: Character; intersection of all
@@ -41,6 +61,11 @@
 #'     \item{\code{predictor_pvals}: Numeric vector; predictor-specific p-values,}
 #'     \item{\code{tests}: List of invariance tests.}
 #'     }
+#'
+#' @references
+#' Kook, L., Saengkyongam, S., Lundborg, A. R., Hothorn, T., & Peters, J. (2023).
+#' Model-based causal feature selection for general response types. arXiv
+#' preprint. \doi{10.48550/arXiv.2309.12833}
 #'
 #' @export
 #'

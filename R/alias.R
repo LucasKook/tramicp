@@ -1,6 +1,12 @@
 # Model aliases
 
-#' Aliases for implemented model classes
+#' @title Aliases for implemented model classes
+#' @name implemented_model_classes
+#'
+#' @description ICP for Box-Cox-type transformed normal regression, parametric
+#'     and semiparametric survival models, continuous outcome logistic
+#'     regression, linear regression, cumulative ordered regression, generalized
+#'     linear models; and nonparametric ICP via ranger.
 #' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
@@ -37,6 +43,10 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull", n = 300)
 #' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' ### or
+#' # survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' # CoxphICP(Y ~ X2, data = d, env = ~ E)
+#' # coxphICP(Y ~ X2, data = d, env = ~ E)
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -57,14 +67,6 @@ SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #'
 #' @export
 #'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "weibull", n = 300)
-#' if (require("survival")) {
-#'   d$surv <- Surv(d$Y)
-#'   survregICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
-#' }
-#'
 survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                         test = "gcm.test", controls = NULL, alpha = 0.05,
                         baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
@@ -83,14 +85,6 @@ survregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @inheritParams dicp
 #'
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph", n = 300)
-#' if (require("survival")) {
-#'   d$surv <- Surv(d$Y)
-#'   coxphICP(surv ~ X1 + X2 + X3, data = d, env = ~ E)
-#' }
 #'
 coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -136,11 +130,6 @@ ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @inheritParams dicp
 #'
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "coxph", n = 300)
-#' CoxphICP(Y ~ X2, data = d, env = ~ E)
 #'
 CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -191,6 +180,8 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "lm", n = 300)
 #' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' ### or
+#' # lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -210,11 +201,6 @@ LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @inheritParams dicp
 #'
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "lm", n = 300)
-#' lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -240,6 +226,8 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "polr", n = 300)
 #' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' ### or
+#' # PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -259,11 +247,6 @@ PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @inheritParams dicp
 #'
 #' @export
-#'
-#' @examples
-#' set.seed(123)
-#' d <- dgp_dicp(mod = "polr", n = 300)
-#' polrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #'
 polrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                      test = "gcm.test", controls = NULL, alpha = 0.05,
