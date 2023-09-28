@@ -3,7 +3,11 @@ Type: Package
 Title: Model-Based Feature Selection for General Response Types
 Version: 0.0-1
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
-    email = "lucasheinrich.kook@gmail.com"))
+    comment = c("ORCID" = "0000-0002-7546-7356"),
+    email = "lucasheinrich.kook@gmail.com"), person("Sorawit", "Saengkyongam",
+    role = "ctb"), person("Anton Rask", "Lundborg", role = "ctb"),
+    person("Torsten", "Hothorn", role = "ctb"), person("Jonas", "Peters",
+    role = "ctb"))
 Description: Extends invariant causal prediction (Peters et al., 2016, 
     <doi:10.1111/rssb.12167>) to generalized linear and transformation models 
     (Hothorn et al., 2018, <doi:10.1111/sjos.12291>).
