@@ -17,7 +17,7 @@
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "boxcox", n = 300)
-#' BoxCoxICP(Y ~ X2, data = d, env = ~ E)
+#' BoxCoxICP(Y ~ X2, data = d, env = ~ E, type = "wald")
 #'
 BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -42,11 +42,11 @@ BoxCoxICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "weibull", n = 300)
-#' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
 #' ### or
-#' # survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
-#' # CoxphICP(Y ~ X2, data = d, env = ~ E)
-#' # coxphICP(Y ~ X2, data = d, env = ~ E)
+#' # survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
+#' # CoxphICP(Y ~ X2, data = d, env = ~ E, type = "wald")
+#' # coxphICP(Y ~ X2, data = d, env = ~ E, type = "wald")
 #'
 SurvregICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -109,7 +109,7 @@ coxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "colr", n = 300)
-#' ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald", test = "wald")
+#' ColrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
 #'
 ColrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -154,7 +154,7 @@ CoxphICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "coxph", n = 300)
-#' LehmannICP(Y ~ X2, data = d, env = ~ E)
+#' LehmannICP(Y ~ X2, data = d, env = ~ E, type = "wald")
 #'
 LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                        test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -179,9 +179,9 @@ LehmannICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "lm", n = 300)
-#' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' LmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
 #' ### or
-#' # lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' # lmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
 #'
 LmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                   test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -225,9 +225,9 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "polr", n = 300)
-#' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
 #' ### or
-#' # PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' # PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, type = "wald")
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                     test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -294,7 +294,7 @@ residuals.polr <- function(object, ...) {
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "binary", n = 300)
-#' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial")
+#' glmICP(Y ~ X1 + X2 + X3, data = d, env = ~ E, family = "binomial", type = "wald")
 #'
 glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    test = "gcm.test", controls = NULL, alpha = 0.05,
@@ -329,7 +329,7 @@ glmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' @examples
 #' set.seed(123)
 #' d <- dgp_dicp(mod = "cotram", n = 300)
-#' cotramICP(Y ~ X2, data = d, env = ~ E)
+#' cotramICP(Y ~ X2, data = d, env = ~ E, type = "wald")
 #'
 cotramICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                       test = "gcm.test", controls = NULL, alpha = 0.05,
