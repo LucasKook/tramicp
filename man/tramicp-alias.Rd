@@ -301,6 +301,8 @@ set.seed(123)
 d <- dgp_dicp(mod = "weibull", n = 300)
 SurvregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 ### or
+library("survival")
+d$Y <- Surv(d$Y)
 survregICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 CoxphICP(Y ~ X2, data = d, env = ~ E)
 coxphICP(Y ~ X2, data = d, env = ~ E)
