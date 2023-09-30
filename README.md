@@ -14,10 +14,15 @@ described in [the paper](https://doi.org/10.48550/arXiv.2309.12833).
 
 # Installation
 
-The `tramicp` package can be installed via:
+The development version of `tramicp` package can be installed via:
 ```r
 # install.packages("remotes")
 remotes::install_github("LucasKook/tramicp")
+```
+
+A stable version is available on [CRAN](https://CRAN.R-project.org/package=tramicp):
+```r
+install.packages("tramicp")
 ```
 
 # Using package `tramicp`
