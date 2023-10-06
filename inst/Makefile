@@ -21,6 +21,9 @@ identifiability:
 invariance-example:
 	(cd .. && Rscript --vanilla inst/code/invariance-example.R)
 
+case-study:
+	(cd .. && R CMD BATCH --vanilla inst/code/case-study.R)
+
 sim-correct:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 10 10 100 0 $(ROW))
 
@@ -59,7 +62,7 @@ vis-wald:
 vis-larger:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 6)
 
-all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example
+all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example case-study
 
 vis: vis-main vis-app vis-hidden vis-link vis-larger
 
