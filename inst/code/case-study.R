@@ -18,7 +18,7 @@ options("wald_test_interactions" = FALSE)
 
 # Load data ---------------------------------------------------------------
 
-load("inst/data/support2.sav")
+load(url("https://hbiostat.org/data/repo/support2.sav"))
 
 ### Preprocessing
 nrow(support2)
