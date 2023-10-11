@@ -44,4 +44,4 @@ inst/results*
 *.pdf
 *.sh
 *.sav
-
+model-classes/
