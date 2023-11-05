@@ -79,7 +79,7 @@ dicp_controls <- function(
 
 .test_fun <- function(type, test, ctest) {
   if (is.function(test))
-    return(list(test = "custom", test_fun = test_fun, test_name = ctest))
+    return(list(test = "custom", test_fun = test, test_name = ctest))
 
   if (type %in% c("wald", "partial")) {
     ctest <- "wald"
