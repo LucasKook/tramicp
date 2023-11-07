@@ -211,8 +211,8 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
         modFUN = modFUN, data = data, controls = controls,
         mandatory = mandatory, ... = ...
       )
-
-      if (.get_pvalue(ret$test) > controls$alpha) {
+      tpv <- .get_pvalue(ret$test)
+      if (!is.nan(tpv) && tpv > controls$alpha) {
         MI <- c(MI, lps[[set]])
       }
 
