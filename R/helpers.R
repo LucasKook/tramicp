@@ -309,3 +309,27 @@ residuals.ranger <- function(object, newdata = NULL, newy = NULL, ...) {
     return(character(0))
   ret
 }
+
+survforest <- function(formula, data, ...) {
+  tms <- .get_terms(formula)
+  if (identical(tms$me, character(0))) {
+    return(survival::coxph(formula, data))
+  }
+  rf <- ranger::ranger(formula, data, ...)
+  class(rf) <- c("survforest", class(rf))
+  rf$y <- stats::model.response(stats::model.frame(formula, data))
+  rf$data <- data
+  rf
+}
+
+residuals.survforest <- function(object, ...) {
+  times <- object$y[, 1]
+  status <- object$y[, 2]
+  pred <- stats::predict(object, data = object$data)
+  idx <- match(times, pred$unique.death.times)
+  preds <- pred$survival
+  ipreds <- sapply(seq_len(nrow(preds)), \(smpl) {
+    -log(preds[smpl, idx[smpl]])
+  })
+  status - ipreds
+}

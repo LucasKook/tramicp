@@ -96,7 +96,9 @@ the `dicp()` function, for instance, after loading `tramME`, `dicp(..., modFUN =
 "BoxCoxME")` can be used.
 
 Nonparametric ICP via the GCM test [4] and random forests for the two
-regressions is implemented in the alias `rangerICP()`.
+regressions is implemented in the alias `rangerICP()`. Survival forests
+are supported for right-censored observations and implemented in 
+`survforestICP()`.
 
 # Replication materials
 

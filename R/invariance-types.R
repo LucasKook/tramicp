@@ -27,8 +27,8 @@
 
   ### Return
   if (set == 1) tset <- "Empty"
-  structure(list(set = tset, test = tst, coef = stats::coef(m), tram = m$tram),
-            class = "dICPtest")
+  structure(list(set = tset, test = tst, coef = stats::coef(m), tram = m$tram,
+                 rYX = r, rEX = e), class = "dICPtest")
 
 }
 
