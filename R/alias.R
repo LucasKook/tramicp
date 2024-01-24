@@ -386,3 +386,31 @@ rangerICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   ret$call <- call
   ret
 }
+
+#' nonparametric ICP for right-censored observations with ranger GCM
+#' @rdname tramicp-alias
+#'
+#' @inheritParams dicp
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' set.seed(12)
+#' d <- dgp_dicp(mod = "coxph", n = 3e2)
+#' d$Y <- survival::Surv(d$Y, sample(0:1, 3e2, TRUE, prob = c(0.1, 0.9)))
+#' survforestICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
+#'
+survforestICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                          test = "gcm.test", controls = NULL, alpha = 0.05,
+                          baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
+                          mandatory = NULL, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = survforest,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              max_size = max_size, mandatory = mandatory, ... = ...)
+  ret$call <- call
+  ret
+}
