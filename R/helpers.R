@@ -129,10 +129,7 @@ intersect_intervals <- function(...) {
 
 #' @method residuals binglm
 residuals.binglm <- function(object, ...) {
-  resp <- stats::model.response(stats::model.frame(object))
-  success <- if (is.factor(resp)) levels(resp)[2] else sort(unique(resp))[2]
-    y <- c(0, 1)[1 + as.numeric(resp == success)]
-  y - stats::predict(object, type = "response")
+  stats:::residuals.glm(object, type = "response")
 }
 
 .check_depth <- function(x) {
