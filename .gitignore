@@ -45,3 +45,4 @@ inst/results*
 *.sh
 *.sav
 model-classes/
+inst/code/revision
