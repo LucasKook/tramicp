@@ -129,7 +129,7 @@ intersect_intervals <- function(...) {
 
 #' @method residuals binglm
 residuals.binglm <- function(object, ...) {
-  stats:::residuals.glm(object, type = "response")
+  stats::residuals.glm(object, type = "response")
 }
 
 .check_depth <- function(x) {
@@ -181,7 +181,7 @@ residuals.binglm <- function(object, ...) {
   res <- lapply(terms, \(term) suppressWarnings(
     max(pvals[!grepl(term, names(pvals), fixed = TRUE)], na.rm = TRUE)))
   ret <- structure(unlist(res), names = terms)
-  if (all(pvals < alpha) & length(ret) > 1)
+  if (all(pvals < alpha, na.rm = TRUE) & length(ret) > 1)
     ret[] <- 1
   ret
 }
