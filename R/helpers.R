@@ -181,7 +181,7 @@ residuals.binglm <- function(object, ...) {
   res <- lapply(terms, \(term) suppressWarnings(
     max(pvals[!grepl(term, names(pvals), fixed = TRUE)], na.rm = TRUE)))
   ret <- structure(unlist(res), names = terms)
-  if (all(ret < alpha) & length(ret) > 1)
+  if (all(pvals < alpha) & length(ret) > 1)
     ret[] <- 1
   ret
 }
