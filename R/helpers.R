@@ -307,6 +307,8 @@ residuals.ranger <- function(object, newdata = NULL, newy = NULL, ...) {
   ret
 }
 
+# Survival and quantile RF
+
 survforest <- function(formula, data, ...) {
   tms <- .get_terms(formula)
   if (identical(tms$me, character(0))) {
@@ -329,4 +331,43 @@ residuals.survforest <- function(object, ...) {
     -log(preds[smpl, idx[smpl]])
   })
   status - ipreds
+}
+
+qrf <- \(formula, data, ...) {
+  rY <- stats::model.response(stats::model.frame(formula, data))
+  tms <- .get_terms(formula)
+  if (identical(tms$me, character(0))) {
+    ret <- list(m = stats::ecdf(rY), data = data, response = rY,
+                unconditional = TRUE)
+    class(ret) <- c("qrf")
+    return(ret)
+  }
+  rf <- ranger::ranger(formula, data, ...)
+  rf$response <- rY
+  rf$data <- data
+  rf$unconditional <- FALSE
+  class(rf) <- c("qrf", class(rf))
+  rf
+}
+
+predict.qrf <- \(object, data, ...) {
+  if (object$unconditional)
+    return(object$m(object$response))
+  class(object) <- class(object)[-1]
+  tn <- stats::predict(object, data = data, type = "terminalNodes")$predictions
+  K <- matrix(0, nrow = N <- nrow(tn), ncol = N)
+  for (tree in seq_len(B <- object$num.trees)) {
+    K <- K + sapply(seq_len(nrow(tn)), \(obs) {
+      as.numeric(tn[obs, tree] == tn[, tree])
+    }, simplify = "matrix")
+  }
+  K <- K / B
+  diag(K) <- 0
+  K <- K / pmax(colSums(K), .Machine$double.eps)
+  pred <- \(y) mean(K %*% as.numeric(object$response <= y))
+  sapply(object$response, pred)
+}
+
+residuals.qrf <- \(object) {
+  2 * predict.qrf(object, object$data) - 1
 }

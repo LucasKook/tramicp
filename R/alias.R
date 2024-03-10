@@ -383,7 +383,7 @@ rangerICP <- function(formula, data, env, verbose = TRUE, type = "residual",
   ret
 }
 
-#' nonparametric ICP for right-censored observations with ranger GCM
+#' nonparametric ICP for right-censored observations with survival forest GCM
 #' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
@@ -404,6 +404,33 @@ survforestICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                           mandatory = NULL, ...) {
   call <- match.call()
   ret <- dicp(formula = formula, data = data, env = env, modFUN = survforest,
+              verbose = verbose, type = type, test = test, controls = controls,
+              alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
+              max_size = max_size, mandatory = mandatory, ... = ...)
+  ret$call <- call
+  ret
+}
+
+#' nonparametric ICP with quantile forest GCM
+#' @rdname tramicp-alias
+#'
+#' @inheritParams dicp
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' set.seed(12)
+#' d <- dgp_dicp(mod = "boxcox", n = 3e2)
+#' qrfICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' }
+#'
+qrfICP <- function(formula, data, env, verbose = TRUE, type = "residual",
+                   test = "gcm.test", controls = NULL, alpha = 0.05,
+                   baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
+                   mandatory = NULL, ...) {
+  call <- match.call()
+  ret <- dicp(formula = formula, data = data, env = env, modFUN = qrf,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
               max_size = max_size, mandatory = mandatory, ... = ...)

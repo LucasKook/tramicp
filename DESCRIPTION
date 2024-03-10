@@ -1,7 +1,7 @@
 Package: tramicp
 Type: Package
 Title: Model-Based Causal Feature Selection for General Response Types
-Version: 0.0-1
+Version: 0.0-2
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
     comment = c("ORCID" = "0000-0002-7546-7356"),
     email = "lucasheinrich.kook@gmail.com"), person("Sorawit", "Saengkyongam",
