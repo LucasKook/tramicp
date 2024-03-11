@@ -321,6 +321,7 @@ survforest <- function(formula, data, ...) {
   rf
 }
 
+#' @exportS3Method residuals survforest
 residuals.survforest <- function(object, ...) {
   times <- object$y[, 1]
   status <- object$y[, 2]
@@ -350,6 +351,7 @@ qrf <- \(formula, data, ...) {
   rf
 }
 
+#' @exportS3Method predict qrf
 predict.qrf <- \(object, data, ...) {
   if (object$unconditional)
     return(object$m(object$response))
@@ -368,6 +370,7 @@ predict.qrf <- \(object, data, ...) {
   sapply(object$response, pred)
 }
 
+#' @exportS3Method residuals qrf
 residuals.qrf <- \(object) {
   2 * predict.qrf(object, object$data) - 1
 }

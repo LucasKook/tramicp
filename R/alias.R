@@ -6,7 +6,9 @@
 #' @description ICP for Box-Cox-type transformed normal regression, parametric
 #'     and semiparametric survival models, continuous outcome logistic
 #'     regression, linear regression, cumulative ordered regression, generalized
-#'     linear models; and nonparametric ICP via ranger.
+#'     linear models; and nonparametric ICP via ranger. While TRAMICP based on
+#'     quantile and survival random forests is also supported, for these methods
+#'     it comes without theoretical guarantees as of yet.
 #' @rdname tramicp-alias
 #'
 #' @inheritParams dicp
