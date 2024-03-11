@@ -405,6 +405,7 @@ survforestICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                           baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                           mandatory = NULL, ...) {
   call <- match.call()
+  message("Note: `survforestICP()` does not come with theoretical guarantees.")
   ret <- dicp(formula = formula, data = data, env = env, modFUN = survforest,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
@@ -432,6 +433,7 @@ qrfICP <- function(formula, data, env, verbose = TRUE, type = "residual",
                    baseline_fixed = TRUE, greedy = FALSE, max_size = NULL,
                    mandatory = NULL, ...) {
   call <- match.call()
+  message("Note: `qrfICP()` does not come with theoretical guarantees.")
   ret <- dicp(formula = formula, data = data, env = env, modFUN = qrf,
               verbose = verbose, type = type, test = test, controls = controls,
               alpha = alpha, baseline_fixed = baseline_fixed, greedy = greedy,
