@@ -326,7 +326,7 @@ residuals.survforest <- function(object, ...) {
   times <- object$y[, 1]
   status <- object$y[, 2]
   pred <- stats::predict(object, data = object$data)
-  idx <- match(times, pred$unique.death.times)
+  idx <- sapply(times, \(x) which.min(abs(x - pred$unique.death.times))[1])
   preds <- pred$survival
   ipreds <- sapply(seq_len(nrow(preds)), \(smpl) {
     -log(preds[smpl, idx[smpl]])
