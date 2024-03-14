@@ -15,6 +15,9 @@ gcm-smooth:
 gcm-penalized:
 	(cd .. && Rscript --vanilla inst/code/gcm-penalized.R)
 
+nonparametric:
+	(cd .. && Rscript --vanilla inst/code/nonparametric.R)
+
 identifiability:
 	(cd .. && Rscript --vanilla inst/code/identifiability.R)
 
@@ -62,7 +65,7 @@ vis-wald:
 vis-larger:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 6)
 
-all: intro faithfulness gcm-smooth gcm-penalized identifiability invariance-example case-study
+all: intro faithfulness gcm-smooth gcm-penalized nonparametric identifiability invariance-example case-study
 
 vis: vis-main vis-app vis-hidden vis-link vis-larger
 
