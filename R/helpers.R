@@ -371,6 +371,6 @@ predict.qrf <- \(object, data, ...) {
 }
 
 #' @exportS3Method residuals qrf
-residuals.qrf <- \(object) {
+residuals.qrf <- \(object, ...) {
   2 * predict.qrf(object, object$data) - 1
 }
