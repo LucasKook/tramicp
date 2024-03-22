@@ -14,6 +14,8 @@
     R_mat <- matrix(r, nrow = nn, ncol = dE) * e
     sigma <- crossprod(R_mat) / nn - tcrossprod(colMeans(R_mat))
     eig <- eigen(sigma)
+    if (min(eig$values) < .Machine$double.eps)
+      warning("`vcov` of test statistic is not invertible")
     siginvhalf <- eig$vectors %*% diag(eig$values^(-1/2)) %*% t(eig$vectors)
     tstat <- siginvhalf %*% colSums(R_mat) / sqrt(nn)
     p.value <- stats::pchisq(sum(tstat^2), df = dE, lower.tail = FALSE)
@@ -23,7 +25,7 @@
     R.sq <- R^2
     meanR <- mean(R)
     tstat <- sqrt(nn) * meanR / sqrt(mean(R.sq) - meanR^2)
-    p.value <- 2 * stats::pnorm(abs(tstat), lower.tail = FALSE)
+    p.value <- 2 * stats::pnorm(-abs(tstat))
   }
   return(list(p.value = p.value, test.statistic = tstat,
               reject = (p.value < controls$alpha)))
