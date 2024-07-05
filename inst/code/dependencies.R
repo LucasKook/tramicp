@@ -14,7 +14,7 @@ remotes::install_bioc(c("graph", "Rgraphviz", "RBGL"))
 ### Install all other packages from CRAN
 pkgs <- c("MASS", "SimDesign", "coin", "colorspace", "cotram", "generalhoslem",
           "glmnet", "multcomp", "pROC", "patchwork", "tidyverse", "tram", "mlt",
-          "ranger", "beepr", "pcalg")
+          "ranger", "beepr", "pcalg", "tramME")
 remotes::install_cran(pkgs)
 
 
