@@ -69,26 +69,3 @@ all: intro faithfulness gcm-smooth gcm-penalized nonparametric identifiability i
 
 vis: vis-main vis-app vis-hidden vis-link vis-larger
 
-count:
-	ls test.* | wc
-
-correct:
-	bash dispatch.sh 4000 run-correct.sh 10800
-
-hidden:
-	bash dispatch.sh 5600 run-hidden.sh 43200
-
-link:
-	bash dispatch.sh 4000 run-link.sh 10800
-
-roc:
-	bash dispatch.sh 500 run-roc.sh 7200
-
-larger:
-	bash dispatch.sh 5600 run-larger.sh 43200
-
-test:
-	bash dispatch.sh 2 run-test.sh 300
-
-deps:
-	bash dispatch.sh 1 run-install.sh 1200
