@@ -21,6 +21,9 @@ nonparametric:
 identifiability:
 	(cd .. && Rscript --vanilla inst/code/identifiability.R)
 
+env-parent:
+	(cd .. && Rscript --vanilla inst/code/environment-parent-faithfulness-violation.R)
+
 invariance-example:
 	(cd .. && Rscript --vanilla inst/code/invariance-example.R)
 
