@@ -68,7 +68,7 @@ vis-wald:
 vis-larger:
 	(cd .. && Rscript --vanilla inst/code/vis-simulation.R 6)
 
-all: intro faithfulness gcm-smooth gcm-penalized nonparametric identifiability invariance-example case-study
+all: intro faithfulness gcm-smooth gcm-penalized nonparametric identifiability invariance-example case-study env-parent
 
 vis: vis-main vis-app vis-hidden vis-link vis-larger
 
