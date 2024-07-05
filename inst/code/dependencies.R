@@ -21,3 +21,10 @@ remotes::install_cran(pkgs)
 ### Install tramicp and helpers locally
 remotes::install_local(force = TRUE)
 remotes::install_local("inst/helpers", force = TRUE)
+
+### Create directories for outputs
+if (!dir.exists(tp <- file.path("inst", "figures")))
+  dir.create(tp, recursive = TRUE)
+
+if (!dir.exists(tp <- file.path("inst", "results")))
+  dir.create(tp, recursive = TRUE)
