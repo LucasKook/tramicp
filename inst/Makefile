@@ -22,7 +22,7 @@ identifiability:
 	(cd .. && Rscript --vanilla inst/code/identifiability.R)
 
 env-parent:
-	(cd .. && Rscript --vanilla inst/code/environment-parent-faithfulness-violation.R)
+	(cd .. && Rscript --vanilla inst/code/environment-parent-faithfulness-violated.R)
 
 invariance-example:
 	(cd .. && Rscript --vanilla inst/code/invariance-example.R)
