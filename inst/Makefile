@@ -1,7 +1,7 @@
 ROW = 1
 
 dependencies:
-	(cd .. && Rscript --vanilla inst/code/dependencies.R > dependencies.out)
+	(cd .. && Rscript --vanilla inst/code/dependencies.R)
 
 intro:
 	(cd .. && Rscript --vanilla inst/code/intro-binary.R)
@@ -28,7 +28,7 @@ invariance-example:
 	(cd .. && Rscript --vanilla inst/code/invariance-example.R)
 
 case-study:
-	(cd .. && R CMD BATCH --vanilla inst/code/case-study.R)
+	(cd .. && Rscript --vanilla inst/code/case-study.R)
 
 sim-correct:
 	(cd .. && Rscript --vanilla inst/code/run-simulation.R 1 10 10 100 0 $(ROW))
