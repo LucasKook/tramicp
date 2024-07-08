@@ -64,5 +64,5 @@ ggsave("inst/figures/gcm-smooth-app.pdf", height = 3.5, width = 9)
 
 ### P-value reported in the paper
 binom.test(sum(res[["TRAM-GCM"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")
-binom.test(sum(res[["TRAM-Wald"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")
+binom.test(sum(res[["TRAM-WALD"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")
 binom.test(sum(res[["TRAM-COR"]] < 0.05), nrow(res), p = 0.05, alternative = "greater")

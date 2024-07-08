@@ -11,6 +11,9 @@ library("tram")
 
 bpath <- file.path("inst", "results", "case-study")
 
+if (!dir.exists(bpath))
+  dir.create(bpath, recursive = TRUE)
+
 # Options -----------------------------------------------------------------
 
 ### Don't fit/test interactions for TRAMICP-Wald

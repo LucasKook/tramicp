@@ -1,7 +1,7 @@
 Package: tramicp
 Type: Package
 Title: Model-Based Causal Feature Selection for General Response Types
-Version: 0.0-2
+Version: 0.0-3
 Authors@R: c(person("Lucas", "Kook", role = c("aut", "cre"),
     comment = c("ORCID" = "0000-0002-7546-7356"),
     email = "lucasheinrich.kook@gmail.com"), person("Sorawit", "Saengkyongam",
@@ -21,3 +21,5 @@ Imports: tram, mlt, coin, multcomp, survival, variables, basefun, MASS,
     cotram, dHSIC, ranger, sandwich
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://github.com/LucasKook/tramicp
+BugReports: https://github.com/LucasKook/tramicp/issues
