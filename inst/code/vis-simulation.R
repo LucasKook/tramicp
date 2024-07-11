@@ -2,7 +2,7 @@
 # Visualize simulation results
 # LK 2023
 
-settings <- c("main", "app", "hidden", "link", "wald-extended", "larger")
+settings <- c("main", "app", "hidden", "link", "larger")
 
 setting <- settings[as.numeric(commandArgs(TRUE))[1]]
 if (is.na(setting))
@@ -112,29 +112,6 @@ if (setting == "main") {
   fobs <- readRDS(file.path(bpath, "fobs.rds"))
   res <- read_sim_results(file.path(bpath, "results"))
   res$oicp[res$oicp == "empty"] <- "Empty"
-} else if (setting == "wald-extended") {
-  ### paths
-  bpath <- file.path(rpath, "results_main")
-  tmods <- c(mods[-1], amods)
-  ttests <- tests
-  out <- "sim-wald-extended.pdf"
-  th <- 4.5
-  tw <- 11
-
-  fobs <- readRDS(file.path(bpath, "fobs.rds"))
-  res <- read_sim_results(file.path(bpath, "results"))
-  res$oicp[res$oicp == "empty"] <- "Empty"
-  res <- dplyr::filter(res, test == "wald")
-
-  bpath <- file.path(rpath, "results_wald-extended")
-  bfobs <- readRDS(file.path(bpath, "fobs.rds"))
-  bres <- read_sim_results(file.path(bpath, "results"))
-  bres$oicp[bres$oicp == "empty"] <- "Empty"
-  bres <- dplyr::filter(bres, test == "wald")
-  bres$test <- "wald.test"
-
-  res <- full_join(res, bres)
-
 }
 
 ### Summarize for plotting
@@ -163,5 +140,5 @@ if (setting == "hidden") {
 # Vis ---------------------------------------------------------------------
 
 p1 <- vis(tmods, ttests)
-ggsave(file.path(rpath, out), p1, height = th, width = tw, scale = 1)
-ggsave(file.path("inst", "figures", out), p1, height = th, width = tw, scale = 1)
+ggsave(file.path(rpath, out), p1, height = th, width = tw, scale = 1, create.dir = TRUE)
+ggsave(file.path("inst", "figures", out), p1, height = th, width = tw, scale = 1, create.dir = TRUE)

@@ -6,7 +6,7 @@ install.packages("remotes", repos = "https://cloud.r-project.org")
 
 ### GitHub packages
 remotes::install_github("igraph/rigraph")
-remotes::install_github("strobl/RCIT")
+remotes::install_github("ericstrobl/RCIT")
 
 ### Bioconductor packages
 remotes::install_bioc(c("graph", "Rgraphviz", "RBGL"))
