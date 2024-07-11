@@ -4,7 +4,6 @@
 
 set.seed(27) # Seed
 parall <- FALSE # Parallel computing?
-.libPaths(c("~/tutu/lib", .libPaths()))
 
 ### Command line args and defaults
 args <- as.numeric(commandArgs(TRUE))
@@ -110,14 +109,15 @@ fobs <- list(types = types, fml = fml, resp = resp, env = env, preds = preds,
              affect_variance = affect_variance)
 
 if (save) {
-  pvec <- c("nanc", nanc, "ndec", ndec, "panc", panc, "pdec", pdec, "penv", penv,
-            "stdz", stdz, "sde", round(sde, 2), "errDist", errDistAnY, errDistDeY,
-            "spec", spec)
-  outdir <- file.path(
-    "inst", "results", Sys.Date(), paste0(paste0(
-      names(pvec), pvec, collapse = ""), collapse = "_"))
+  specname <- switch(spec, "correct" = "results_main",
+                     "link" = "results_link", "hidden" = "results_hidden",
+                     "roc" = "results_binary-roc", "larger" = "results_larger")
+  outdir <- file.path("inst", "results", specname)
+  resdir <- file.path(outdir, "results")
   if (!dir.exists(outdir))
     dir.create(outdir, recursive = TRUE)
+  if (!dir.exists(resdir))
+    dir.create(resdir, recursive = TRUE)
 
   write_rds(fobs, file.path(outdir, "fobs.rds"))
 }
@@ -138,7 +138,6 @@ if (TEST) {
   Design <- Design[ROW <- 1, ]
 }
 
-
 # Run ---------------------------------------------------------------------
 
 suppressWarnings(file.remove(list.files(pattern = "SIMDESIGN-TEMPFILE")))
@@ -158,7 +157,8 @@ res <- runSimulation(
   packages = pkgs,
   filename = file.path(outdir, paste0("sim-results", ROW, ".rds")),
   save_details = list(
-    safe = TRUE, save_results_dirname = file.path(outdir, paste0("results-row-", ROW)),
-    save_seeds_dirname = file.path(outdir, "seeds")
+    safe = TRUE, save_results_dirname = file.path(resdir, paste0("results-row-", ROW)),
+    save_results_filename = paste0("results-row-", ROW),
+    save_seeds_dirname = file.path(resdir, "seeds")
   )
 )
