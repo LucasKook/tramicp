@@ -16,7 +16,7 @@ Description: Extends invariant causal prediction (Peters et al., 2016,
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.1
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.1.0)
 Imports: tram, mlt, coin, multcomp, survival, variables, basefun, MASS, 
     cotram, dHSIC, ranger, sandwich
 Suggests: testthat (>= 3.0.0)
