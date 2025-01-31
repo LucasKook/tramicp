@@ -10,3 +10,4 @@
 ^inst/code
 ^inst/Makefile$
 ^inst
+^Makefile$
