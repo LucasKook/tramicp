@@ -103,12 +103,15 @@ intersection over all non-rejected sets as an estimate of the causal parents.
 \examples{
 set.seed(12)
 d <- dgp_dicp(n = 1e3, mod = "binary")
-dicp(Y ~ X1 + X2 + X3, data = d, env = ~ E, modFUN = "glm",
-     family = "binomial", type = "wald")
+dicp(Y ~ X1 + X2 + X3,
+  data = d, env = ~E, modFUN = "glm",
+  family = "binomial", type = "wald"
+)
 
 }
 \references{
-Kook, L., Saengkyongam, S., Lundborg, A. R., Hothorn, T., & Peters, J. (2023).
-Model-based causal feature selection for general response types. arXiv
-preprint. \doi{10.48550/arXiv.2309.12833}
+Kook, L., Saengkyongam, S., Lundborg, A. R., Hothorn, T., & Peters, J.
+(2024). Model-based causal feature selection for general response types.
+Journal of the American Statistical Association, 1-12.
+\doi{10.1080/01621459.2024.2395588}
 }

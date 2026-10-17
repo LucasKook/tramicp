@@ -240,7 +240,7 @@ lmICP <- function(formula, data, env, verbose = TRUE, type = "residual",
 #' d <- dgp_dicp(mod = "polr", n = 300)
 #' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #' ### or
-#' PolrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
+#' polrICP(Y ~ X1 + X2 + X3, data = d, env = ~ E)
 #' }
 #'
 PolrICP <- function(formula, data, env, verbose = TRUE, type = "residual",

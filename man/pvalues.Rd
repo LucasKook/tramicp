@@ -22,6 +22,7 @@ Extract set and predictor p-values from tramicp outputs
 \details{
 Predictor p-values are computed from the set p-values as follows:
     For each predictor j as the largest p-value of all sets not containing j.
+    If all sets are rejected, all predictor p-values are set to 1.
 }
 \examples{
 set.seed(123)

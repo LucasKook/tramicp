@@ -51,7 +51,7 @@
 .combined_test <- function(r, e, controls) {
   shift <- stats::t.test(r ~ e)
   scale <- stats::var.test(r ~ e)
-  list("p.value" = 2 * min(shift$p.value, scale$p.value),
+  list("p.value" = min(1, 2 * min(shift$p.value, scale$p.value)),
        shift = shift, scale = scale)
 }
 

@@ -14,7 +14,7 @@
   mfm <- stats::reformulate(c(meff, mand), resp)
 
   ### (Cross-) fit models
-  resids <- .compute_residuals(mfm, data, meff, mand, set, controls, modFUN,
+  resids <- .compute_residuals(mfm, data, tset, mand, set, controls, modFUN,
                                env, ...)
   m <- resids$m
   r <- resids$r
@@ -43,7 +43,7 @@
   ### Empty set treated separately
   if (set == 1) {
     tset <- "1"
-    meff <- .pplus(c(ifelse(controls$baseline_fixed, env, "1"), mand))
+    meff <- .pplus(c(if (controls$baseline_fixed) env else "1", mand))
     mint <- ""
   } else {
     tset <- me[tx]
@@ -67,8 +67,7 @@
   if (inherits(m, "tram"))
     m <- mlt::as.mlt(m)
   cfs <- names(stats::coef(m))
-  tcfs <- union(unlist(sapply(paste0(":", env), \(pat) grep(pat, cfs, value = TRUE))),
-                unlist(sapply(env, \(pat) grep(pat, cfs, value = TRUE))))
+  tcfs <- .env_coefs(cfs, env, data)
 
   ### Test
   tst <- try(summary(
@@ -78,7 +77,7 @@
 
   ### Catch failure cases
   if (inherits(tst, "try-error")) {
-    return(.empty_output(me[tx], NA))
+    return(.empty_output(if (set == 1) "Empty" else me[tx], NA))
   }
 
   ### Return
@@ -87,6 +86,15 @@
   tst$tram <- m$tram
   tst
 
+}
+
+# Coefficients corresponding to environment main effects and interactions
+.env_coefs <- function(cfs, env, data) {
+  ecfs <- colnames(.rm_int(stats::model.matrix(stats::reformulate(env), data)))
+  ecfs <- c(ecfs, unlist(lapply(env, \(e) if (is.factor(data[[e]]))
+    paste0(e, levels(data[[e]])))))
+  cfs[vapply(strsplit(cfs, ":", fixed = TRUE), \(cf) any(cf %in% ecfs),
+             logical(1))]
 }
 
 # Partial invariance

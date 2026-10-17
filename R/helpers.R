@@ -6,7 +6,8 @@
   stopifnot("`modFUN` should be a function or a character matching a
             function name." = is.function(modFUN) | is.character(modFUN))
   etms <- .get_terms(env)
-  if (length(etms$all) != 1 && test %in% c("cor.test", "t.test"))
+  if (length(etms$all) != 1 && is.character(test) &&
+      test %in% c("cor.test", "t.test"))
     stop("Invariance tests `\"cor.test\"` and `\"t.test\"`
          are not implemented for multivariable environments.")
 }
@@ -128,6 +129,7 @@ intersect_intervals <- function(...) {
 }
 
 #' @method residuals binglm
+#' @exportS3Method residuals binglm
 residuals.binglm <- function(object, ...) {
   stats::residuals.glm(object, type = "response")
 }
@@ -178,10 +180,11 @@ residuals.binglm <- function(object, ...) {
 
 # Pvalues for individual predictors being a causal parent
 .indiv_pvals <- function(terms, pvals, alpha) {
+  sets <- strsplit(names(pvals), split = "+", fixed = TRUE)
   res <- lapply(terms, \(term) suppressWarnings(
-    max(pvals[!grepl(term, names(pvals), fixed = TRUE)], na.rm = TRUE)))
+    max(pvals[!vapply(sets, \(set) term %in% set, logical(1))], na.rm = TRUE)))
   ret <- structure(unlist(res), names = terms)
-  if (all(pvals < alpha, na.rm = TRUE) & length(ret) > 1)
+  if (all(pvals < alpha, na.rm = TRUE))
     ret[] <- 1
   ret
 }
@@ -267,7 +270,7 @@ RANGER <- function(formula, data, ...) {
   resp <- if (is_binary) as.numeric(response) - 1 else if (is_ordered)
     as.numeric(response) else response
   tmp <- list(data = data, response = resp, is_binary = is_binary,
-              is_ordered = is_ordered)
+              is_ordered = is_ordered, fml = formula)
   if (identical(tms$me, character(0))) {
     if (is_binary)
       return(structure(c(list(mean = mean(as.numeric(response) - 1)), tmp),
@@ -285,6 +288,9 @@ RANGER <- function(formula, data, ...) {
 residuals.ranger <- function(object, newdata = NULL, newy = NULL, ...) {
   if (is.null(newdata))
     newdata <- object$data
+  else if (is.null(newy))
+    newy <- unname(stats::model.response(
+      stats::model.frame(object$fml, newdata)))
   if (!is.null(newy))
     newy <- if (object$is_binary) as.numeric(newy) - 1 else if (object$is_ordered)
       as.numeric(newy) else newy
