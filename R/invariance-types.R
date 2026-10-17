@@ -43,7 +43,7 @@
   ### Empty set treated separately
   if (set == 1) {
     tset <- "1"
-    meff <- .pplus(c(ifelse(controls$baseline_fixed, env, "1"), mand))
+    meff <- .pplus(c(if (controls$baseline_fixed) env else "1", mand))
     mint <- ""
   } else {
     tset <- me[tx]

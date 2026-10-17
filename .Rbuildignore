@@ -11,3 +11,5 @@
 ^inst/Makefile$
 ^inst
 ^Makefile$
+^NEWS\.md$
+^cran-comments\.md$

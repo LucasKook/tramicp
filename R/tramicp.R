@@ -140,7 +140,7 @@ dicp <- function(
   }
 
   ### Compute predictor-level p-values
-  ipv <- .indiv_pvals(me, pvals, alpha = alpha)
+  ipv <- .indiv_pvals(me, pvals, alpha = controls$alpha)
   if (identical(inv, character(0))) {
     inv <- "Empty"
   }
@@ -169,7 +169,7 @@ dicp <- function(
 #' @export
 invariant_sets <- function(object, with_pvalues = FALSE) {
   pvals <- pvalues(object, "set")
-  ret <- pvals[pvals > object$controls$alpha]
+  ret <- pvals[which(pvals > object$controls$alpha)]
   if (with_pvalues) {
     return(ret)
   }
@@ -217,7 +217,7 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
         utils::setTxtProgressBar(pb, set)
       }
 
-      if (length(MI > 0) && any(unlist(MI) %in% lps[[set]])) {
+      if (length(MI) > 0 && any(unlist(MI) %in% lps[[set]])) {
         tests[[set]] <- .empty_output(me[lps[[set]]], 0)
         next
       }
@@ -229,16 +229,16 @@ invariant_sets <- function(object, with_pvalues = FALSE) {
         mandatory = mandatory, ... = ...
       )
       tpv <- .get_pvalue(ret$test)
-      if (!is.nan(tpv) && tpv > controls$alpha) {
+      if (!is.na(tpv) && tpv > controls$alpha) {
         MI <- c(MI, lps[[set]])
       }
+
+      tests[[set]] <- ret
 
       UMI <- sort(unique(unlist(MI)))
       if (length(MI) > 0 && length(UMI) == length(me) && all(UMI == seq_along(me))) {
         break
       }
-
-      tests[[set]] <- ret
     }
   }
 

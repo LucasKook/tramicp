@@ -3,6 +3,7 @@
 S3method(predict,qrf)
 S3method(print,dICP)
 S3method(print,dICPtest)
+S3method(residuals,binglm)
 S3method(residuals,polr)
 S3method(residuals,qrf)
 S3method(residuals,ranger)
