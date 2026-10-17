@@ -56,3 +56,61 @@ test_that("invariant_sets ignores NA p-values", {
   res$set_pvals[2] <- NA
   expect_false(anyNA(invariant_sets(res)))
 })
+
+test_that("Wald test only uses environment coefficients", {
+  set.seed(123)
+  d <- dgp_dicp(n = 300, mod = "boxcox")
+  d$AGE <- rnorm(nrow(d))
+  res <- dicp(Y ~ AGE, d, ~ E, modFUN = "BoxCox", type = "wald",
+              verbose = FALSE)
+  expect_setequal(rownames(res$tests[[2]]$linfct), c("E2", "AGE:E2"))
+})
+
+test_that("failed Wald test for empty set is labelled", {
+  set.seed(123)
+  d <- dgp_dicp(n = 300, mod = "boxcox")
+  ctrl <- dicp_controls("wald", "wald",
+                        vcov = function(object) stop("vcov failed"))
+  capture.output(res <- dicp(Y ~ X1, d, ~ E, modFUN = "BoxCox", type = "wald",
+                             controls = ctrl, verbose = FALSE),
+                 type = "message")
+  expect_equal(names(pvalues(res, "set")), c("Empty", "X1"))
+})
+
+test_that("GCM regresses environment on all transformed terms", {
+  set.seed(123)
+  d <- dgp_dicp(n = 300, mod = "lm")
+  set.seed(1)
+  r1 <- lmICP(Y ~ I(X1) + I(X2), d, ~ E, verbose = FALSE)
+  set.seed(1)
+  r2 <- lmICP(Y ~ X1 + X2, d, ~ E, verbose = FALSE)
+  expect_equal(r1$tests[[4]]$rEX, r2$tests[[4]]$rEX)
+})
+
+test_that("ranger residuals on new data use new response", {
+  set.seed(123)
+  d <- dgp_dicp(n = 100, mod = "lm")
+  train <- d[1:50, ]
+  test <- d[51:100, ]
+  rf <- tramicp:::RANGER(Y ~ X1, data = train)
+  expect_equal(residuals(rf, newdata = test),
+               unname(test$Y - predict(rf, data = test)$predictions))
+  rf0 <- tramicp:::RANGER(Y ~ 1, data = train)
+  expect_equal(residuals(rf0, newdata = test), test$Y - mean(train$Y))
+})
+
+test_that("dgp_dicp respects K", {
+  set.seed(123)
+  d <- dgp_dicp(n = 300, mod = "polr", K = 3)
+  expect_equal(nlevels(d$Y), 3)
+})
+
+test_that("predictor p-values are one if all sets are rejected", {
+  set.seed(3)
+  d <- dgp_dicp(n = 1e3, mod = "boxcox")
+  res <- dicp(Y ~ X3, d, ~ E, modFUN = "BoxCox", type = "wald",
+              verbose = FALSE)
+  expect_true(all(pvalues(res, "set") < 0.05))
+  expect_equal(unname(pvalues(res, "predictor")), 1)
+  expect_equal(res$candidate_causal_predictors, "Empty")
+})

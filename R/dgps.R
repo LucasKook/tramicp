@@ -57,7 +57,7 @@ dgp_dicp <- function(
     Y <- ncY <- - cfb[1] / cfb[2] + cbind(x1, x2) %*% cfx / cfb[2] + stats::rnorm(n)
     x3 <- tge + Y / stats::sd(Y) + ex3
   } else {
-    m <- .tram_from_name(mod, ia = interacting, cfb = cfb, cfx = cfx)
+    m <- .tram_from_name(mod, ia = interacting, cfb = cfb, cfx = cfx, K = K)
     Y <- stats::simulate(m, newdata = df)
     if (!is.ordered(Y)) {
       if (rm_censoring)

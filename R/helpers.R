@@ -184,7 +184,7 @@ residuals.binglm <- function(object, ...) {
   res <- lapply(terms, \(term) suppressWarnings(
     max(pvals[!vapply(sets, \(set) term %in% set, logical(1))], na.rm = TRUE)))
   ret <- structure(unlist(res), names = terms)
-  if (all(pvals < alpha, na.rm = TRUE) & length(ret) > 1)
+  if (all(pvals < alpha, na.rm = TRUE))
     ret[] <- 1
   ret
 }
@@ -270,7 +270,7 @@ RANGER <- function(formula, data, ...) {
   resp <- if (is_binary) as.numeric(response) - 1 else if (is_ordered)
     as.numeric(response) else response
   tmp <- list(data = data, response = resp, is_binary = is_binary,
-              is_ordered = is_ordered)
+              is_ordered = is_ordered, fml = formula)
   if (identical(tms$me, character(0))) {
     if (is_binary)
       return(structure(c(list(mean = mean(as.numeric(response) - 1)), tmp),
@@ -288,6 +288,9 @@ RANGER <- function(formula, data, ...) {
 residuals.ranger <- function(object, newdata = NULL, newy = NULL, ...) {
   if (is.null(newdata))
     newdata <- object$data
+  else if (is.null(newy))
+    newy <- unname(stats::model.response(
+      stats::model.frame(object$fml, newdata)))
   if (!is.null(newy))
     newy <- if (object$is_binary) as.numeric(newy) - 1 else if (object$is_ordered)
       as.numeric(newy) else newy
